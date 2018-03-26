@@ -112,4 +112,27 @@
         <attr name="flLineCenter" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RecyclerTabLayout">
+        <attr name="tabIndicatorColor" format="color"/>
+        <attr name="tabIndicatorHeight" format="dimension"/>
+
+        <attr name="tabBackground" format="reference"/>
+
+        <attr name="tabTextAppearance" format="reference"/>
+        <attr name="tabSelectedTextColor" format="color"/>
+
+        <attr name="tabOnScreenLimit" format="integer"/>
+        <attr name="tabMinWidth" format="dimension"/>
+        <attr name="tabMaxWidth" format="dimension"/>
+
+        <attr name="tabPaddingStart" format="dimension"/>
+        <attr name="tabPaddingTop" format="dimension"/>
+        <attr name="tabPaddingEnd" format="dimension"/>
+        <attr name="tabPaddingBottom" format="dimension"/>
+        <attr name="tabPadding" format="dimension"/>
+
+        <attr name="tabScrollEnabled" format="boolean"/>
+
+    </declare-styleable>
+
 </resources>
