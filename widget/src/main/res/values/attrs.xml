@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BottomBarItem">
+        <!--默认状态下的图标-->
+        <attr name="bbIconNormal" format="reference"/>
+        <!--选中状态下的图标-->
+        <attr name="bbIconSelected" format="reference"/>
+        <!--底部文字-->
+        <attr name="bbItemText" format="string"/>
+        <!--文字大小-->
+        <attr name="bbItemTextSize" format="dimension"/>
+        <!--默认状态下的文字颜色-->
+        <attr name="bbTextColorNormal" format="color"/>
+        <!--选中状态下的文字颜色-->
+        <attr name="bbTextColorSelected" format="color"/>
+
+        <!--文字和图标的顶部距离-->
+        <attr name="bbItemMarginTop" format="dimension"/>
+
+        <!--是否开启触摸背景效果-->
+        <attr name="bbOpenTouchBg" format="boolean"/>
+        <!--设置触摸背景-->
+        <attr name="bbTouchDrawable" format="reference"/>
+
+        <!--设置图标的宽度-->
+        <attr name="bbIconWidth" format="dimension"/>
+        <!--设置图标的高度-->
+        <attr name="bbIconHeight" format="dimension"/>
+
+        <!--设置BottomBarItem的padding-->
+        <attr name="bbItemPadding" format="dimension"/>
+
+        <!--设置未读数字体大小-->
+        <attr name="bbUnreadTextSize" format="dimension"/>
+        <!--设置未读数字体颜色-->
+        <attr name="bbUnreadTextColor" format="reference"/>
+        <!--设置未读数背景色-->
+        <attr name="bbUnreadTextBg" format="reference"/>
+
+        <!--设置提示消息字体大小-->
+        <attr name="bbMsgTextSize" format="dimension"/>
+        <!--设置提示消息字体颜色-->
+        <attr name="bbMsgTextColor" format="reference"/>
+        <!--设置提示消息背景-->
+        <attr name="bbMsgTextBg" format="reference"/>
+
+        <!--设置提示点背景-->
+        <attr name="bbNotifyPointBg" format="reference"/>
+
+        <!--设置未读数组阈值 大于阈值的数字将显示为 n+ n为设置的阈值-->
+        <attr name="bbUnreadThreshold" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="BottomBarLayout">
+        <attr name="bbSmoothScroll" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="ShapeImageView">
+        <attr name="sivShape" format="integer">
+            <enum name="circle" value="1" />
+            <enum name="rectangle" value="2" />
+            <enum name="arc" value="3" />
+        </attr>
+        <attr name="sivBorderWidth" format="dimension" />
+        <attr name="sivBorderColor" format="color" />
+        <attr name="sivRoundRadius" format="dimension" />
+        <attr name="sivLeftTopRadius" format="dimension" />
+        <attr name="sivRightTopRadius" format="dimension" />
+        <attr name="sivRightBottomRadius" format="dimension" />
+        <attr name="sivLeftBottomRadius" format="dimension" />
+        <attr name="sivOnlyDrawBorder" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleProgressView">
+        <attr name="cpvNormalColor" format="color"/>
+        <attr name="cpvReachColor" format="color"/>
+        <attr name="cpvTextColor" format="color"/>
+        <attr name="cpvTextSize" format="dimension"/>
+        <attr name="cpvTextOffset" format="dimension"/>
+        <attr name="cpvNormalSize" format="dimension"/>
+        <attr name="cpvReachSize" format="dimension"/>
+        <attr name="cpvRadius" format="dimension"/>
+        <attr name="cpvTextVisible" format="boolean"/>
+        <attr name="cpvStartArc" format="integer"/>
+        <attr name="cpvTextSkewX" format="dimension"/>
+        <attr name="cpvTextPrefix" format="string"/>
+        <attr name="cpvTextSuffix" format="string"/>
+        <attr name="cpvInnerBackgroundColor" format="color"/>
+        <attr name="cpvStyle" format="enum">
+            <enum name="Normal" value="0"/>
+            <enum name="FillInner" value="1"/>
+            <enum name="FillInnerArc" value="2"/>
+        </attr>
+        <attr name="cpvInnerProgressColor" format="color"/>
+        <attr name="cpvInnerPadding" format="dimension"/>
+        <attr name="cpvOuterColor" format="color"/>
+        <attr name="cpvOuterSize" format="dimension"/>
+        <attr name="cpvReachCapRound" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="flSingleLine" format="boolean" />
+        <attr name="flMaxLines" format="integer" />
+        <attr name="flMultiChecked" format="boolean" />
+        <attr name="flHorizontalSpace" format="dimension" />
+        <attr name="flVerticalSpace" format="dimension" />
+        <attr name="flColumnNumbers" format="integer" />
+        <attr name="flRowNumbers" format="integer" />
+        <attr name="flCutLineWidth" format="dimension" />
+        <attr name="flCutLineColor" format="color" />
+        <attr name="flCutLine" format="boolean" />
+        <attr name="flLineCenter" format="boolean" />
+    </declare-styleable>
+
+</resources>
