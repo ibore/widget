@@ -562,11 +562,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     /*************************************** 监听事件 ******************************************/
 
     public interface OnItemClickListener {
-        void onClick(RecyclerHolder holder, int postion);
+        void onClick(RecyclerHolder holder, int position);
     }
 
     public interface OnItemLongClickListener {
-        boolean onLongClick(RecyclerHolder holder, int postion);
+        boolean onLongClick(RecyclerHolder holder, int position);
     }
 
     public interface OnLoadListener {

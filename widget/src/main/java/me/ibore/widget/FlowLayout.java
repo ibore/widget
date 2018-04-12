@@ -582,7 +582,7 @@ public class FlowLayout extends ViewGroup {
     /**
      * 删除指定索引的view
      * @param index true删除成功 false删除失败
-     * @return
+     * @return 是否删除成功
      */
     public boolean deleteView(int index) {
         if (mCurrentItemIndex != 0) {
