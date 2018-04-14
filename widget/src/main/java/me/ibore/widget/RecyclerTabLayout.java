@@ -195,7 +195,7 @@ public class RecyclerTabLayout extends RecyclerView {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
                 startAnimation(position);
             } else {
-                scrollToTab(position); //FIXME add animation
+                scrollToTab(position);
             }
 
         } else {
@@ -473,9 +473,8 @@ public class RecyclerTabLayout extends RecyclerView {
         }
 
         @SuppressLint("RestrictedApi")
-        @SuppressWarnings("deprecation")
         @Override
-        public RecyclerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        protected RecyclerHolder onCreateRecyclerHolder(ViewGroup parent, int viewType) {
             TabTextView tabTextView = new TabTextView(parent.getContext());
 
             if (mTabSelectedTextColorSet) {
@@ -508,20 +507,14 @@ public class RecyclerTabLayout extends RecyclerView {
                         tabTextView.getCurrentTextColor(), mTabSelectedTextColor));
             }
             if (mTabBackgroundResId != 0) {
-                tabTextView.setBackgroundDrawable(
-                        AppCompatDrawableManager.get().getDrawable(tabTextView.getContext(), mTabBackgroundResId));
+                tabTextView.setBackgroundResource(mTabBackgroundResId);
             }
             tabTextView.setLayoutParams(createLayoutParamsForTabs());
             return RecyclerHolder.create(tabTextView);
         }
 
         @Override
-        protected RecyclerHolder onCreateRecyclerViewHolder(ViewGroup parent, int viewType) {
-            return null;
-        }
-
-        @Override
-        protected void onBindRecyclerViewHolder(final RecyclerHolder holder, List<String> mDatas, int position) {
+        protected void onBindRecyclerHolder(final RecyclerHolder holder, List<String> mDatas, int position) {
             CharSequence title = getViewPager().getAdapter().getPageTitle(position);
             ((TabTextView)holder.getItemView()).setText(title);
             holder.getItemView().setSelected(getCurrentIndicatorPosition() == position);
@@ -583,7 +576,7 @@ public class RecyclerTabLayout extends RecyclerView {
     }
 
 
-    public static class TabTextView extends TextView {
+    public static class TabTextView extends android.support.v7.widget.AppCompatTextView {
 
         public TabTextView(Context context) {
             super(context);

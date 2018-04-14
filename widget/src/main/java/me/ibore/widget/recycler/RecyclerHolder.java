@@ -67,6 +67,7 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return (VH) this;
     }
 
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     public <T extends View> T getView(@IdRes int id) {
         View view = mViews.get(id);
         if (null == view) {
