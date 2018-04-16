@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <me.ibore.widget.WheelView
+        android:id="@+id/wheel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:wvTextSize="18sp"
+        app:wvDividerSize="38dp"
+        app:wvItemSize="35dp"
+        app:wvTextColor="#000000"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp" />
+
+</LinearLayout>

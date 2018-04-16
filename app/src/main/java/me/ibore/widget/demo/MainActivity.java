@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import me.ibore.widget.demo.wheel.WheelActivity;
 import me.ibore.widget.recycler.CommonAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
@@ -43,5 +44,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
         mAdapter.addData(new MainItem("RecyclerView", RecyclerViewActivity.class));
+        mAdapter.addData(new MainItem("WheelView", WheelActivity.class));
     }
 }
