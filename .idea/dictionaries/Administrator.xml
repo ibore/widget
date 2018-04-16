@@ -4,6 +4,10 @@
       <w>loadmore</w>
       <w>noanimator</w>
       <w>scalein</w>
+      <w>slideinbottom</w>
+      <w>slideinleft</w>
+      <w>slideinright</w>
+      <w>slideintop</w>
     </words>
   </dictionary>
 </component>
