@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.ibore.widget.listener.OnItemClickListener;
+
 /**
  * Created by Administrator on 2018/2/27.
  */
@@ -50,7 +52,7 @@ public class FlowLayout extends ViewGroup {
     /**
      * 子View的点击事件
      */
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener<FlowLayout, View> mOnItemClickListener;
     /**
      * 当前view的索引
      */
@@ -442,8 +444,7 @@ public class FlowLayout extends ViewGroup {
 
 
     @Override
-    public LayoutParams generateLayoutParams(AttributeSet attrs)
-    {
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new MarginLayoutParams(getContext(), attrs);
     }
 
@@ -498,7 +499,7 @@ public class FlowLayout extends ViewGroup {
                     }
                 }
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick((Integer)(key == -1 ? view.getTag() : key),view);
+                    mOnItemClickListener.onItemClick(FlowLayout.this, (Integer)(key == -1 ? view.getTag() : key),view);
                 }
             }
         });
@@ -867,9 +868,6 @@ public class FlowLayout extends ViewGroup {
         return mIsCenter;
     }
 
-    public interface OnItemClickListener{
-        void onItemClick(int position, View view);
-    }
     public void setOnItemClickListener(OnItemClickListener onItemClickListener){
         mOnItemClickListener = onItemClickListener;
     }

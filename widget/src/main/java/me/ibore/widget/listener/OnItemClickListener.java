@@ -6,8 +6,8 @@ import android.view.View;
  * Created by Administrator on 2018/2/27.
  */
 
-public interface OnItemClickListener {
+public interface OnItemClickListener<P, C> {
 
-    void onItemClick(int position, View view);
+    void onItemClick(P parent, int position, C child);
 
 }

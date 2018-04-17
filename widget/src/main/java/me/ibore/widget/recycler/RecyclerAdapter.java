@@ -130,7 +130,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         ViewCompat.animate(v).setInterpolator(null).setStartDelay(0);
     }
 
-    protected Animator[] getAnimators(View view) {
+    public Animator[] getAnimators(View view) {
         Animator[] animators;
         switch (mAnimatorType) {
             case SCALEIN:

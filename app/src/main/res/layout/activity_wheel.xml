@@ -9,10 +9,14 @@
         android:id="@+id/wheel"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        app:wvTextSize="18sp"
-        app:wvDividerSize="38dp"
-        app:wvItemSize="35dp"
-        app:wvTextColor="#000000"/>
+        app:wvCyclic="false"
+        app:wvEntries="@array/default_array"
+        app:wvVisibleItems="6"
+        app:wvMode="Mode_3D"
+        app:wvTextSize="14sp"
+        app:wvSelectedColor="@color/colorAccent"
+        app:wvUnselectedColor="@color/colorPrimary"
+        app:wvLineSpace="8dp"/>
 
     <TextView
         android:id="@+id/tv_content"

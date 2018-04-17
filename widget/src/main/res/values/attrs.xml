@@ -136,25 +136,21 @@
     </declare-styleable>
 
     <declare-styleable name="WheelView">
-        <!-- 中间分割线外的item数量,整个滑动数量就为 wvItemCount * 2 + 1  -->
-        <attr name="wvItemCount" format="integer"/>
-        <!-- 滑轮item高度 -->
-        <attr name="wvItemSize" format="dimension"/>
-        <!-- 滑轮字体大小 -->
+
+        <attr name="wvCyclic" format="boolean"/>
+        <attr name="wvEntries" format="reference"/>
+        <attr name="wvVisibleItems" format="integer"/>
+        <attr name="wvLineSpace" format="dimension"/>
         <attr name="wvTextSize" format="dimension"/>
-        <!-- 滑轮字体颜色 -->
-        <attr name="wvTextColor" format="color"/>
-        <!-- 滑轮中心字体颜色 -->
-        <attr name="wvTextColorCenter" format="color"/>
-        <!-- 分割线颜色 -->
-        <attr name="wvDividerColor" format="color"/>
-        <!-- 布局方向 -->
-        <attr name="wvOrientation">
-            <enum name="vertical" value="1"/>
-            <enum name="horizontal" value="2"/>
+        <attr name="wvSelectedColor" format="color"/>
+        <attr name="wvUnselectedColor" format="color"/>
+        <attr name="wvDivider" format="reference"/>
+
+        <attr name="wvMode" format="enum">
+            <enum name="Mode_2D" value="0"/>
+            <enum name="Mode_3D" value="1"/>
         </attr>
-        <!-- 两根分割线的距离 -->
-        <attr name="wvDividerSize" format="dimension"/>
+
     </declare-styleable>
 
 
