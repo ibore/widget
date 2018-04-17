@@ -43,6 +43,18 @@ public class WheelView extends View {
     private int mUnselectedColor = Color.parseColor("#727272");
     private Drawable mDividerTop;
     private Drawable mDividerBottom;
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        if (this.mode != mode) {
+            this.mode = mode;
+            invalidate();
+        }
+    }
+
     private int mode = MODE_2D;
 
     int centerX;
@@ -83,11 +95,6 @@ public class WheelView extends View {
         mDividerBottom = a.getDrawable(R.styleable.WheelView_wvDivider);
         mode = a.getInt(R.styleable.WheelView_wvMode, MODE_2D);
         a.recycle();
-        if (mode == MODE_3D) {
-            mCamera = new Camera();
-            mMatrix = new Matrix();
-        }
-
         mPaint = new TextPaint();
         mPaint.setAntiAlias(true);
         mPaint.setTextAlign(Paint.Align.CENTER);
@@ -372,6 +379,10 @@ public class WheelView extends View {
     }
 
     private void draw3DText(Canvas canvas, CharSequence text, float translateX, float translateY, float translateZ, float rotateX) {
+        if (null == mCamera) {
+            mCamera = new Camera();
+            mMatrix = new Matrix();
+        }
         mCamera.save();
         mCamera.translate(translateX, 0, translateZ);
         mCamera.rotateX(rotateX);

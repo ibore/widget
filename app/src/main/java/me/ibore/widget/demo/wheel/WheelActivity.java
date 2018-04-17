@@ -10,13 +10,15 @@ import me.ibore.widget.demo.R;
 
 public class WheelActivity extends AppCompatActivity {
 
-
+    private WheelView wheel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wheel);
+        wheel = findViewById(R.id.wheel);
 
+        wheel.setMode(WheelView.Mode.MODE_2D);
 
     }
 }
