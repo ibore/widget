@@ -7,11 +7,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import me.ibore.widget.recycler.CommonAdapter;
+import me.ibore.widget.recycler.RecyclerAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
 public class RecyclerViewActivity extends AppCompatActivity {
@@ -39,7 +41,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 holder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mAdapter.remove(0);
+//                        mAdapter.remove(0);
 //                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -53,6 +55,17 @@ public class RecyclerViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mAdapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                Log.d("----", "onLoadMore");
+            }
+
+            @Override
+            public void onLoadError() {
+                Log.d("----", "onLoadError");
             }
         });
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
@@ -87,12 +100,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 mAdapter.addData("555555555");
                 mAdapter.addData("666666666");
                 mAdapter.addData("777777777");
+                mAdapter.showContentView();
             }
         });
         empty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.showEmptyMoreView().setOnClickListener(new View.OnClickListener() {
+                mAdapter.showEmptyView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), "showEmptyView", Toast.LENGTH_SHORT).show();
@@ -114,12 +128,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         loading_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.showLoadingMoreView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "showLoadingView", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                mAdapter.showLoadingMoreView();
             }
         });
         content_more.setOnClickListener(new View.OnClickListener() {
