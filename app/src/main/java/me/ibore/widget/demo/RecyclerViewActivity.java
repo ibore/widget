@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.ibore.widget.recycler.CommonAdapter;
 import me.ibore.widget.recycler.RecyclerAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
@@ -47,16 +50,16 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 });
             }
         };
-        mAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.header, null));
-        mAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer, null));
-        mAdapter.setLoadView(this, R.layout.loading, R.layout.empty, R.layout.error);
+//        mAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.header, null));
+//        mAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer, null));
+//        mAdapter.setLoadView(this, R.layout.loading, R.layout.empty, R.layout.error);
         mAdapter.setLoadMoreView(this, R.layout.loading, R.layout.empty, R.layout.error);
-        mAdapter.getHeaderView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mAdapter.getHeaderView().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
+//            }
+//        });
         mAdapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -68,7 +71,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 Log.d("----", "onLoadError");
             }
         });
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(mAdapter);
         loading = findViewById(R.id.loading);
         content = findViewById(R.id.content);
@@ -93,14 +96,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
         content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.addData("111111111");
-                mAdapter.addData("222222222");
-                mAdapter.addData("333333333");
-                mAdapter.addData("444444444");
-                mAdapter.addData("555555555");
-                mAdapter.addData("666666666");
-                mAdapter.addData("777777777");
-                mAdapter.showContentView();
+                List<String> strings = new ArrayList<>();
+                for (int i = 0; i < 20; i++) {
+                    strings.add("Position:" + i);
+                }
+                mAdapter.setDatas(strings);
             }
         });
         empty.setOnClickListener(new View.OnClickListener() {
