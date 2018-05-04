@@ -1,5 +1,6 @@
 package me.ibore.widget.demo.bannerview;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,67 +19,27 @@ import me.ibore.widget.demo.R;
 
 public class BannerViewActivity extends AppCompatActivity implements View.OnClickListener  {
 
-    public static String[] titles = new String[]{
-            "每周7件Tee不重样",
-            "俏皮又知性 适合上班族的漂亮衬衫",
-            "名侦探柯南",
-            "境界之轮回",
-            "我的英雄学院",
-            "全职猎人",
-    };
-    public static String[] urls = new String[]{//750x500
-            "https://s2.mogucdn.com/mlcdn/c45406/170422_678did070ec6le09de3g15c1l7l36_750x500.jpg",
-            "https://s2.mogucdn.com/mlcdn/c45406/170420_1hcbb7h5b58ihilkdec43bd6c2ll6_750x500.jpg",
-            "http://s18.mogucdn.com/p2/170122/upload_66g1g3h491bj9kfb6ggd3i1j4c7be_750x500.jpg",
-            "http://s18.mogucdn.com/p2/170204/upload_657jk682b5071bi611d9ka6c3j232_750x500.jpg",
-            "http://s16.mogucdn.com/p2/170204/upload_56631h6616g4e2e45hc6hf6b7g08f_750x500.jpg",
-            "http://s16.mogucdn.com/p2/170206/upload_1759d25k9a3djeb125a5bcg0c43eg_750x500.jpg"
-    };
-
-    public static class BannerItem {
-        public String image;
-        public String title;
-
-        @Override
-        public String toString() {
-            return title;
-        }
-    }
-
-    public static class BannerViewFactory implements BannerView.ViewFactory<BannerItem> {
-        @Override
-        public View create(BannerItem item, int position, ViewGroup container) {
-            ImageView iv = new ImageView(container.getContext());
-            RequestOptions options = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA);
-            Glide.with(container.getContext().getApplicationContext()).load(item.image).apply(options).into(iv);
-            return iv;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bannerview);
 
-        List<BannerItem> list = new ArrayList<>();
-        for (int i = 0; i < urls.length; i++) {
-            BannerItem item = new BannerItem();
-            item.image = urls[i];
-            item.title = titles[i];
-
-            list.add(item);
-        }
-
-        final BannerView banner1 = (BannerView) findViewById(R.id.banner1);
-        banner1.setViewFactory(new BannerViewFactory());
-        banner1.setDataList(list);
-        banner1.start();
+        BannerView bannerView1 = findViewById(R.id.banner1);
+        BannerView bannerView2 = findViewById(R.id.banner2);
 
 
-        final BannerView banner2 = (BannerView) findViewById(R.id.banner2);
-        banner2.setViewFactory(new BannerViewFactory());
-        banner2.setDataList(list);
-        banner2.start();
+        final List<String> urls = new ArrayList<>();
+        urls.add("http://img3.imgtn.bdimg.com/it/u=2674591031,2960331950&fm=23&gp=0.jpg");
+        urls.add("http://img5.imgtn.bdimg.com/it/u=3639664762,1380171059&fm=23&gp=0.jpg");
+        urls.add("http://img0.imgtn.bdimg.com/it/u=1095909580,3513610062&fm=23&gp=0.jpg");
+        urls.add("http://img4.imgtn.bdimg.com/it/u=1030604573,1579640549&fm=23&gp=0.jpg");
+        urls.add("http://img5.imgtn.bdimg.com/it/u=2583054979,2860372508&fm=23&gp=0.jpg");
+        bannerView1.setImageLoader(new GlideImageLoader());
+        bannerView1.setViewUrls(urls);
+
+
+
 
     }
 
@@ -87,5 +48,13 @@ public class BannerViewActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
 
     }
+
+    public class GlideImageLoader implements BannerView.ImageLoader {
+        @Override
+        public void displayImage(Context context, String path, ImageView imageView) {
+            Glide.with(context).load(path).into(imageView);
+        }
+    }
+
 }
 
