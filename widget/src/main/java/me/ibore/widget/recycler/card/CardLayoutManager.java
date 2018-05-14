@@ -1,85 +1,99 @@
 package me.ibore.widget.recycler.card;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class CardLayoutManager extends RecyclerView.LayoutManager {
 
-    /**
-     * 显示个数
-     */
-    private static int MAX_SHOW_COUNT = 3;
-    /**
-     * 缩放倍数
-     */
-    private static float SCALE_GAP = 0.1f;
-    /**
-     * 旋转角度
-     */
-    private static int TRANS_Y_GAP = 15;
+
+    private RecyclerView mRecyclerView;
+    private ItemTouchHelper mItemTouchHelper;
+
+    public CardLayoutManager(@NonNull RecyclerView recyclerView,
+                             @NonNull ItemTouchHelper itemTouchHelper) {
+        this.mRecyclerView = checkIsNull(recyclerView);
+        this.mItemTouchHelper = checkIsNull(itemTouchHelper);
+    }
+
+    private <T> T checkIsNull(T t) {
+        if (t == null) {
+            throw new NullPointerException();
+        }
+        return t;
+    }
 
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-        return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
-    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
-
+    public void onLayoutChildren(final RecyclerView.Recycler recycler, RecyclerView.State state) {
         detachAndScrapAttachedViews(recycler);
         int itemCount = getItemCount();
-        if (itemCount < 1) {
-            return;
-        }
-        //top-3View的position
-        int bottomPosition;
-        //边界处理
-        if (itemCount < MAX_SHOW_COUNT) {
-            bottomPosition = 0;
+        // 当数据源个数大于最大显示数时
+        if (itemCount > CardConfig.DEFAULT_SHOW_ITEM) {
+            for (int position = CardConfig.DEFAULT_SHOW_ITEM; position >= 0; position--) {
+                final View view = recycler.getViewForPosition(position);
+                addView(view);
+                measureChildWithMargins(view, 0, 0);
+                int widthSpace = getWidth() - getDecoratedMeasuredWidth(view);
+                int heightSpace = getHeight() - getDecoratedMeasuredHeight(view);
+                // recyclerview 布局
+                layoutDecoratedWithMargins(view, widthSpace / 2, heightSpace / 2,
+                        widthSpace / 2 + getDecoratedMeasuredWidth(view),
+                        heightSpace / 2 + getDecoratedMeasuredHeight(view));
+
+                if (position == CardConfig.DEFAULT_SHOW_ITEM) {
+                    view.setScaleX(1 - (position - 1) * CardConfig.DEFAULT_SCALE);
+                    view.setScaleY(1 - (position - 1) * CardConfig.DEFAULT_SCALE);
+                    view.setTranslationY((position - 1) * view.getMeasuredHeight() / CardConfig.DEFAULT_TRANSLATE_Y);
+                } else if (position > 0) {
+                    view.setScaleX(1 - position * CardConfig.DEFAULT_SCALE);
+                    view.setScaleY(1 - position * CardConfig.DEFAULT_SCALE);
+                    view.setTranslationY(position * view.getMeasuredHeight() / CardConfig.DEFAULT_TRANSLATE_Y);
+                } else {
+                    view.setOnTouchListener(mOnTouchListener);
+                }
+            }
         } else {
-            bottomPosition = itemCount - MAX_SHOW_COUNT;
-        }
+            // 当数据源个数小于或等于最大显示数时
+            for (int position = itemCount - 1; position >= 0; position--) {
+                final View view = recycler.getViewForPosition(position);
+                addView(view);
+                measureChildWithMargins(view, 0, 0);
+                int widthSpace = getWidth() - getDecoratedMeasuredWidth(view);
+                int heightSpace = getHeight() - getDecoratedMeasuredHeight(view);
+                // recyclerview 布局
+                layoutDecoratedWithMargins(view, widthSpace / 2, heightSpace / 2,
+                        widthSpace / 2 + getDecoratedMeasuredWidth(view),
+                        heightSpace / 2 + getDecoratedMeasuredHeight(view));
 
-        //从可见的最底层View开始layout，依次层叠上去
-        for (int position = bottomPosition; position < itemCount; position++) {
-            View view = recycler.getViewForPosition(position);
-            addView(view);
-            measureChildWithMargins(view, 0, 0);
-            int widthSpace = getWidth() - getDecoratedMeasuredWidth(view);
-            int heightSpace = getHeight() - getDecoratedMeasuredHeight(view);
-            //我们在布局时，将childView居中处理，这里也可以改为只水平居中
-            layoutDecoratedWithMargins(view, widthSpace / 2, heightSpace / 2,
-                    widthSpace / 2 + getDecoratedMeasuredWidth(view),
-                    heightSpace / 2 + getDecoratedMeasuredHeight(view));
-            /**
-             * TopView的Scale 为1，translationY 0
-             * 每一级Scale相差0.05f，translationY相差7dp左右
-             *
-             * 观察人人影视的UI，拖动时，topView被拖动，Scale不变，一直为1.
-             * top-1View 的Scale慢慢变化至1，translation也慢慢恢复0
-             * top-2View的Scale慢慢变化至 top-1View的Scale，translation 也慢慢变化只top-1View的translation
-             * top-3View的Scale要变化，translation岿然不动
-             */
-
-            //第几层,举例子，count =7， 最后一个TopView（6）是第0层，
-            int level = itemCount - position - 1;
-            //除了顶层不需要缩小和位移
-            if (level > 0 /*&& level < mShowCount - 1*/) {
-                //每一层都需要X方向的缩小
-                view.setScaleX(1 - SCALE_GAP * level);
-                //前N层，依次向下位移和Y方向的缩小
-                if (level < MAX_SHOW_COUNT - 1) {
-                    view.setTranslationY(TRANS_Y_GAP * level);
-                    view.setScaleY(1 - SCALE_GAP * level);
-                } else {//第N层在 向下位移和Y方向的缩小的成都与 N-1层保持一致
-                    view.setTranslationY(TRANS_Y_GAP * (level - 1));
-                    view.setScaleY(1 - SCALE_GAP * (level - 1));
+                if (position > 0) {
+                    view.setScaleX(1 - position * CardConfig.DEFAULT_SCALE);
+                    view.setScaleY(1 - position * CardConfig.DEFAULT_SCALE);
+                    view.setTranslationY(position * view.getMeasuredHeight() / CardConfig.DEFAULT_TRANSLATE_Y);
+                } else {
+                    view.setOnTouchListener(mOnTouchListener);
                 }
             }
         }
-
     }
+
+    private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            RecyclerView.ViewHolder childViewHolder = mRecyclerView.getChildViewHolder(v);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mItemTouchHelper.startSwipe(childViewHolder);
+            }
+            return false;
+        }
+    };
 }

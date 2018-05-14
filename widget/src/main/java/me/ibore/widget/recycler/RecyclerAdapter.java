@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.ibore.widget.recycler.anim.helper.ViewHelper;
+
 /**
  * description:
  * author: Ibore Xie
@@ -114,17 +116,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public void clearAnimator(View v) {
-        ViewCompat.setAlpha(v, 1);
-        ViewCompat.setScaleY(v, 1);
-        ViewCompat.setScaleX(v, 1);
-        ViewCompat.setTranslationY(v, 0);
-        ViewCompat.setTranslationX(v, 0);
-        ViewCompat.setRotation(v, 0);
-        ViewCompat.setRotationY(v, 0);
-        ViewCompat.setRotationX(v, 0);
-        ViewCompat.setPivotY(v, v.getMeasuredHeight() / 2);
-        ViewCompat.setPivotX(v, v.getMeasuredWidth() / 2);
-        ViewCompat.animate(v).setInterpolator(null).setStartDelay(0);
+        ViewHelper.clear(v);
     }
 
     protected Animator[] getAnimators(View view) {
@@ -278,7 +270,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         return (VH) holder;
     }
 
-    protected abstract RecyclerHolder onCreateRecyclerHolder(ViewGroup parent, int viewType);
+    protected abstract VH onCreateRecyclerHolder(ViewGroup parent, int viewType);
 
     protected abstract void onBindRecyclerHolder(VH holder, List<T> mDatas, int position);
 

@@ -3,6 +3,7 @@ package me.ibore.widget.recycler;
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -38,12 +39,12 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         mViews = new SparseArray<>();
     }
 
-    public static RecyclerHolder create(ViewGroup parent, @LayoutRes int layoutId) {
-        return new RecyclerHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, null));
+    public static RecyclerHolder<RecyclerHolder> create(ViewGroup parent, @LayoutRes int layoutId) {
+        return new RecyclerHolder<>(LayoutInflater.from(parent.getContext()).inflate(layoutId, null));
     }
 
-    public static RecyclerHolder create(View itemView) {
-        return new RecyclerHolder(itemView);
+    public static RecyclerHolder<RecyclerHolder> create(View itemView) {
+        return new RecyclerHolder<>(itemView);
     }
 
     public View getItemView() {
@@ -54,20 +55,6 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return itemView.getContext();
     }
 
-    public VH setOnClickListener(View.OnClickListener onClickListener) {
-        if (null != onClickListener) {
-            getItemView().setOnClickListener(onClickListener);
-        }
-        return (VH) this;
-    }
-    public VH setOnClickListener(@IdRes int id, View.OnClickListener onClickListener) {
-        if (null != onClickListener) {
-            getView(id).setOnClickListener(onClickListener);
-        }
-        return (VH) this;
-    }
-
-    @SuppressWarnings("TypeParameterUnusedInFormals")
     public <T extends View> T getView(@IdRes int id) {
         View view = mViews.get(id);
         if (null == view) {
@@ -194,6 +181,35 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
             mViews.append(id, view);
         }
         return  view;
+    }
+
+
+    public VH setOnClickListener(View.OnClickListener onClickListener) {
+        if (null != onClickListener) {
+            getItemView().setOnClickListener(onClickListener);
+        }
+        return (VH) this;
+    }
+    public VH setOnClickListener(@IdRes int id, View.OnClickListener onClickListener) {
+        if (null != onClickListener) {
+            getView(id).setOnClickListener(onClickListener);
+        }
+        return (VH) this;
+    }
+
+    public VH text(@IdRes int id, @StringRes int res) {
+        getTextView(id).setText(res);
+        return (VH) this;
+    }
+
+    public VH text(@IdRes int id, CharSequence charSequence) {
+        getTextView(id).setText(charSequence);
+        return (VH) this;
+    }
+
+    public VH visibility(@IdRes int id, int visibility) {
+        getView(id).setVisibility(visibility);
+        return (VH) this;
     }
 
 

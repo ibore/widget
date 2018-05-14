@@ -10,7 +10,7 @@
         android:paddingEnd="12dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="96dp" />
     <View
         android:background="#e5e5e5"
         android:layout_width="match_parent"

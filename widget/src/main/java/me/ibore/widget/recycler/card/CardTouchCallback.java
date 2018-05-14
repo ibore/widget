@@ -1,19 +1,40 @@
 package me.ibore.widget.recycler.card;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import java.util.List;
 
-public class CardTouchCallback extends ItemTouchHelper.SimpleCallback {
+public class CardTouchCallback<T> extends ItemTouchHelper.SimpleCallback {
 
-    protected RecyclerView recyclerView;
-    protected List mDatas;
+    private final RecyclerView.Adapter adapter;
+    private List<T> dataList;
+    private OnCardSwipeListener<T> mListener;
 
-    public CardTouchCallback(int dragDirs, int swipeDirs) {
-        super(dragDirs, swipeDirs);
+    public CardTouchCallback(@NonNull RecyclerView.Adapter adapter, @NonNull List<T> dataList) {
+        this(adapter, dataList, null);
+    }
+
+    public CardTouchCallback(@NonNull RecyclerView.Adapter adapter, @NonNull List<T> dataList, OnCardSwipeListener<T> listener) {
+        super(ItemTouchHelper.LEFT | ItemTouchHelper.UP | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN,
+                ItemTouchHelper.LEFT | ItemTouchHelper.UP | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN);
+        this.adapter = checkIsNull(adapter);
+        this.dataList = checkIsNull(dataList);
+        this.mListener = listener;
+    }
+
+    private <T> T checkIsNull(T t) {
+        if (t == null) {
+            throw new NullPointerException();
+        }
+        return t;
+    }
+
+    public void setOnCardSwipeListener(OnCardSwipeListener<T> mListener) {
+        this.mListener = mListener;
     }
 
     @Override
@@ -23,44 +44,79 @@ public class CardTouchCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        Object remove = mDatas.remove(viewHolder.getLayoutPosition());
-        mDatas.add(0, remove);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        // 移除 onTouchListener,否则触摸滑动会乱了
+        viewHolder.itemView.setOnTouchListener(null);
+        int layoutPosition = viewHolder.getLayoutPosition();
+        T remove = dataList.remove(layoutPosition);
+        adapter.notifyDataSetChanged();
+        if (mListener != null) {
+            mListener.onSwiped(viewHolder, remove, direction == ItemTouchHelper.LEFT ? CardConfig.SWIPED_LEFT : CardConfig.SWIPED_RIGHT);
+        }
+        // 当没有数据时回调 mListener
+        if (adapter.getItemCount() == 0) {
+            if (mListener != null) {
+                mListener.onSwipedClear();
+            }
+        }
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        //先根据滑动的dxdy 算出现在动画的比例系数fraction
-        double swipValue = Math.sqrt(dX * dX + dY * dY);
-        double fraction = swipValue / getThreshold(viewHolder);
-        //边界修正 最大为1
-        if (fraction > 1) {
-            fraction = 1;
-        }
-        //对每个ChildView进行缩放 位移
-        int childCount = recyclerView.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = recyclerView.getChildAt(i);
-            //第几层,举例子，count =7， 最后一个TopView（6）是第0层，
-            int level = childCount - i - 1;
-            if (level > 0) {
-                child.setScaleX((float) (1 - SCALE_GAP * level + fraction * SCALE_GAP));
+    public boolean isItemViewSwipeEnabled() {
+        return false;
+    }
 
-                if (level < MAX_SHOW_COUNT - 1) {
-                    child.setScaleY((float) (1 - SCALE_GAP * level + fraction * SCALE_GAP));
-                    child.setTranslationY((float) (TRANS_Y_GAP * level - fraction * TRANS_Y_GAP));
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                            float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        View itemView = viewHolder.itemView;
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            float ratio = dX / getThreshold(recyclerView, viewHolder);
+            // ratio 最大为 1 或 -1
+            if (ratio > 1) {
+                ratio = 1;
+            } else if (ratio < -1) {
+                ratio = -1;
+            }
+            itemView.setRotation(ratio * CardConfig.DEFAULT_ROTATE_DEGREE);
+            int childCount = recyclerView.getChildCount();
+            // 当数据源个数大于最大显示数时
+            if (childCount > CardConfig.DEFAULT_SHOW_ITEM) {
+                for (int position = 1; position < childCount - 1; position++) {
+                    int index = childCount - position - 1;
+                    View view = recyclerView.getChildAt(position);
+                    view.setScaleX(1 - index * CardConfig.DEFAULT_SCALE + Math.abs(ratio) * CardConfig.DEFAULT_SCALE);
+                    view.setScaleY(1 - index * CardConfig.DEFAULT_SCALE + Math.abs(ratio) * CardConfig.DEFAULT_SCALE);
+                    view.setTranslationY((index - Math.abs(ratio)) * itemView.getMeasuredHeight() / CardConfig.DEFAULT_TRANSLATE_Y);
+                }
+            } else {
+                // 当数据源个数小于或等于最大显示数时
+                for (int position = 0; position < childCount - 1; position++) {
+                    int index = childCount - position - 1;
+                    View view = recyclerView.getChildAt(position);
+                    view.setScaleX(1 - index * CardConfig.DEFAULT_SCALE + Math.abs(ratio) * CardConfig.DEFAULT_SCALE);
+                    view.setScaleY(1 - index * CardConfig.DEFAULT_SCALE + Math.abs(ratio) * CardConfig.DEFAULT_SCALE);
+                    view.setTranslationY((index - Math.abs(ratio)) * itemView.getMeasuredHeight() / CardConfig.DEFAULT_TRANSLATE_Y);
+                }
+            }
+            if (mListener != null) {
+                if (ratio != 0) {
+                    mListener.onSwiping(viewHolder, ratio, ratio < 0 ? CardConfig.SWIPING_LEFT : CardConfig.SWIPING_RIGHT);
                 } else {
-                    //child.setTranslationY((float) (mTranslationYGap * (level - 1) - fraction * mTranslationYGap));
+                    mListener.onSwiping(viewHolder, ratio, CardConfig.SWIPING_NONE);
                 }
             }
         }
-
-
     }
 
-    private double getThreshold(RecyclerView.ViewHolder viewHolder) {
-        Object remove = mDatas.remove(viewHolder.getLayoutPosition());
-
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        viewHolder.itemView.setRotation(0f);
     }
+
+    private float getThreshold(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        return recyclerView.getWidth() * getSwipeThreshold(viewHolder);
+    }
+
 }
