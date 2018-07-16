@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.ActionBarContextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -67,7 +68,7 @@ public class RecyclerViewHolder<VH extends RecyclerViewHolder> extends RecyclerV
     public TextView getTextView(@IdRes int id) {
         TextView view = (TextView) mViews.get(id);
         if (null == view) {
-            view = (TextView) itemView.findViewById(id);
+            view = itemView.findViewById(id);
             mViews.append(id, view);
         }
         return  view;
@@ -206,18 +207,23 @@ public class RecyclerViewHolder<VH extends RecyclerViewHolder> extends RecyclerV
         return (VH) this;
     }
 
-    public VH text(@IdRes int id, @StringRes int res) {
+    public VH setText(@IdRes int id, @StringRes int res) {
         getTextView(id).setText(res);
         return (VH) this;
     }
 
-    public VH text(@IdRes int id, CharSequence charSequence) {
+    public VH setText(@IdRes int id, CharSequence charSequence) {
         getTextView(id).setText(charSequence);
         return (VH) this;
     }
 
-    public VH visibility(@IdRes int id, int visibility) {
+    public VH setVisibility(@IdRes int id, int visibility) {
         getView(id).setVisibility(visibility);
+        return (VH) this;
+    }
+
+    public VH setBackgroundResource(@IdRes int id, int resid) {
+        getView(id).setBackgroundResource(resid);
         return (VH) this;
     }
 

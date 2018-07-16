@@ -132,13 +132,10 @@ public class MixtureTextView extends RelativeLayout {
             mFirstInLayout = false;
             mMinHeight = getMeasuredHeight();
         }
-
         super.onLayout(changed, l, t, r, b);
-
         if (!mNeedRenderText) {
             return;
         }
-
         getAllYCors();
     }
 
@@ -147,8 +144,6 @@ public class MixtureTextView extends RelativeLayout {
         boolean kidding = canvas == null;
         int lineHeight = mLineHeight;
         List<List<Rect>> destRects = mDestRects;
-
-
         int start = 0;
         int lineSum = 0;
         int fullSize = mText.length();

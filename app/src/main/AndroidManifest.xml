@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecyclerViewAnimatorActivity">
+        <activity android:name=".HtmlTextActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,9 +19,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RecyclerViewActivity" />
+        <!--<activity android:name=".RecyclerViewActivity" />-->
+
         <activity android:name=".wheel.WheelActivity" />
-        <!--<activity android:name=".bannerview.BannerViewActivity" />-->
+
+        <activity android:name=".bannerview.BannerViewActivity" />
+
     </application>
 
 </manifest>
