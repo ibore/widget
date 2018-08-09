@@ -10,7 +10,7 @@ publish {
     userOrg = 'ibore'
     groupId = 'me.ibore'
     artifactId = 'widget'
-    publishVersion = '1.1.2'
+    publishVersion = '1.1.4'
     desc = 'Widget'
     website = 'https://github.com/ibore/widget'
 }

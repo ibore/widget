@@ -40,7 +40,7 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
     }
 
     public static RecyclerHolder<RecyclerHolder> create(ViewGroup parent, @LayoutRes int layoutId) {
-        return new RecyclerHolder<>(LayoutInflater.from(parent.getContext()).inflate(layoutId, null));
+        return new RecyclerHolder<>(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
     }
 
     public static RecyclerHolder<RecyclerHolder> create(View itemView) {
