@@ -1,3 +1,4 @@
+/*
 package me.ibore.widget.recycler;
 
 import android.animation.Animator;
@@ -195,3 +196,4 @@ public abstract class RecyclerViewAdapter<T, VH extends RecyclerHolder> extends 
 
 
 }
+*/

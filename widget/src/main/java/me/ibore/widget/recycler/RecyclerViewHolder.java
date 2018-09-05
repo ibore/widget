@@ -1,3 +1,4 @@
+/*
 package me.ibore.widget.recycler;
 
 import android.content.Context;
@@ -24,12 +25,14 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+*/
 /**
  * description:
  * author: Ibore Xie
  * date: 2017-11-26 00:22
  * website: ibore.me
- */
+ *//*
+
 
 public class RecyclerViewHolder<VH extends RecyclerViewHolder> extends RecyclerView.ViewHolder {
 
@@ -229,3 +232,4 @@ public class RecyclerViewHolder<VH extends RecyclerViewHolder> extends RecyclerV
 
 
 }
+*/

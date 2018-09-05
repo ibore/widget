@@ -14,7 +14,7 @@ public abstract class MultiAdapter<T> extends RecyclerAdapter<T, RecyclerHolder>
 
     protected abstract int getMultiItemId(int viewType);
 
-    protected abstract void convertMulti(RecyclerHolder holder, T t, int itemViewType);
+    protected abstract void convertMulti(RecyclerHolder holder, T t, int position, int itemViewType);
 
 
     @Override
@@ -29,6 +29,6 @@ public abstract class MultiAdapter<T> extends RecyclerAdapter<T, RecyclerHolder>
 
     @Override
     protected void onBindRecyclerHolder(RecyclerHolder holder, List<T> mDatas, int position) {
-        convertMulti(holder, mDatas.get(position), holder.getItemViewType());
+        convertMulti(holder, mDatas.get(position), position, holder.getItemViewType());
     }
 }
