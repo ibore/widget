@@ -99,18 +99,21 @@
     </declare-styleable>
 
     <declare-styleable name="FlowLayout">
-        <attr name="flSingleLine" format="boolean" />
-        <attr name="flMaxLines" format="integer" />
-        <attr name="flMultiChecked" format="boolean" />
-        <attr name="flHorizontalSpace" format="dimension" />
-        <attr name="flVerticalSpace" format="dimension" />
-        <attr name="flColumnNumbers" format="integer" />
-        <attr name="flRowNumbers" format="integer" />
-        <attr name="flCutLineWidth" format="dimension" />
-        <attr name="flCutLineColor" format="color" />
-        <attr name="flCutLine" format="boolean" />
-        <attr name="flLineCenter" format="boolean" />
+
+        <attr name="flGravity">
+            <enum name="left" value="-1" />
+            <enum name="center" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+
     </declare-styleable>
+
+    <declare-styleable name="TagLayout">
+
+        <attr name="tlMaxSelect" format="integer" />
+
+    </declare-styleable>
+
 
     <declare-styleable name="RecyclerTabLayout">
         <attr name="tabIndicatorColor" format="color"/>
@@ -230,5 +233,6 @@
         <attr name="emptyLayout" format="reference" />
         <attr name="errorLayout" format="reference" />
     </declare-styleable>
+
 
 </resources>
