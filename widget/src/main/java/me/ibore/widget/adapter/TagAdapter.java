@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import me.ibore.widget.FlowLayout;
+import me.ibore.widget.TagLayout;
 
 public abstract class TagAdapter<T> {
     private List<T> mTagDatas;
@@ -67,7 +68,7 @@ public abstract class TagAdapter<T> {
         return mTagDatas.get(position);
     }
 
-    public abstract View getView(FlowLayout parent, int position, T t);
+    public abstract View getView(TagLayout parent, int position, T t);
 
 
     public void onSelected(int position, View view){
