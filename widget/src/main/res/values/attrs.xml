@@ -234,5 +234,31 @@
         <attr name="errorLayout" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="ShadowLayout">
+        <attr name="slShape">
+            <enum name="ROUND" value="1"/>
+            <enum name="CIRCLE" value="2"/>
+        </attr>
+        <attr name="slBgColor" format="color|reference" />
+        <attr name="slShapeRadius" format="dimension|reference" />
+        <attr name="slShadowColor" format="color|reference" />
+        <attr name="slShadowRadius" format="dimension|reference" />
+        <attr name="slOffsetX" format="dimension|reference" />
+        <attr name="slOffsetY" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MarqueeView">
+        <attr name="mvInterval" format="integer|reference"/>
+        <attr name="mvAnimDuration" format="integer|reference"/>
+        <attr name="mvTextSize" format="dimension|reference"/>
+        <attr name="mvTextColor" format="color|reference"/>
+        <attr name="mvSingleLine" format="boolean"/>
+        <attr name="mvGravity">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+    </declare-styleable>
+
 
 </resources>
