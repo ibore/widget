@@ -197,6 +197,10 @@
     </declare-styleable>
 
     <declare-styleable name="BannerView">
+
+        <attr name="bvUnSelectedDrawable" format="reference" />
+        <attr name="bvSelectedDrawable" format="reference" />
+
         <attr name="bvSelectedIndicatorColor" format="color|reference" />
         <attr name="bvUnSelectedIndicatorColor" format="color|reference" />
         <attr name="bvIndicatorShape" format="enum">

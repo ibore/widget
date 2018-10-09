@@ -42,8 +42,6 @@ public class BannerView extends RelativeLayout {
     private boolean isAutoPlay = true;
     private boolean isShowIndicator = true;
 
-    private int itemCount;
-
     private int selectedIndicatorColor = 0xffff0000;
     private int unSelectedIndicatorColor = 0x88888888;
 
@@ -121,6 +119,8 @@ public class BannerView extends RelativeLayout {
     private void init(AttributeSet attrs, int defStyle) {
 
         TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.BannerView, defStyle, 0);
+        unSelectedDrawable = array.getDrawable(R.styleable.BannerView_bvUnSelectedDrawable);
+        selectedDrawable = array.getDrawable(R.styleable.BannerView_bvSelectedDrawable);
         selectedIndicatorColor = array.getColor(R.styleable.BannerView_bvSelectedIndicatorColor, selectedIndicatorColor);
         unSelectedIndicatorColor = array.getColor(R.styleable.BannerView_bvUnSelectedIndicatorColor, unSelectedIndicatorColor);
 
@@ -150,58 +150,46 @@ public class BannerView extends RelativeLayout {
         isShowIndicator = array.getBoolean(R.styleable.BannerView_bvIsShowIndicator, isShowIndicator);
         array.recycle();
 
-        //绘制未选中状态图形
-        LayerDrawable unSelectedLayerDrawable;
-        LayerDrawable selectedLayerDrawable;
-        GradientDrawable unSelectedGradientDrawable;
-        unSelectedGradientDrawable = new GradientDrawable();
+        if (null == unSelectedDrawable || null == selectedDrawable) {
+            //绘制未选中状态图形
+            LayerDrawable unSelectedLayerDrawable;
+            LayerDrawable selectedLayerDrawable;
+            GradientDrawable unSelectedGradientDrawable;
+            unSelectedGradientDrawable = new GradientDrawable();
 
-        //绘制选中状态图形
-        GradientDrawable selectedGradientDrawable;
-        selectedGradientDrawable = new GradientDrawable();
-        switch (indicatorShape) {
-            case rect:
-                unSelectedGradientDrawable.setShape(GradientDrawable.RECTANGLE);
-                selectedGradientDrawable.setShape(GradientDrawable.RECTANGLE);
-                break;
-            case oval:
-                unSelectedGradientDrawable.setShape(GradientDrawable.OVAL);
-                selectedGradientDrawable.setShape(GradientDrawable.OVAL);
-                break;
+            //绘制选中状态图形
+            GradientDrawable selectedGradientDrawable;
+            selectedGradientDrawable = new GradientDrawable();
+            switch (indicatorShape) {
+                case rect:
+                    unSelectedGradientDrawable.setShape(GradientDrawable.RECTANGLE);
+                    selectedGradientDrawable.setShape(GradientDrawable.RECTANGLE);
+                    break;
+                case oval:
+                    unSelectedGradientDrawable.setShape(GradientDrawable.OVAL);
+                    selectedGradientDrawable.setShape(GradientDrawable.OVAL);
+                    break;
+            }
+            unSelectedGradientDrawable.setColor(unSelectedIndicatorColor);
+            unSelectedGradientDrawable.setSize(unSelectedIndicatorWidth, unSelectedIndicatorHeight);
+            unSelectedLayerDrawable = new LayerDrawable(new Drawable[]{unSelectedGradientDrawable});
+            unSelectedDrawable = unSelectedLayerDrawable;
+
+            selectedGradientDrawable.setColor(selectedIndicatorColor);
+            selectedGradientDrawable.setSize(selectedIndicatorWidth, selectedIndicatorHeight);
+            selectedLayerDrawable = new LayerDrawable(new Drawable[]{selectedGradientDrawable});
+            selectedDrawable = selectedLayerDrawable;
         }
-        unSelectedGradientDrawable.setColor(unSelectedIndicatorColor);
-        unSelectedGradientDrawable.setSize(unSelectedIndicatorWidth, unSelectedIndicatorHeight);
-        unSelectedLayerDrawable = new LayerDrawable(new Drawable[]{unSelectedGradientDrawable});
-        unSelectedDrawable = unSelectedLayerDrawable;
-
-        selectedGradientDrawable.setColor(selectedIndicatorColor);
-        selectedGradientDrawable.setSize(selectedIndicatorWidth, selectedIndicatorHeight);
-        selectedLayerDrawable = new LayerDrawable(new Drawable[]{selectedGradientDrawable});
-        selectedDrawable = selectedLayerDrawable;
-
     }
 
 
     //添加网络图片路径
     public void setViewUrls(List<String> urls) {
+        if (null == urls || urls.size() == 0) return;
         List<View> views = new ArrayList<>();
-        itemCount = urls.size();
         //主要是解决当item为小于3个的时候滑动有问题，这里将其拼凑成3个以上
-        if (itemCount < 1) {//当item个数0
-            throw new IllegalStateException("item count not equal zero");
-        } else if (itemCount < 2) { //当item个数为1
-            views.add(getImageView(urls.get(0), 0));
-            views.add(getImageView(urls.get(0), 0));
-            views.add(getImageView(urls.get(0), 0));
-        } else if (itemCount < 3) {//当item个数为2
-            views.add(getImageView(urls.get(0), 0));
-            views.add(getImageView(urls.get(1), 1));
-            views.add(getImageView(urls.get(0), 0));
-            views.add(getImageView(urls.get(1), 1));
-        } else {
-            for (int i = 0; i < urls.size(); i++) {
-                views.add(getImageView(urls.get(i), i));
-            }
+        for (int i = 0; i < urls.size(); i++) {
+            views.add(getImageView(urls.get(i), i));
         }
         setViews(views);
     }
@@ -222,7 +210,6 @@ public class BannerView extends RelativeLayout {
         return imageView;
     }
 
-
     public void setImageLoader(ImageLoader imageLoader) {
         this.imageLoader = imageLoader;
     }
@@ -236,6 +223,18 @@ public class BannerView extends RelativeLayout {
 
     //添加任意View视图
     public void setViews(final List<View> views) {
+        if (null == views || views.size() == 0) return;
+        if (views.size() == 1) {
+            views.add(views.get(0));
+            views.add(views.get(0));
+            views.add(views.get(0));
+        }
+        if (views.size() == 2) {
+            views.add(views.get(0));
+            views.add(views.get(1));
+            views.add(views.get(0));
+            views.add(views.get(1));
+        }
         removeAllViews();
         //初始化pager
         pager = new ViewPager(getContext());
@@ -278,7 +277,7 @@ public class BannerView extends RelativeLayout {
         //添加指示器容器布局到SliderLayout
         addView(indicatorContainer, params);
         //初始化指示器，并添加到指示器容器布局
-        for (int i = 0; i < itemCount; i++) {
+        for (int i = 0; i < views.size(); i++) {
             ImageView indicator = new ImageView(getContext());
             indicator.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             indicator.setPadding(indicatorSpace, indicatorSpace, indicatorSpace, indicatorSpace);
@@ -289,15 +288,15 @@ public class BannerView extends RelativeLayout {
         pager.setAdapter(pagerAdapter);
         //设置当前item到Integer.MAX_VALUE中间的一个值，看起来像无论是往前滑还是往后滑都是ok的
         //如果不设置，用户往左边滑动的时候已经划不动了
-        int targetItemPosition = Integer.MAX_VALUE / 2 - Integer.MAX_VALUE / 2 % itemCount;
+        int targetItemPosition = Integer.MAX_VALUE / 2 - Integer.MAX_VALUE / 2 % views.size();
         currentPosition = targetItemPosition;
         pager.setCurrentItem(targetItemPosition);
-        switchIndicator(targetItemPosition % itemCount);
+        switchIndicator(targetItemPosition % views.size());
         pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 currentPosition = position;
-                switchIndicator(position % itemCount);
+                switchIndicator(position % views.size());
             }
         });
         if (isAutoPlay) {
