@@ -1,4 +1,4 @@
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: "guru.stefma.bintrayrelease"
 
 tasks.withType(Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
@@ -6,11 +6,12 @@ tasks.withType(Javadoc) {
     options.addStringOption('charSet', 'UTF-8')
 }
 
+version = "1.1.2"
+group = "me.ibore"
+
 publish {
     userOrg = 'ibore'
-    groupId = 'me.ibore'
     artifactId = 'widget'
-    publishVersion = '1.2.0'
     desc = 'Widget'
     website = 'https://github.com/ibore/widget'
 }
