@@ -8,6 +8,11 @@ import android.content.Context;
 
 public class UIUtils {
 
+    private static Context mContext;
+
+    public static void init(Context context) {
+        mContext = context;
+    }
 
     /**
      * dp 转 px
@@ -15,8 +20,8 @@ public class UIUtils {
      * @param dpValue dp 值
      * @return px 值
      */
-    public static int dp2px(Context context, final float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    public static int dp2px(final float dpValue) {
+        final float scale = mContext.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
@@ -26,8 +31,8 @@ public class UIUtils {
      * @param pxValue px 值
      * @return dp 值
      */
-    public static int px2dp(Context context, final float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    public static int px2dp(final float pxValue) {
+        final float scale = mContext.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -37,8 +42,8 @@ public class UIUtils {
      * @param spValue sp 值
      * @return px 值
      */
-    public static int sp2px(Context context, final float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+    public static int sp2px(final float spValue) {
+        final float fontScale = mContext.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -48,8 +53,8 @@ public class UIUtils {
      * @param pxValue px 值
      * @return sp 值
      */
-    public static int px2sp(Context context, final float pxValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+    public static int px2sp(final float pxValue) {
+        final float fontScale = mContext.getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 

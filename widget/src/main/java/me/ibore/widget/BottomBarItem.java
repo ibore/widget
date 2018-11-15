@@ -81,12 +81,12 @@ public class BottomBarItem extends LinearLayout {
         mIconSelectedResourceId = ta.getResourceId(R.styleable.BottomBarItem_bbIconSelected, -1);
 
         mText = ta.getString(R.styleable.BottomBarItem_bbItemText);
-        mTextSize = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbItemTextSize, UIUtils.sp2px(mContext, mTextSize));
+        mTextSize = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbItemTextSize, UIUtils.sp2px(mTextSize));
 
         mTextColorNormal = ta.getColor(R.styleable.BottomBarItem_bbTextColorNormal, mTextColorNormal);
         mTextColorSelected = ta.getColor(R.styleable.BottomBarItem_bbTextColorSelected, mTextColorSelected);
 
-        mMarginTop = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbItemMarginTop, UIUtils.dp2px(mContext, mMarginTop));
+        mMarginTop = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbItemMarginTop, UIUtils.dp2px(mMarginTop));
 
         mOpenTouchBg = ta.getBoolean(R.styleable.BottomBarItem_bbOpenTouchBg, mOpenTouchBg);
         mTouchDrawable = ta.getDrawable(R.styleable.BottomBarItem_bbTouchDrawable);
@@ -95,11 +95,11 @@ public class BottomBarItem extends LinearLayout {
         mIconHeight = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbIconHeight, 0);
         mItemPadding = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbItemPadding, 0);
 
-        mUnreadTextSize = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbUnreadTextSize, UIUtils.sp2px(mContext, mUnreadTextSize));
+        mUnreadTextSize = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbUnreadTextSize, UIUtils.sp2px(mUnreadTextSize));
         mUnreadTextColor = ta.getColor(R.styleable.BottomBarItem_bbUnreadTextColor, 0xFFFFFFFF);
         mUnreadTextBg = ta.getDrawable(R.styleable.BottomBarItem_bbUnreadTextBg);
 
-        mMsgTextSize = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbMsgTextSize, UIUtils.sp2px(mContext, mMsgTextSize));
+        mMsgTextSize = ta.getDimensionPixelSize(R.styleable.BottomBarItem_bbMsgTextSize, UIUtils.sp2px(mMsgTextSize));
         mMsgTextColor = ta.getColor(R.styleable.BottomBarItem_bbMsgTextColor, 0xFFFFFFFF);
         mMsgTextBg = ta.getDrawable(R.styleable.BottomBarItem_bbMsgTextBg);
 

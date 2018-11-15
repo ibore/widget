@@ -197,7 +197,6 @@ public class RecyclerTabLayout extends RecyclerView {
             } else {
                 scrollToTab(position);
             }
-
         } else {
             scrollToTab(position);
         }

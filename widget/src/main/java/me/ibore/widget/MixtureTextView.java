@@ -35,7 +35,7 @@ public class MixtureTextView extends RelativeLayout {
     private int mLineHeight;
 
     private int mTextColor = Color.BLACK;
-    private int mTextSize = UIUtils.sp2px(getContext(), 14);
+    private int mTextSize = UIUtils.sp2px(14);
     private String mText;
 
     private int mLineSpace;
@@ -357,10 +357,10 @@ public class MixtureTextView extends RelativeLayout {
                 mTextSize = size;
                 break;
             case TypedValue.COMPLEX_UNIT_DIP:
-                mTextSize = UIUtils.dp2px(getContext(), size);
+                mTextSize = UIUtils.dp2px(size);
                 break;
             case TypedValue.COMPLEX_UNIT_SP:
-                mTextSize = UIUtils.sp2px(getContext(), size);
+                mTextSize = UIUtils.sp2px(size);
                 break;
         }
         mTextPaint.setTextSize(mTextSize);

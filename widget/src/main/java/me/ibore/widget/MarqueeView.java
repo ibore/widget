@@ -49,7 +49,7 @@ public class MarqueeView extends ViewFlipper {
         animDuration = typedArray.getInteger(R.styleable.MarqueeView_mvAnimDuration, animDuration);
         if (typedArray.hasValue(R.styleable.MarqueeView_mvTextSize)) {
             textSize = (int) typedArray.getDimension(R.styleable.MarqueeView_mvTextSize, textSize);
-            textSize = UIUtils.px2sp(context, textSize);
+            textSize = UIUtils.px2sp(textSize);
         }
         textColor = typedArray.getColor(R.styleable.MarqueeView_mvTextColor, textColor);
         int gravityType = typedArray.getInt(R.styleable.MarqueeView_mvGravity, TEXT_GRAVITY_LEFT);
@@ -72,7 +72,7 @@ public class MarqueeView extends ViewFlipper {
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 startWithFixedWidth(notice, getWidth());
             }
         });
@@ -87,7 +87,7 @@ public class MarqueeView extends ViewFlipper {
     // 根据宽度和公告字符串启动轮播
     private void startWithFixedWidth(String notice, int width) {
         int noticeLength = notice.length();
-        int dpW = UIUtils.px2sp(getContext(), width);
+        int dpW = UIUtils.px2sp(width);
         int limit = dpW / textSize;
         if (dpW == 0) {
             throw new RuntimeException("Please set MarqueeView width !");

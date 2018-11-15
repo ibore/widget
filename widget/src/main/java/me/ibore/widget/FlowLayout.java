@@ -24,7 +24,7 @@ import me.ibore.widget.listener.OnItemClickListener;
  */
 
 public class FlowLayout extends ViewGroup {
-    private static final String TAG = "FlowLayout";
+
     private static final int LEFT = -1;
     private static final int CENTER = 0;
     private static final int RIGHT = 1;

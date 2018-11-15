@@ -2,21 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <me.ibore.widget.WheelView
         android:id="@+id/wheel"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        app:wvCyclic="false"
-        app:wvEntries="@array/default_array"
-        app:wvVisibleItems="6"
-        app:wvMode="Mode_3D"
-        app:wvTextSize="14sp"
-        app:wvSelectedColor="@color/colorAccent"
-        app:wvUnselectedColor="@color/colorPrimary"
-        app:wvLineSpace="8dp"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_content"

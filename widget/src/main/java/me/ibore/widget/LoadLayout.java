@@ -10,8 +10,7 @@ import android.widget.FrameLayout;
 
 public class LoadLayout extends FrameLayout {
 
-    private @LayoutRes
-    int mLoadingId, mEmptyId, mErrorId;
+    private @LayoutRes int mLoadingId, mEmptyId, mErrorId;
 
     private View mLoadingView, mEmptyView, mErrorView, mContentView;
 
@@ -185,7 +184,6 @@ public class LoadLayout extends FrameLayout {
     }
 
     private void showView(View specialView) {
-
         if (specialView == null) {
             throw new NullPointerException("The View can't be empty");
         }

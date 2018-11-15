@@ -139,23 +139,85 @@
     </declare-styleable>
 
     <declare-styleable name="WheelView">
-
-        <attr name="wvCyclic" format="boolean"/>
-        <attr name="wvEntries" format="reference"/>
-        <attr name="wvVisibleItems" format="integer"/>
-        <attr name="wvLineSpace" format="dimension"/>
+        <!--文字大小-->
         <attr name="wvTextSize" format="dimension"/>
-        <attr name="wvSelectedColor" format="color"/>
-        <attr name="wvUnselectedColor" format="color"/>
-        <attr name="wvDivider" format="reference"/>
-
-        <attr name="wvMode" format="enum">
-            <enum name="Mode_2D" value="0"/>
-            <enum name="Mode_3D" value="1"/>
+        <!--是否自适应文字大小以完全显示过长的文字-->
+        <attr name="wvAutoFitTextSize" format="boolean"/>
+        <!--文字对齐方式-->
+        <attr name="wvTextAlign" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
         </attr>
+        <!--文字距离边界的外边距-->
+        <attr name="wvTextBoundaryMargin" format="dimension"/>
+        <!--未选中文字颜色-->
+        <attr name="wvNormalItemTextColor" format="color"/>
+        <!--被选中的文字颜色-->
+        <attr name="wvSelectedItemTextColor" format="color"/>
+        <!--行间距-->
+        <attr name="wvLineSpacing" format="dimension"/>
+        <!--数据为Integer类型时是否需要转换-->
+        <attr name="wvIntegerNeedFormat" format="boolean"/>
+        <!--Integer类型转换格式-->
+        <attr name="wvIntegerFormat" format="string"/>
 
+        <!--可见item数-->
+        <attr name="wvVisibleItems" format="integer"/>
+        <!--当前选中下标-->
+        <attr name="wvSelectedItemPosition" format="integer"/>
+        <!--是否循环滚动-->
+        <attr name="wvCyclic" format="boolean"/>
+
+        <!--是否显示分割线-->
+        <attr name="wvShowDivider" format="boolean"/>
+        <!--分割线类型-->
+        <attr name="wvDividerType" format="enum">
+            <enum name="fill" value="0"/>
+            <enum name="wrap" value="1"/>
+        </attr>
+        <!--分割线颜色-->
+        <attr name="wvDividerColor" format="color"/>
+        <!--分割线高度-->
+        <attr name="wvDividerHeight" format="dimension"/>
+        <!--wrap类型下分割线内边距-->
+        <attr name="wvDividerPaddingForWrap" format="dimension"/>
+
+
+        <!--是否是弯曲（3D）效果-->
+        <attr name="wvCurved" format="boolean"/>
+        <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
+        <attr name="wvCurvedArcDirection" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
+        <attr name="wvCurvedArcDirectionFactor" format="float"/>
+        <!--弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <attr name="wvCurvedRefractRatio" format="float"/>
+
+        <!--是否绘制选中区域-->
+        <attr name="wvDrawSelectedRect" format="boolean"/>
+        <!--选中区域颜色-->
+        <attr name="wvSelectedRectColor" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="YearWheelView">
+        <attr name="ywvStartYear" format="integer" />
+        <attr name="ywvEndYear" format="integer" />
+        <attr name="ywvSelectedYear" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="MonthWheelView">
+        <attr name="mwvSelectedMonth" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="DayWheelView">
+        <attr name="dwvYear" format="integer" />
+        <attr name="dwvMonth" format="integer" />
+        <attr name="dwvSelectedDay" format="integer" />
+    </declare-styleable>
 
     <declare-styleable name="VoiceLineView">
         <!--中间线的颜色，就是波形的时候，大家可以看到，中间有一条直线，就是那个-->
@@ -263,6 +325,7 @@
             <enum name="right" value="2"/>
         </attr>
     </declare-styleable>
+
 
 
 </resources>

@@ -31,6 +31,7 @@ public class ShadowDrawable extends Drawable {
     public final static int SHAPE_CIRCLE = 2;
 
     private ShadowDrawable(int shape, int[] bgColor, int shapeRadius, int shadowColor, int shadowRadius, int offsetX, int offsetY) {
+        if (shape == SHAPE_ROUND || shape == SHAPE_CIRCLE)
         this.mShape = shape;
         this.mBgColor = bgColor;
         this.mShapeRadius = shapeRadius;
@@ -66,7 +67,7 @@ public class ShadowDrawable extends Drawable {
         if (mShape == SHAPE_ROUND) {
             canvas.drawRoundRect(mRect, mShapeRadius, mShapeRadius, mPaint);
             canvas.drawRoundRect(mRect, mShapeRadius, mShapeRadius, newPaint);
-        } else {
+        } else if (mShape == SHAPE_CIRCLE){
             canvas.drawCircle(mRect.centerX(), mRect.centerY(), Math.min(mRect.width(), mRect.height())/ 2, mPaint);
             canvas.drawCircle(mRect.centerX(), mRect.centerY(), Math.min(mRect.width(), mRect.height())/ 2, newPaint);
 
