@@ -37,4 +37,8 @@ dependencies {
 
 }
 
-apply from: "bintrayUpload.gradle"
+apply plugin: 'com.github.dcendents.android-maven'
+group='me.ibore'
+
+
+//apply from: "bintrayUpload.gradle"
