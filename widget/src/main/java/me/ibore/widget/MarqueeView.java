@@ -15,6 +15,9 @@ import android.widget.ViewFlipper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 跑马灯View
+ */
 public class MarqueeView extends ViewFlipper {
 
     private Context mContext;

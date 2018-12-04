@@ -11,7 +11,7 @@ buildscript {
 
         classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.1"
 
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5' // Add this line
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1' // Add this line
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

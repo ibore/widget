@@ -20,7 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * <pre>
- * description:
+ * description: 圆形进度条
  * author: Ibore Xie
  * date: 2018/1/19 18:20
  * website: ibore.me

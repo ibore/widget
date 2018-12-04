@@ -258,8 +258,9 @@
         </attr>
     </declare-styleable>
 
+    <!-- 轮播图 -->
     <declare-styleable name="BannerView">
-
+        <!--  -->
         <attr name="bvUnSelectedDrawable" format="reference" />
         <attr name="bvSelectedDrawable" format="reference" />
 
@@ -326,6 +327,51 @@
         </attr>
     </declare-styleable>
 
+    <!-- 倒计时 -->
+    <declare-styleable name="CountdownView">
+        <attr name="cvIncludeFontPadding" format="boolean" />
 
+        <attr name="cvTimeFormat" format="string" />
+
+        <attr name="cvShowDays" format="boolean" />
+        <attr name="cvShowHours" format="boolean" />
+        <attr name="cvShowMinutes" format="boolean" />
+        <attr name="cvShowSeconds" format="boolean" />
+
+        <attr name="cvTimeTextSize" format="dimension" />
+        <attr name="cvTimeTextColor" format="color" />
+        <attr name="cvIsTimeTextBold" format="boolean" />
+        <attr name="cvTimeTextLetterSpacing" format="dimension" />
+        <attr name="cvTimeTextLetterBackgroundSpacing" format="dimension" />
+        <attr name="cvTimeBackground" format="reference|color" />
+        <attr name="cvTimeBackgroundWidth" format="dimension" />
+        <attr name="cvTimeBackgroundHeight" format="dimension" />
+        <attr name="cvTimeBackgroundPadding" format="dimension" />
+        <attr name="cvTimeBackgroundPaddingX" format="dimension" />
+        <attr name="cvTimeBackgroundPaddingY" format="dimension" />
+        <attr name="cvTimeBackgroundPaddingLeft" format="dimension" />
+        <attr name="cvTimeBackgroundPaddingRight" format="dimension" />
+        <attr name="cvTimeBackgroundPaddingTop" format="dimension" />
+        <attr name="cvTimeBackgroundPaddingBottom" format="dimension" />
+
+        <attr name="cvSuffixDayText" format="string" />
+        <attr name="cvSuffixHourText" format="string" />
+        <attr name="cvSuffixMinuteText" format="string" />
+        <attr name="cvSuffixSecondText" format="string" />
+        <attr name="cvSuffixTextSize" format="dimension" />
+        <attr name="cvSuffixTextColor" format="color" />
+        <attr name="cvIsSuffixTextBold" format="boolean" />
+        <attr name="cvSuffixTextMargin" format="dimension" />
+        <attr name="cvSuffixBackground" format="reference|color" />
+        <attr name="cvSuffixBackgroundWidth" format="dimension" />
+        <attr name="cvSuffixBackgroundHeight" format="dimension" />
+        <attr name="cvSuffixBackgroundPadding" format="dimension" />
+        <attr name="cvSuffixBackgroundPaddingX" format="dimension" />
+        <attr name="cvSuffixBackgroundPaddingY" format="dimension" />
+        <attr name="cvSuffixBackgroundPaddingLeft" format="dimension" />
+        <attr name="cvSuffixBackgroundPaddingRight" format="dimension" />
+        <attr name="cvSuffixBackgroundPaddingTop" format="dimension" />
+        <attr name="cvSuffixBackgroundPaddingBottom" format="dimension" />
+    </declare-styleable>
 
 </resources>
