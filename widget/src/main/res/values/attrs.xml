@@ -2,57 +2,57 @@
 <resources>
     <declare-styleable name="BottomBarItem">
         <!--默认状态下的图标-->
-        <attr name="bbIconNormal" format="reference"/>
+        <attr name="bbIconNormal" format="reference" />
         <!--选中状态下的图标-->
-        <attr name="bbIconSelected" format="reference"/>
+        <attr name="bbIconSelected" format="reference" />
         <!--底部文字-->
-        <attr name="bbItemText" format="string"/>
+        <attr name="bbItemText" format="string" />
         <!--文字大小-->
-        <attr name="bbItemTextSize" format="dimension"/>
+        <attr name="bbItemTextSize" format="dimension" />
         <!--默认状态下的文字颜色-->
-        <attr name="bbTextColorNormal" format="color"/>
+        <attr name="bbTextColorNormal" format="color" />
         <!--选中状态下的文字颜色-->
-        <attr name="bbTextColorSelected" format="color"/>
+        <attr name="bbTextColorSelected" format="color" />
 
         <!--文字和图标的顶部距离-->
-        <attr name="bbItemMarginTop" format="dimension"/>
+        <attr name="bbItemMarginTop" format="dimension" />
 
         <!--是否开启触摸背景效果-->
-        <attr name="bbOpenTouchBg" format="boolean"/>
+        <attr name="bbOpenTouchBg" format="boolean" />
         <!--设置触摸背景-->
-        <attr name="bbTouchDrawable" format="reference"/>
+        <attr name="bbTouchDrawable" format="reference" />
 
         <!--设置图标的宽度-->
-        <attr name="bbIconWidth" format="dimension"/>
+        <attr name="bbIconWidth" format="dimension" />
         <!--设置图标的高度-->
-        <attr name="bbIconHeight" format="dimension"/>
+        <attr name="bbIconHeight" format="dimension" />
 
         <!--设置BottomBarItem的padding-->
-        <attr name="bbItemPadding" format="dimension"/>
+        <attr name="bbItemPadding" format="dimension" />
 
         <!--设置未读数字体大小-->
-        <attr name="bbUnreadTextSize" format="dimension"/>
+        <attr name="bbUnreadTextSize" format="dimension" />
         <!--设置未读数字体颜色-->
-        <attr name="bbUnreadTextColor" format="reference"/>
+        <attr name="bbUnreadTextColor" format="reference" />
         <!--设置未读数背景色-->
-        <attr name="bbUnreadTextBg" format="reference"/>
+        <attr name="bbUnreadTextBg" format="reference" />
 
         <!--设置提示消息字体大小-->
-        <attr name="bbMsgTextSize" format="dimension"/>
+        <attr name="bbMsgTextSize" format="dimension" />
         <!--设置提示消息字体颜色-->
-        <attr name="bbMsgTextColor" format="reference"/>
+        <attr name="bbMsgTextColor" format="reference" />
         <!--设置提示消息背景-->
-        <attr name="bbMsgTextBg" format="reference"/>
+        <attr name="bbMsgTextBg" format="reference" />
 
         <!--设置提示点背景-->
-        <attr name="bbNotifyPointBg" format="reference"/>
+        <attr name="bbNotifyPointBg" format="reference" />
 
         <!--设置未读数组阈值 大于阈值的数字将显示为 n+ n为设置的阈值-->
-        <attr name="bbUnreadThreshold" format="integer"/>
+        <attr name="bbUnreadThreshold" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="BottomBarLayout">
-        <attr name="bbSmoothScroll" format="boolean"/>
+        <attr name="bbSmoothScroll" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="ShapeImageView">
@@ -72,30 +72,30 @@
     </declare-styleable>
 
     <declare-styleable name="CircleProgressView">
-        <attr name="cpvNormalColor" format="color"/>
-        <attr name="cpvReachColor" format="color"/>
-        <attr name="cpvTextColor" format="color"/>
-        <attr name="cpvTextSize" format="dimension"/>
-        <attr name="cpvTextOffset" format="dimension"/>
-        <attr name="cpvNormalSize" format="dimension"/>
-        <attr name="cpvReachSize" format="dimension"/>
-        <attr name="cpvRadius" format="dimension"/>
-        <attr name="cpvTextVisible" format="boolean"/>
-        <attr name="cpvStartArc" format="integer"/>
-        <attr name="cpvTextSkewX" format="dimension"/>
-        <attr name="cpvTextPrefix" format="string"/>
-        <attr name="cpvTextSuffix" format="string"/>
-        <attr name="cpvInnerBackgroundColor" format="color"/>
+        <attr name="cpvNormalColor" format="color" />
+        <attr name="cpvReachColor" format="color" />
+        <attr name="cpvTextColor" format="color" />
+        <attr name="cpvTextSize" format="dimension" />
+        <attr name="cpvTextOffset" format="dimension" />
+        <attr name="cpvNormalSize" format="dimension" />
+        <attr name="cpvReachSize" format="dimension" />
+        <attr name="cpvRadius" format="dimension" />
+        <attr name="cpvTextVisible" format="boolean" />
+        <attr name="cpvStartArc" format="integer" />
+        <attr name="cpvTextSkewX" format="dimension" />
+        <attr name="cpvTextPrefix" format="string" />
+        <attr name="cpvTextSuffix" format="string" />
+        <attr name="cpvInnerBackgroundColor" format="color" />
         <attr name="cpvStyle" format="enum">
-            <enum name="Normal" value="0"/>
-            <enum name="FillInner" value="1"/>
-            <enum name="FillInnerArc" value="2"/>
+            <enum name="Normal" value="0" />
+            <enum name="FillInner" value="1" />
+            <enum name="FillInnerArc" value="2" />
         </attr>
-        <attr name="cpvInnerProgressColor" format="color"/>
-        <attr name="cpvInnerPadding" format="dimension"/>
-        <attr name="cpvOuterColor" format="color"/>
-        <attr name="cpvOuterSize" format="dimension"/>
-        <attr name="cpvReachCapRound" format="boolean"/>
+        <attr name="cpvInnerProgressColor" format="color" />
+        <attr name="cpvInnerPadding" format="dimension" />
+        <attr name="cpvOuterColor" format="color" />
+        <attr name="cpvOuterSize" format="dimension" />
+        <attr name="cpvReachCapRound" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="FlowLayout">
@@ -116,91 +116,96 @@
 
 
     <declare-styleable name="RecyclerTabLayout">
-        <attr name="tabIndicatorColor" format="color"/>
-        <attr name="tabIndicatorHeight" format="dimension"/>
+        <attr name="tabIndicatorMode" format="enum">
+            <enum name="round" value="0" />
+            <enum name="square" value="1" />
+        </attr>
+        <attr name="tabIndicatorColor" format="color" />
+        <attr name="tabIndicatorHeight" format="dimension" />
+        <attr name="tabIndicatorWidth" format="dimension" />
 
-        <attr name="tabBackground" format="reference"/>
+        <attr name="tabBackground" format="reference" />
 
-        <attr name="tabTextAppearance" format="reference"/>
-        <attr name="tabSelectedTextColor" format="color"/>
+        <attr name="tabTextAppearance" format="reference" />
+        <attr name="tabSelectedTextColor" format="color" />
 
-        <attr name="tabOnScreenLimit" format="integer"/>
-        <attr name="tabMinWidth" format="dimension"/>
-        <attr name="tabMaxWidth" format="dimension"/>
+        <attr name="tabOnScreenLimit" format="integer" />
+        <attr name="tabMinWidth" format="dimension" />
+        <attr name="tabMaxWidth" format="dimension" />
 
-        <attr name="tabPaddingStart" format="dimension"/>
-        <attr name="tabPaddingTop" format="dimension"/>
-        <attr name="tabPaddingEnd" format="dimension"/>
-        <attr name="tabPaddingBottom" format="dimension"/>
-        <attr name="tabPadding" format="dimension"/>
+        <attr name="tabPaddingStart" format="dimension" />
+        <attr name="tabPaddingTop" format="dimension" />
+        <attr name="tabPaddingEnd" format="dimension" />
+        <attr name="tabPaddingBottom" format="dimension" />
+        <attr name="tabPadding" format="dimension" />
 
-        <attr name="tabScrollEnabled" format="boolean"/>
+        <attr name="tabScrollEnabled" format="boolean" />
 
     </declare-styleable>
 
     <declare-styleable name="WheelView">
         <!--文字大小-->
-        <attr name="wvTextSize" format="dimension"/>
+        <attr name="wvTextSize" format="dimension" />
         <!--是否自适应文字大小以完全显示过长的文字-->
-        <attr name="wvAutoFitTextSize" format="boolean"/>
+        <attr name="wvAutoFitTextSize" format="boolean" />
         <!--文字对齐方式-->
         <attr name="wvTextAlign" format="enum">
-            <enum name="left" value="0"/>
-            <enum name="center" value="1"/>
-            <enum name="right" value="2"/>
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
         </attr>
         <!--文字距离边界的外边距-->
-        <attr name="wvTextBoundaryMargin" format="dimension"/>
+        <attr name="wvTextBoundaryMargin" format="dimension" />
         <!--未选中文字颜色-->
-        <attr name="wvNormalItemTextColor" format="color"/>
+        <attr name="wvNormalItemTextColor" format="color" />
         <!--被选中的文字颜色-->
-        <attr name="wvSelectedItemTextColor" format="color"/>
+        <attr name="wvSelectedItemTextColor" format="color" />
         <!--行间距-->
-        <attr name="wvLineSpacing" format="dimension"/>
+        <attr name="wvLineSpacing" format="dimension" />
         <!--数据为Integer类型时是否需要转换-->
-        <attr name="wvIntegerNeedFormat" format="boolean"/>
+        <attr name="wvIntegerNeedFormat" format="boolean" />
         <!--Integer类型转换格式-->
-        <attr name="wvIntegerFormat" format="string"/>
+        <attr name="wvIntegerFormat" format="string" />
 
         <!--可见item数-->
-        <attr name="wvVisibleItems" format="integer"/>
+        <attr name="wvVisibleItems" format="integer" />
         <!--当前选中下标-->
-        <attr name="wvSelectedItemPosition" format="integer"/>
+        <attr name="wvSelectedItemPosition" format="integer" />
         <!--是否循环滚动-->
-        <attr name="wvCyclic" format="boolean"/>
+        <attr name="wvCyclic" format="boolean" />
 
         <!--是否显示分割线-->
-        <attr name="wvShowDivider" format="boolean"/>
+        <attr name="wvShowDivider" format="boolean" />
         <!--分割线类型-->
         <attr name="wvDividerType" format="enum">
-            <enum name="fill" value="0"/>
-            <enum name="wrap" value="1"/>
+            <enum name="fill" value="0" />
+            <enum name="wrap" value="1" />
         </attr>
         <!--分割线颜色-->
-        <attr name="wvDividerColor" format="color"/>
+        <attr name="wvDividerColor" format="color" />
         <!--分割线高度-->
-        <attr name="wvDividerHeight" format="dimension"/>
+        <attr name="wvDividerHeight" format="dimension" />
         <!--wrap类型下分割线内边距-->
-        <attr name="wvDividerPaddingForWrap" format="dimension"/>
+        <attr name="wvDividerPaddingForWrap" format="dimension" />
 
 
         <!--是否是弯曲（3D）效果-->
-        <attr name="wvCurved" format="boolean"/>
+        <attr name="wvCurved" format="boolean" />
         <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
         <attr name="wvCurvedArcDirection" format="enum">
-            <enum name="left" value="0"/>
-            <enum name="center" value="1"/>
-            <enum name="right" value="2"/>
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
         </attr>
         <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
-        <attr name="wvCurvedArcDirectionFactor" format="float"/>
+        <attr name="wvCurvedArcDirectionFactor" format="float" />
         <!--弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显-->
-        <attr name="wvCurvedRefractRatio" format="float"/>
+        <attr name="wvCurvedRefractRatio" format="float" />
 
         <!--是否绘制选中区域-->
-        <attr name="wvDrawSelectedRect" format="boolean"/>
+        <attr name="wvDrawSelectedRect" format="boolean" />
         <!--选中区域颜色-->
-        <attr name="wvSelectedRectColor" format="color"/>
+        <attr name="wvSelectedRectColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="YearWheelView">
@@ -290,8 +295,8 @@
         <attr name="bvIndicatorMargin" format="dimension|reference" />
         <attr name="bvAutoPlayDuration" format="integer|reference" />
         <attr name="bvScrollDuration" format="integer|reference" />
-        <attr name="bvIsAutoPlay" format="boolean|reference"/>
-        <attr name="bvIsShowIndicator" format="boolean|reference"/>
+        <attr name="bvIsAutoPlay" format="boolean|reference" />
+        <attr name="bvIsShowIndicator" format="boolean|reference" />
     </declare-styleable>
 
 
@@ -303,8 +308,8 @@
 
     <declare-styleable name="ShadowLayout">
         <attr name="slShape">
-            <enum name="ROUND" value="1"/>
-            <enum name="CIRCLE" value="2"/>
+            <enum name="ROUND" value="1" />
+            <enum name="CIRCLE" value="2" />
         </attr>
         <attr name="slBgColor" format="color|reference" />
         <attr name="slShapeRadius" format="dimension|reference" />
@@ -315,15 +320,15 @@
     </declare-styleable>
 
     <declare-styleable name="MarqueeView">
-        <attr name="mvInterval" format="integer|reference"/>
-        <attr name="mvAnimDuration" format="integer|reference"/>
-        <attr name="mvTextSize" format="dimension|reference"/>
-        <attr name="mvTextColor" format="color|reference"/>
-        <attr name="mvSingleLine" format="boolean"/>
+        <attr name="mvInterval" format="integer|reference" />
+        <attr name="mvAnimDuration" format="integer|reference" />
+        <attr name="mvTextSize" format="dimension|reference" />
+        <attr name="mvTextColor" format="color|reference" />
+        <attr name="mvSingleLine" format="boolean" />
         <attr name="mvGravity">
-            <enum name="left" value="0"/>
-            <enum name="center" value="1"/>
-            <enum name="right" value="2"/>
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
         </attr>
     </declare-styleable>
 

@@ -212,5 +212,9 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return (VH) this;
     }
 
+    public VH setBackgroundResource(@IdRes int id, int resid) {
+        getView(id).setBackgroundResource(resid);
+        return (VH) this;
+    }
 
 }

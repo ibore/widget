@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -318,7 +319,7 @@ public class RecyclerTabLayout extends RecyclerView {
             return;
         }
         mRequestScrollToTab = false;
-
+        Log.d("----", "mScrollOffset:" +  mScrollOffset);
         int left;
         int right;
         if (isLayoutRtl()) {
@@ -331,7 +332,7 @@ public class RecyclerTabLayout extends RecyclerView {
 
         int top = getHeight() - mIndicatorHeight;
         int bottom = getHeight();
-
+        Log.d("----", "left:" +  left + "top:" +  top + "right:" +  right + "bottom:" +  bottom);
         canvas.drawRect(left, top, right, bottom, mIndicatorPaint);
     }
 

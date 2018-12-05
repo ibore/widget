@@ -28,6 +28,8 @@
 
         <activity android:name=".bannerview.BannerViewActivity" />
 
+        <activity android:name=".RecyclerTabLayoutActivity" />
+
     </application>
 
 </manifest>
