@@ -41,5 +41,7 @@ public class RecyclerTabLayoutActivity extends AppCompatActivity {
         views.add(view3);
         viewPager.setAdapter(new ViewAdapter(views, titles));
         tabLayout.setUpWithViewPager(viewPager);
+        tabLayout.setPositionThreshold(1);
+
     }
 }

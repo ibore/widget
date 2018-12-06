@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <me.ibore.widget.RecyclerTabLayout
+        android:layoutDirection="ltr"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        app:tabIndicatorHeight="48dp"
+        app:tabIndicatorMargin="5dp"
+        app:tabIndicatorWidth="48dp"
+        app:tabPadding="2dp"
+        app:tabMaxWidth="48dp"
+        app:tabIndicatorMode="triangle_down"
+        app:tabScrollEnabled="false">
 
     </me.ibore.widget.RecyclerTabLayout>
 

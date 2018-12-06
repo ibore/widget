@@ -37,16 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import me.ibore.widget.R;
 
-/**
- * @author zyyoona7
- * @version v1.0.1
- * @since 2018/8/7.
- */
 public class WheelView<T> extends View implements Runnable {
-
-    private static final String TAG = "WheelView";
 
     private static final float DEFAULT_LINE_SPACING = UIUtils.dp2px(2);
     private static final float DEFAULT_TEXT_SIZE = UIUtils.sp2px(15);

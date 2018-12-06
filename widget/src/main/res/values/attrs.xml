@@ -117,13 +117,17 @@
 
     <declare-styleable name="RecyclerTabLayout">
         <attr name="tabIndicatorMode" format="enum">
-            <enum name="round" value="0" />
-            <enum name="square" value="1" />
+            <enum name="line_square" value="0" />
+            <enum name="line_round" value="1" />
+            <enum name="triangle_up" value="2" />
+            <enum name="triangle_down" value="3" />
         </attr>
         <attr name="tabIndicatorColor" format="color" />
         <attr name="tabIndicatorHeight" format="dimension" />
         <attr name="tabIndicatorWidth" format="dimension" />
+        <attr name="tabIndicatorMargin" format="dimension" />
 
+        <!-- TAB背景 -->
         <attr name="tabBackground" format="reference" />
 
         <attr name="tabTextAppearance" format="reference" />
@@ -139,6 +143,7 @@
         <attr name="tabPaddingBottom" format="dimension" />
         <attr name="tabPadding" format="dimension" />
 
+        <!-- 是否可以滑动切换 -->
         <attr name="tabScrollEnabled" format="boolean" />
 
     </declare-styleable>

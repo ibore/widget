@@ -8,10 +8,11 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Build;
+import android.support.annotation.IntDef;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,8 +21,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import me.ibore.widget.recycler.RecyclerAdapter;
@@ -30,12 +32,26 @@ import me.ibore.widget.recycler.RecyclerHolder;
 
 public class RecyclerTabLayout extends RecyclerView {
 
+
+
+    @IntDef({IndicatorMode.LINE_SQUARE, IndicatorMode.LINE_ROUND, IndicatorMode.TRIANGLE_UP, IndicatorMode.TRIANGLE_DOWN})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface IndicatorMode {
+        int LINE_SQUARE = 0;
+        int LINE_ROUND = 1;
+        int TRIANGLE_UP = 2;
+        int TRIANGLE_DOWN = 3;
+    }
+
     protected static final long DEFAULT_SCROLL_DURATION = 200;
     protected static final float DEFAULT_POSITION_THRESHOLD = 0.6f;
     protected static final float POSITION_THRESHOLD_ALLOWABLE = 0.001f;
 
     protected Paint mIndicatorPaint;
     protected int mTabBackgroundResId;
+    /**
+     * 父布局比例
+     */
     protected int mTabOnScreenLimit;
     protected int mTabMinWidth;
     protected int mTabMaxWidth;
@@ -47,6 +63,9 @@ public class RecyclerTabLayout extends RecyclerView {
     protected int mTabPaddingEnd;
     protected int mTabPaddingBottom;
     protected int mIndicatorHeight;
+    protected int mIndicatorWidth;
+    protected int mIndicatorMode;
+    protected int mIndicatorMargin;
 
     protected LinearLayoutManager mLinearLayoutManager;
     protected RecyclerOnScrollListener mRecyclerOnScrollListener;
@@ -57,9 +76,15 @@ public class RecyclerTabLayout extends RecyclerView {
     protected int mIndicatorOffset;
     protected int mScrollOffset;
     protected float mOldPositionOffset;
+    /**
+     * 滑动阈值 < 1
+     */
     protected float mPositionThreshold;
     protected boolean mRequestScrollToTab;
-    protected boolean mScrollEanbled;
+    /**
+     * 是否开启滑动
+     */
+    protected boolean mScrollEnabled;
 
     public RecyclerTabLayout(Context context) {
         this(context, null);
@@ -72,28 +97,26 @@ public class RecyclerTabLayout extends RecyclerView {
     public RecyclerTabLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setWillNotDraw(false);
-        mIndicatorPaint = new Paint();
+        mIndicatorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         getAttributes(context, attrs, defStyle);
-        mLinearLayoutManager = new LinearLayoutManager(getContext()) {
+        mLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false) {
             @Override
             public boolean canScrollHorizontally() {
-                return mScrollEanbled;
+                return mScrollEnabled;
             }
         };
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         setLayoutManager(mLinearLayoutManager);
         setItemAnimator(null);
         mPositionThreshold = DEFAULT_POSITION_THRESHOLD;
     }
 
     private void getAttributes(Context context, AttributeSet attrs, int defStyle) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecyclerTabLayout,
-                defStyle, R.style.RecyclerTabLayout);
-        setIndicatorColor(a.getColor(R.styleable
-                .RecyclerTabLayout_tabIndicatorColor, 0));
-        setIndicatorHeight(a.getDimensionPixelSize(R.styleable
-                .RecyclerTabLayout_tabIndicatorHeight, 0));
-
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecyclerTabLayout, defStyle, R.style.RecyclerTabLayout);
+        setIndicatorColor(a.getColor(R.styleable.RecyclerTabLayout_tabIndicatorColor, 0));
+        setIndicatorHeight(a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorHeight, 0));
+        setIndicatorWidth(a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorWidth, 0));
+        setIndicatorMode(a.getInt(R.styleable.RecyclerTabLayout_tabIndicatorMode, IndicatorMode.LINE_SQUARE));
+        mIndicatorMargin = a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMargin, 0);
         mTabTextAppearance = a.getResourceId(R.styleable.RecyclerTabLayout_tabTextAppearance,
                 R.style.RecyclerTabLayout_Tab);
 
@@ -125,8 +148,9 @@ public class RecyclerTabLayout extends RecyclerView {
 
         mTabBackgroundResId = a
                 .getResourceId(R.styleable.RecyclerTabLayout_tabBackground, 0);
-        mScrollEanbled = a.getBoolean(R.styleable.RecyclerTabLayout_tabScrollEnabled, true);
+        mScrollEnabled = a.getBoolean(R.styleable.RecyclerTabLayout_tabScrollEnabled, true);
         a.recycle();
+
     }
 
     @Override
@@ -145,6 +169,21 @@ public class RecyclerTabLayout extends RecyclerView {
 
     public void setIndicatorHeight(int indicatorHeight) {
         mIndicatorHeight = indicatorHeight;
+        mIndicatorPaint.setStrokeWidth(mIndicatorHeight);
+    }
+
+    public void setIndicatorWidth(int indicatorWidth) {
+        mIndicatorWidth = indicatorWidth;
+    }
+
+    private void setIndicatorMode(@IndicatorMode int indicatorMode) {
+        mIndicatorMode = indicatorMode;
+        /*if (mIndicatorMode == IndicatorMode.LINE_ROUND) {
+            mIndicatorPaint.setStrokeCap(Paint.Cap.ROUND);
+        } else {
+            mIndicatorPaint.setStrokeCap(Paint.Cap.ROUND);
+        }*/
+        mIndicatorPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
     public void setAutoSelectionMode(boolean autoSelect) {
@@ -290,7 +329,6 @@ public class RecyclerTabLayout extends RecyclerView {
         if (mIndicatorHeight > 0) {
             invalidate();
         }
-
         mOldPositionOffset = positionOffset;
     }
 
@@ -319,21 +357,41 @@ public class RecyclerTabLayout extends RecyclerView {
             return;
         }
         mRequestScrollToTab = false;
-        Log.d("----", "mScrollOffset:" +  mScrollOffset);
         int left;
         int right;
         if (isLayoutRtl()) {
-            left = view.getLeft() - mScrollOffset - mIndicatorOffset;
-            right = view.getRight() - mScrollOffset + mIndicatorOffset;
+            left = view.getLeft() + (view.getWidth() - mIndicatorWidth) / 2 - mScrollOffset - mIndicatorOffset + mIndicatorMargin;
+            right = view.getRight() - (view.getWidth() - mIndicatorWidth) / 2 - mScrollOffset + mIndicatorOffset - mIndicatorMargin;
         } else {
-            left = view.getLeft() + mScrollOffset - mIndicatorOffset;
-            right = view.getRight() + mScrollOffset + mIndicatorOffset;
+            left = view.getLeft() + (view.getWidth() - mIndicatorWidth) / 2 + mScrollOffset - mIndicatorOffset;
+            right = view.getRight() - (view.getWidth() - mIndicatorWidth) / 2 + mScrollOffset + mIndicatorOffset;
+        }
+        int top = view.getBottom() - mIndicatorHeight - mIndicatorMargin;
+        if (top < mIndicatorMargin) {
+            top = mIndicatorMargin;
+        }
+        int bottom = view.getBottom() - mIndicatorMargin;
+
+        Log.d("----", "left:" + left + "top:" + top + "right:" + right + "bottom:" + bottom);
+        if (mIndicatorMode == IndicatorMode.LINE_SQUARE || mIndicatorMode == IndicatorMode.LINE_ROUND) {
+            float y = getHeight() - mIndicatorHeight / 2;
+            canvas.drawLine(left, y, right, y, mIndicatorPaint);
+        } else if (mIndicatorMode == IndicatorMode.TRIANGLE_UP) {
+            Path path = new Path();
+            path.moveTo(left, bottom);
+            path.lineTo((right + left) / 2, top);
+            path.lineTo(right, bottom);
+            path.close();
+            canvas.drawPath(path, mIndicatorPaint);
+        } else if (mIndicatorMode == IndicatorMode.TRIANGLE_DOWN) {
+            Path path = new Path();
+            path.moveTo(left, top);
+            path.lineTo((right + left) / 2, bottom);
+            path.lineTo(right, top);
+            path.close();
+            canvas.drawPath(path, mIndicatorPaint);
         }
 
-        int top = getHeight() - mIndicatorHeight;
-        int bottom = getHeight();
-        Log.d("----", "left:" +  left + "top:" +  top + "right:" +  right + "bottom:" +  bottom);
-        canvas.drawRect(left, top, right, bottom, mIndicatorPaint);
     }
 
     protected boolean isLayoutRtl() {
@@ -516,7 +574,7 @@ public class RecyclerTabLayout extends RecyclerView {
         @Override
         protected void onBindRecyclerHolder(final RecyclerHolder holder, List<String> mDatas, int position) {
             CharSequence title = getViewPager().getAdapter().getPageTitle(position);
-            ((TabTextView)holder.getItemView()).setText(title);
+            ((TabTextView) holder.getItemView()).setText(title);
             holder.getItemView().setSelected(getCurrentIndicatorPosition() == position);
             holder.getItemView().setOnClickListener(new OnClickListener() {
                 @Override
