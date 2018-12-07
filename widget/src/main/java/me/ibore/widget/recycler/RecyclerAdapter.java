@@ -30,6 +30,15 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         this.mDatas = new ArrayList<>();
     }
 
+    public void setDatas(List<T> datas) {
+        if (null != datas) {
+            mDatas = datas;
+            notifyDataSetChanged();
+        } else {
+            clearDatas();
+        }
+    }
+
     public List<T> getDatas() {
         return mDatas;
     }
@@ -44,7 +53,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public void addData(T data, int position) {
         mDatas.add(position, data);
-        notifyItemInserted(position);
+        notifyItemInserted(getRecyclerPosition(position));
     }
 
     public void addDatas(List<T> datas) {
@@ -127,7 +136,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     protected abstract VH onCreateRecyclerHolder(ViewGroup parent, int viewType);
 
-    protected abstract void onBindRecyclerHolder(VH holder, List<T> mDatas, int position);
+    protected abstract void onBindRecyclerHolder(VH holder, List<T> datas, int position);
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -140,7 +149,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onClick(holder, position);
+                    onItemClickListener.onClick(holder, getRecyclerPosition(position));
                 }
             });
         }
@@ -148,11 +157,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return onItemLongClickListener.onLongClick(holder, position);
+                    return onItemLongClickListener.onLongClick(holder, getRecyclerPosition(position));
                 }
             });
         }
-        onBindRecyclerHolder(holder, mDatas, position);
+        onBindRecyclerHolder(holder, mDatas, getRecyclerPosition(position));
         int adapterPosition = holder.getAdapterPosition();
         if (!isAnimatorFirstOnly || adapterPosition > mLastPosition) {
             for (Animator anim : getAnimators(holder.itemView)) {
@@ -164,6 +173,14 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             clearAnimator(holder.itemView);
         }
     }
+
+    protected int getRecyclerPosition(int position) {
+        return position;
+    }
+
+    protected abstract int getRecyclerItemViewType(List<T> datas, int position);
+
+    protected abstract int getRecyclerItemCount();
 
     @Override
     public int getItemCount() {

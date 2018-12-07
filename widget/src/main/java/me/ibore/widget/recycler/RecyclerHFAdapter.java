@@ -1,9 +1,7 @@
 package me.ibore.widget.recycler;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,15 +9,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import me.ibore.widget.recycler.anim.helper.ViewHelper;
 
 /**
  * description:
@@ -28,9 +21,9 @@ import me.ibore.widget.recycler.anim.helper.ViewHelper;
  * website: ibore.me
  */
 
-public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends RecyclerView.Adapter<VH> {
+public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends RecyclerAdapter<T, VH> {
 
-    private List<T> mDatas;
+
     private static final int TYPE_LOAD = 0x1000;
     private static final int TYPE_HEADER = 0x1001;
     private static final int TYPE_FOOTER = 0x1002;
@@ -41,118 +34,21 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     private LinearLayout mFooterView;
     private boolean mIsShowContent = false;
 
-    private AnimatorType mAnimatorType = AnimatorType.NOANIMATOR;
-    private int mLastPosition = -1;
-    private boolean isAnimatorFirstOnly = true;
-    private long mAnimatorDuration = 300;
-    private Interpolator mAnimatorInterpolator = new LinearInterpolator();
-
-    public enum AnimatorType {
-        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT
-    }
-
-    public RecyclerHFAdapter() {
-        this.mDatas = new ArrayList<>();
-    }
 
     public void setDatas(List<T> datas) {
-        if (null == datas) {
-            clearDatas();
+        if (null != datas && datas.size() > 0) {
+            mIsShowContent = true;
+            if (null != mLoadMoreView) showLoadingMoreView();
         } else {
-            mDatas = datas;
-            if (mDatas.size() > 0) {
-                mIsShowContent = true;
-                if (null != mLoadMoreView) showLoadingMoreView();
-            } else {
-                if (null != mLoadView) showEmptyView();
-            }
+            if (null != mLoadView) showEmptyView();
         }
-        notifyDataSetChanged();
-    }
-    public List<T> getDatas() {
-        return mDatas;
+        super.setDatas(datas);
     }
 
-    public T getData(int position) {
-        return mDatas.get(position);
-    }
-
-    public void addData(T data) {
-        addData(data, mDatas.size());
-    }
-
-    public void addData(T data, int position) {
-        mDatas.add(position, data);
-        notifyItemInserted(hasHeaderView() ? position + 1 : position);
-    }
-
-    public void addDatas(List<T> datas) {
-        mDatas.addAll(datas);
-        notifyDataSetChanged();
-    }
 
     public void clearDatas() {
-        mDatas.clear();
         mIsShowContent = false;
-        notifyDataSetChanged();
-    }
-
-    public void setAnimatorFirstOnly(boolean isFirstOnly) {
-        this.isAnimatorFirstOnly = isFirstOnly;
-    }
-
-    public void setAnimator(AnimatorType animatorType){
-        this.setAnimator(animatorType, 300);
-    }
-
-    public void setAnimator(AnimatorType animatorType, long duration){
-        this.setAnimator(animatorType, duration, null);
-    }
-
-    public void setAnimator(AnimatorType animatorType, long duration, Interpolator value){
-        this.mAnimatorType = animatorType;
-        this.mAnimatorDuration = duration;
-        this.mAnimatorInterpolator = value;
-    }
-
-    public void clearAnimator(View v) {
-        ViewHelper.clear(v);
-    }
-
-    protected Animator[] getAnimators(View view) {
-        Animator[] animators;
-        switch (mAnimatorType) {
-            case SCALEIN:
-                ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 0.5f, 1f);
-                ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 0.5f, 1f);
-                animators = new ObjectAnimator[] { scaleX, scaleY };
-                break;
-            case SLIDEINTOP:
-                animators = new Animator[] {
-                        ObjectAnimator.ofFloat(view, "translationY", -view.getMeasuredHeight(), 0)
-                };
-                break;
-            case SLIDEINBOTTOM:
-                animators = new Animator[] {
-                        ObjectAnimator.ofFloat(view, "translationY", view.getMeasuredHeight(), 0)
-                };
-                break;
-            case SLIDEINLEFT:
-                animators = new Animator[] {
-                        ObjectAnimator.ofFloat(view, "translationX", -view.getRootView().getWidth(), 0)
-                };
-                break;
-            case SLIDEINRIGHT:
-                animators = new Animator[] {
-                        ObjectAnimator.ofFloat(view, "translationX", view.getRootView().getWidth(), 0)
-                };
-                break;
-            case NOANIMATOR:
-            default:
-                animators = new Animator[0];
-                break;
-        }
-        return animators;
+        super.clearDatas();
     }
 
     @Override
@@ -173,6 +69,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
             }
         }
     }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -249,30 +146,19 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerHolder holder;
         switch (viewType) {
             case TYPE_LOAD:
-                holder = RecyclerHolder.create(mLoadView);
-                break;
+                return (VH) RecyclerHolder.create(mLoadView);
             case TYPE_HEADER:
-                holder = RecyclerHolder.create(mHeaderView);
-                break;
+                return (VH) RecyclerHolder.create(mHeaderView);
             case TYPE_FOOTER:
-                holder = RecyclerHolder.create(mFooterView);
-                break;
+                return (VH) RecyclerHolder.create(mFooterView);
             case TYPE_LOADMORE:
-                holder = RecyclerHolder.create(mLoadMoreView);
-                break;
+                return (VH) RecyclerHolder.create(mLoadMoreView);
             default:
-                holder = onCreateRecyclerHolder(parent, viewType);
-                break;
+                return super.onCreateViewHolder(parent, viewType);
         }
-        return (VH) holder;
     }
-
-    protected abstract VH onCreateRecyclerHolder(ViewGroup parent, int viewType);
-
-    protected abstract void onBindRecyclerHolder(VH holder, List<T> mDatas, int position);
 
     @Override
     public void onBindViewHolder(final VH holder, final int position) {
@@ -280,33 +166,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         if (isHeaderView(position)) return;
         if (isFooterView(position)) return;
         if (isLoadMoreView(position)) return;
-        if (null != onItemClickListener) {
-            holder.getItemView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onClick(holder, hasHeaderView() ? position - 1 : position);
-                }
-            });
-        }
-        if (null != onItemLongClickListener){
-            holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return onItemLongClickListener.onLongClick(holder, hasHeaderView() ? position - 1 : position);
-                }
-            });
-        }
-        onBindRecyclerHolder(holder, mDatas, hasHeaderView() ? position - 1 : position);
-        int adapterPosition = holder.getAdapterPosition();
-        if (!isAnimatorFirstOnly || adapterPosition > mLastPosition) {
-            for (Animator anim : getAnimators(holder.itemView)) {
-                anim.setDuration(mAnimatorDuration).start();
-                anim.setInterpolator(mAnimatorInterpolator);
-            }
-            mLastPosition = adapterPosition;
-        } else {
-            clearAnimator(holder.itemView);
-        }
+        super.onBindViewHolder(holder, position);
     }
 
     @Override
@@ -324,6 +184,13 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     }
 
     @Override
+    protected int getRecyclerPosition(int position) {
+        return getDatas().size();
+    }
+
+
+
+    @Override
     public int getItemViewType(int position) {
         if (isLoadView(position)) return TYPE_LOAD;
 
@@ -333,12 +200,12 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
         if (isLoadMoreView(position)) return TYPE_LOADMORE;
 
-        return getRecyclerItemViewType(mDatas, position);
+        return getRecyclerItemViewType(getDatas(), position);
     }
 
     public int getRecyclerItemCount() {
-        if (null != mDatas) {
-            return mDatas.size();
+        if (null != getDatas()) {
+            return getDatas().size();
         }
         return 0;
     }
@@ -489,18 +356,22 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         mHeaderView.setOrientation(LinearLayout.VERTICAL);
         mHeaderView.addView(headerView);
     }
+
     public View getHeaderView() {
         if (null == mHeaderView) throw new NullPointerException("The HeaderView can't empty View");
         return mHeaderView;
     }
+
     public void removeHeaderView() {
         if (hasHeaderView()) mHeaderView.removeAllViews();
         mHeaderView = null;
         notifyDataSetChanged();
     }
+
     public boolean hasHeaderView() {
         return null != mHeaderView;
     }
+
     public boolean isHeaderView(int position) {
         if (hasHeaderView()) {
             int otherPosition = 1;
@@ -508,6 +379,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         }
         return false;
     }
+
     public void addFooterView(View footerView) {
         mFooterView = new LinearLayout(footerView.getContext());
         mFooterView.setLayoutParams(new ViewGroup.LayoutParams(
@@ -515,18 +387,22 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         mFooterView.setOrientation(LinearLayout.VERTICAL);
         mFooterView.addView(footerView);
     }
+
     public View getFooterView() {
         if (null == mFooterView) throw new NullPointerException("The FooterView can't empty View");
         return mFooterView;
     }
+
     public void removeFooterView() {
         if (hasHeaderView()) mFooterView.removeAllViews();
         mFooterView = null;
         notifyDataSetChanged();
     }
+
     public boolean hasFooterView() {
         return null != mFooterView;
     }
+
     public boolean isFooterView(int position) {
         if (hasFooterView()) {
             int otherPosition = 1;
@@ -541,42 +417,25 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     /*************************************** 监听事件 ******************************************/
     private OnLoadListener mOnLoadListener;
     private OnLoadMoreListener mOnLoadMoreListener;
+
     public void setOnLoadListener(OnLoadListener mOnLoadListener) {
         this.mOnLoadListener = mOnLoadListener;
     }
+
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
     /*************************************** 监听事件 ******************************************/
-    /*************************************** 监听事件 ******************************************/
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
-        this.onItemLongClickListener = onItemLongClickListener;
-    }
-    private OnItemLongClickListener onItemLongClickListener;
-
-    /*************************************** 监听事件 ******************************************/
-
-    public interface OnItemClickListener {
-        void onClick(RecyclerHolder holder, int position);
-    }
-
-    public interface OnItemLongClickListener {
-        boolean onLongClick(RecyclerHolder holder, int position);
-    }
 
     public interface OnLoadListener {
         void onLoadEmpty();
+
         void onLoadError();
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
+
         void onLoadError();
     }
 
