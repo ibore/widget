@@ -121,11 +121,14 @@
             <enum name="line_round" value="1" />
             <enum name="triangle_up" value="2" />
             <enum name="triangle_down" value="3" />
+            <enum name="point" value="4" />
+            <enum name="resource" value="5" />
         </attr>
         <attr name="tabIndicatorColor" format="color" />
         <attr name="tabIndicatorHeight" format="dimension" />
         <attr name="tabIndicatorWidth" format="dimension" />
-        <attr name="tabIndicatorMargin" format="dimension" />
+        <attr name="tabIndicatorMarginVertical" format="dimension" />
+        <attr name="tabIndicatorResourceId" format="reference" />
 
         <!-- TAB背景 -->
         <attr name="tabBackground" format="reference" />
@@ -382,6 +385,21 @@
         <attr name="cvSuffixBackgroundPaddingRight" format="dimension" />
         <attr name="cvSuffixBackgroundPaddingTop" format="dimension" />
         <attr name="cvSuffixBackgroundPaddingBottom" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="MsgView">
+        <!-- 圆角矩形背景色 -->
+        <attr name="mvBackgroundColor" format="color"/>
+        <!-- 圆角弧度,单位dp-->
+        <attr name="mvCornerRadius" format="dimension"/>
+        <!-- 圆角弧度,单位dp-->
+        <attr name="mvStrokeWidth" format="dimension"/>
+        <!-- 圆角边框颜色-->
+        <attr name="mvStrokeColor" format="color"/>
+        <!-- 圆角弧度是高度一半-->
+        <attr name="mvIsRadiusHalfHeight" format="boolean"/>
+        <!-- 圆角矩形宽高相等,取较宽高中大值-->
+        <attr name="mvIsWidthHeightEqual" format="boolean"/>
     </declare-styleable>
 
 </resources>

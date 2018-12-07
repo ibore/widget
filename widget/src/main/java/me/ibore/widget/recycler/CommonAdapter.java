@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/21.
  */
 
-public abstract class CommonAdapter<T> extends RecyclerAdapter<T, RecyclerHolder> {
+public abstract class CommonAdapter<T> extends RecyclerHFAdapter<T, RecyclerHolder> {
 
     @Override
     protected RecyclerHolder onCreateRecyclerHolder(ViewGroup parent, int viewType) {

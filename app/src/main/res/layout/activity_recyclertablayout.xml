@@ -6,16 +6,14 @@
     android:orientation="vertical">
 
     <me.ibore.widget.RecyclerTabLayout
-        android:layoutDirection="ltr"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        app:tabIndicatorHeight="48dp"
-        app:tabIndicatorMargin="5dp"
-        app:tabIndicatorWidth="48dp"
-        app:tabPadding="2dp"
-        app:tabMaxWidth="48dp"
-        app:tabIndicatorMode="triangle_down"
+        app:tabIndicatorHeight="0dp"
+        app:tabIndicatorMarginVertical="4dp"
+        app:tabPadding="10dp"
+        app:tabIndicatorResourceId="@drawable/ll"
+        app:tabIndicatorMode="resource"
         app:tabScrollEnabled="false">
 
     </me.ibore.widget.RecyclerTabLayout>

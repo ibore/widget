@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ibore.widget.recycler.CommonAdapter;
-import me.ibore.widget.recycler.RecyclerAdapter;
+import me.ibore.widget.recycler.RecyclerHFAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
 public class RecyclerViewActivity extends AppCompatActivity {
@@ -58,7 +58,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
 //            }
 //        });
-        mAdapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
+        mAdapter.setOnLoadMoreListener(new RecyclerHFAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 Log.d("----", "onLoadMore");
