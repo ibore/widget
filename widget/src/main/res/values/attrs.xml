@@ -128,7 +128,7 @@
         <attr name="tabIndicatorHeight" format="dimension" />
         <attr name="tabIndicatorWidth" format="dimension" />
         <attr name="tabIndicatorMarginVertical" format="dimension" />
-        <attr name="tabIndicatorResourceId" format="reference" />
+        <attr name="tabIndicatorResource" format="reference" />
 
         <!-- TAB背景 -->
         <attr name="tabBackground" format="reference" />

@@ -136,7 +136,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     protected abstract VH onCreateRecyclerHolder(ViewGroup parent, int viewType);
 
-    protected abstract void onBindRecyclerHolder(VH holder, List<T> datas, int position);
+    protected abstract void onBindRecyclerHolder(VH holder, T t, int position);
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -161,7 +161,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
                 }
             });
         }
-        onBindRecyclerHolder(holder, mDatas, getRecyclerPosition(position));
+        onBindRecyclerHolder(holder, mDatas.get(getRecyclerPosition(position)), getRecyclerPosition(position));
         int adapterPosition = holder.getAdapterPosition();
         if (!isAnimatorFirstOnly || adapterPosition > mLastPosition) {
             for (Animator anim : getAnimators(holder.itemView)) {
@@ -178,13 +178,22 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         return position;
     }
 
-    protected abstract int getRecyclerItemViewType(List<T> datas, int position);
+    protected int getRecyclerItemViewType(T t, int position) {
+        return 0;
+    }
 
-    protected abstract int getRecyclerItemCount();
+    @Override
+    public int getItemViewType(int position) {
+        return getRecyclerItemViewType(mDatas.get(getRecyclerPosition(position)), getRecyclerPosition(position));
+    }
+
+    protected int getRecyclerItemCount() {
+        return mDatas.size();
+    }
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return getRecyclerItemCount();
     }
 
     public enum AnimatorType {

@@ -3,6 +3,7 @@ package me.ibore.widget.demo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,12 +35,10 @@ public class RecyclerViewActivity extends AppCompatActivity {
             protected int getLayoutId() {
                 return R.layout.item_main;
             }
-
-
             @Override
             protected void convert(RecyclerHolder holder, final String s, int position) {
                 holder.getTextView(R.id.title).setText(s);
-                holder.setOnClickListener(new View.OnClickListener() {
+                holder.onClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        mAdapter.remove(0);
@@ -48,16 +47,16 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 });
             }
         };
-//        mAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.header, null));
-//        mAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer, null));
-//        mAdapter.setLoadView(this, R.layout.loading, R.layout.empty, R.layout.error);
+        mAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.header, null));
+        mAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer, null));
+        mAdapter.setLoadView(this, R.layout.loading, R.layout.empty, R.layout.error);
         mAdapter.setLoadMoreView(this, R.layout.loading, R.layout.empty, R.layout.error);
-//        mAdapter.getHeaderView().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        mAdapter.getHeaderView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
+            }
+        });
         mAdapter.setOnLoadMoreListener(new RecyclerHFAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -69,7 +68,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 Log.d("----", "onLoadError");
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         recyclerView.setAdapter(mAdapter);
         loading = findViewById(R.id.loading);
         content = findViewById(R.id.content);

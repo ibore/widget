@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -24,8 +25,10 @@ import android.view.ViewGroup;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.List;
 
+import me.ibore.widget.recycler.RecyclerAdapter;
 import me.ibore.widget.recycler.RecyclerHFAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
@@ -99,6 +102,9 @@ public class RecyclerTabLayout extends RecyclerView {
     public RecyclerTabLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setWillNotDraw(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         mIndicatorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         getAttributes(context, attrs, defStyle);
         mLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false) {
@@ -119,7 +125,7 @@ public class RecyclerTabLayout extends RecyclerView {
         setIndicatorWidth(a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorWidth, -1));
         setIndicatorMode(a.getInt(R.styleable.RecyclerTabLayout_tabIndicatorMode, IndicatorMode.LINE_SQUARE));
         mIndicatorMarginVertical = a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginVertical, 0);
-        mIndicatorResourceId = a.getResourceId(R.styleable.RecyclerTabLayout_tabIndicatorResourceId, 0);
+        mIndicatorResourceId = a.getResourceId(R.styleable.RecyclerTabLayout_tabIndicatorResource, 0);
 
         mTabTextAppearance = a.getResourceId(R.styleable.RecyclerTabLayout_tabTextAppearance,
                 R.style.RecyclerTabLayout_Tab);
@@ -387,7 +393,6 @@ public class RecyclerTabLayout extends RecyclerView {
             right = right + mIndicatorGap;
 
         }
-
         int top = view.getBottom() - mIndicatorHeight - mIndicatorMarginVertical;
         if (top < mIndicatorMarginVertical) {
             top = mIndicatorMarginVertical;
@@ -521,9 +526,20 @@ public class RecyclerTabLayout extends RecyclerView {
         }
     }
 
-    public static abstract class Adapter<T> extends RecyclerHFAdapter<T, RecyclerHolder> {
+    public static abstract class Adapter<T> extends RecyclerAdapter<T, RecyclerHolder> {
 
         protected ViewPager mViewPager;
+        protected int mTabPaddingStart;
+        protected int mTabPaddingTop;
+        protected int mTabPaddingEnd;
+        protected int mTabPaddingBottom;
+        protected int mTabTextAppearance;
+        protected boolean mTabSelectedTextColorSet;
+        protected int mTabSelectedTextColor;
+        protected int mTabMaxWidth;
+        protected int mTabMinWidth;
+        protected int mTabBackgroundResId;
+        protected int mTabOnScreenLimit;
         protected int mIndicatorPosition;
 
         public Adapter(ViewPager viewPager) {
@@ -541,26 +557,58 @@ public class RecyclerTabLayout extends RecyclerView {
         public int getCurrentIndicatorPosition() {
             return mIndicatorPosition;
         }
+
+
+        public void setTabPadding(int tabPaddingStart, int tabPaddingTop, int tabPaddingEnd,
+                                  int tabPaddingBottom) {
+            mTabPaddingStart = tabPaddingStart;
+            mTabPaddingTop = tabPaddingTop;
+            mTabPaddingEnd = tabPaddingEnd;
+            mTabPaddingBottom = tabPaddingBottom;
+        }
+
+        public void setTabTextAppearance(int tabTextAppearance) {
+            mTabTextAppearance = tabTextAppearance;
+        }
+
+        public void setTabSelectedTextColor(boolean tabSelectedTextColorSet,
+                                            int tabSelectedTextColor) {
+            mTabSelectedTextColorSet = tabSelectedTextColorSet;
+            mTabSelectedTextColor = tabSelectedTextColor;
+        }
+
+        public void setTabMaxWidth(int tabMaxWidth) {
+            mTabMaxWidth = tabMaxWidth;
+        }
+
+        public void setTabMinWidth(int tabMinWidth) {
+            mTabMinWidth = tabMinWidth;
+        }
+
+        public void setTabBackgroundResId(int tabBackgroundResId) {
+            mTabBackgroundResId = tabBackgroundResId;
+        }
+
+        public void setTabOnScreenLimit(int tabOnScreenLimit) {
+            mTabOnScreenLimit = tabOnScreenLimit;
+        }
+
+        protected RecyclerView.LayoutParams createLayoutParamsForTabs() {
+            return new RecyclerView.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        }
     }
 
     public static class DefaultAdapter extends RecyclerTabLayout.Adapter<String> {
 
         protected static final int MAX_TAB_TEXT_LINES = 2;
 
-        protected int mTabPaddingStart;
-        protected int mTabPaddingTop;
-        protected int mTabPaddingEnd;
-        protected int mTabPaddingBottom;
-        protected int mTabTextAppearance;
-        protected boolean mTabSelectedTextColorSet;
-        protected int mTabSelectedTextColor;
-        private int mTabMaxWidth;
-        private int mTabMinWidth;
-        private int mTabBackgroundResId;
-        private int mTabOnScreenLimit;
-
         public DefaultAdapter(ViewPager viewPager) {
             super(viewPager);
+            for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
+                getDatas().add(mViewPager.getAdapter().getPageTitle(i).toString());
+            }
+            notifyDataSetChanged();
         }
 
         @SuppressLint("RestrictedApi")
@@ -605,9 +653,8 @@ public class RecyclerTabLayout extends RecyclerView {
         }
 
         @Override
-        protected void onBindRecyclerHolder(final RecyclerHolder holder, List<String> mDatas, int position) {
-            CharSequence title = getViewPager().getAdapter().getPageTitle(position);
-            ((TabTextView) holder.getItemView()).setText(title);
+        protected void onBindRecyclerHolder(final RecyclerHolder holder, String s, int position) {
+            ((TabTextView) holder.getItemView()).setText(s);
             holder.getItemView().setSelected(getCurrentIndicatorPosition() == position);
             holder.getItemView().setOnClickListener(new OnClickListener() {
                 @Override
@@ -619,53 +666,7 @@ public class RecyclerTabLayout extends RecyclerView {
                 }
             });
         }
-
-        @Override
-        public int getRecyclerItemCount() {
-            return getViewPager().getAdapter().getCount();
-        }
-
-        public void setTabPadding(int tabPaddingStart, int tabPaddingTop, int tabPaddingEnd,
-                                  int tabPaddingBottom) {
-            mTabPaddingStart = tabPaddingStart;
-            mTabPaddingTop = tabPaddingTop;
-            mTabPaddingEnd = tabPaddingEnd;
-            mTabPaddingBottom = tabPaddingBottom;
-        }
-
-        public void setTabTextAppearance(int tabTextAppearance) {
-            mTabTextAppearance = tabTextAppearance;
-        }
-
-        public void setTabSelectedTextColor(boolean tabSelectedTextColorSet,
-                                            int tabSelectedTextColor) {
-            mTabSelectedTextColorSet = tabSelectedTextColorSet;
-            mTabSelectedTextColor = tabSelectedTextColor;
-        }
-
-        public void setTabMaxWidth(int tabMaxWidth) {
-            mTabMaxWidth = tabMaxWidth;
-        }
-
-        public void setTabMinWidth(int tabMinWidth) {
-            mTabMinWidth = tabMinWidth;
-        }
-
-        public void setTabBackgroundResId(int tabBackgroundResId) {
-            mTabBackgroundResId = tabBackgroundResId;
-        }
-
-        public void setTabOnScreenLimit(int tabOnScreenLimit) {
-            mTabOnScreenLimit = tabOnScreenLimit;
-        }
-
-        protected RecyclerView.LayoutParams createLayoutParamsForTabs() {
-            return new RecyclerView.LayoutParams(
-                    LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        }
-
     }
-
 
     public static class TabTextView extends android.support.v7.widget.AppCompatTextView {
 
