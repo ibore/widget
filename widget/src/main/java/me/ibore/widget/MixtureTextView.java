@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 图文混排TextView
+ */
 public class MixtureTextView extends RelativeLayout {
 
     private Layout layout = null;
@@ -42,9 +45,9 @@ public class MixtureTextView extends RelativeLayout {
 
     private TextPaint mTextPaint;
 
-    private List<List<Rect>> mDestRects = new ArrayList<List<Rect>>();
+    private List<List<Rect>> mDestRects = new ArrayList<>();
     private List<Integer> mCorYs = null;
-    private HashSet<Integer> mCorYHashes = new HashSet<Integer>();
+    private HashSet<Integer> mCorYHashes = new HashSet<>();
 
     private int mMaxHeight;
     private int mHeightMeasureSpec;
@@ -66,7 +69,7 @@ public class MixtureTextView extends RelativeLayout {
     private static final int INDEX_ATTR_TEXT_COLOR = 1;
     private static final int INDEX_ATTR_TEXT = 2;
 
-    private Map<Integer, Point> mViewBounds = new HashMap<Integer, Point>();
+    private Map<Integer, Point> mViewBounds = new HashMap<>();
 
     public MixtureTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

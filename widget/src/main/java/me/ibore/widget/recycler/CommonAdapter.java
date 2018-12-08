@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/21.
  */
 
-public abstract class CommonAdapter<T> extends RecyclerAdapter<T, RecyclerHolder> {
+public abstract class CommonAdapter<T> extends RecyclerHFAdapter<T, RecyclerHolder> {
 
     @Override
     protected RecyclerHolder onCreateRecyclerHolder(ViewGroup parent, int viewType) {
@@ -16,8 +16,8 @@ public abstract class CommonAdapter<T> extends RecyclerAdapter<T, RecyclerHolder
     }
 
     @Override
-    protected void onBindRecyclerHolder(RecyclerHolder holder, List<T> mDatas, int position) {
-        convert(holder, mDatas.get(position), position);
+    protected void onBindRecyclerHolder(RecyclerHolder holder, T t, int position) {
+        convert(holder, t, position);
     }
 
     protected abstract int getLayoutId();

@@ -1,8 +1,11 @@
 package me.ibore.widget.recycler;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -11,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -82,16 +87,6 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return  view;
     }
 
-    public ImageButton getImageButton(@IdRes int id) {
-        ImageButton view = (ImageButton) mViews.get(id);
-        if (null == view) {
-            view = itemView.findViewById(id);
-            mViews.append(id, view);
-        }
-        return  view;
-    }
-
-
     public ProgressBar getProgressBar(@IdRes int id) {
         ProgressBar view = (ProgressBar) mViews.get(id);
         if (null == view) {
@@ -110,7 +105,6 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return  view;
     }
 
-
     public Button getButton(@IdRes int id) {
         Button view = (Button) mViews.get(id);
         if (null == view) {
@@ -120,8 +114,26 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return  view;
     }
 
+    public ImageButton getImageButton(@IdRes int id) {
+        ImageButton view = (ImageButton) mViews.get(id);
+        if (null == view) {
+            view = itemView.findViewById(id);
+            mViews.append(id, view);
+        }
+        return  view;
+    }
+
     public CheckBox getCheckBox(@IdRes int id) {
         CheckBox view = (CheckBox) mViews.get(id);
+        if (null == view) {
+            view = itemView.findViewById(id);
+            mViews.append(id, view);
+        }
+        return view;
+    }
+
+    public CompoundButton getCompoundButton(@IdRes int id) {
+        CompoundButton view = (CompoundButton) mViews.get(id);
         if (null == view) {
             view = itemView.findViewById(id);
             mViews.append(id, view);
@@ -183,16 +195,64 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return  view;
     }
 
+    public FrameLayout getFrameLayout(@IdRes int id) {
+        FrameLayout view = (FrameLayout) mViews.get(id);
+        if (null == view) {
+            view = itemView.findViewById(id);
+            mViews.append(id, view);
+        }
+        return  view;
+    }
 
+    public RecyclerView getRecyclerView(@IdRes int id) {
+        RecyclerView view = (RecyclerView) mViews.get(id);
+        if (null == view) {
+            view = itemView.findViewById(id);
+            mViews.append(id, view);
+        }
+        return  view;
+    }
+
+    @Deprecated
     public VH setOnClickListener(View.OnClickListener onClickListener) {
         if (null != onClickListener) {
             getItemView().setOnClickListener(onClickListener);
         }
         return (VH) this;
     }
+
+    public VH onClickListener(View.OnClickListener onClickListener) {
+        if (null != onClickListener) {
+            getItemView().setOnClickListener(onClickListener);
+        }
+        return (VH) this;
+    }
+
+    public VH onLongClickListener(View.OnLongClickListener onLongClickListener) {
+        if (null != onLongClickListener) {
+            getItemView().setOnLongClickListener(onLongClickListener);
+        }
+        return (VH) this;
+    }
+
+    @Deprecated
     public VH setOnClickListener(@IdRes int id, View.OnClickListener onClickListener) {
         if (null != onClickListener) {
             getView(id).setOnClickListener(onClickListener);
+        }
+        return (VH) this;
+    }
+
+    public VH onClickListener(@IdRes int id, View.OnClickListener onClickListener) {
+        if (null != onClickListener) {
+            getView(id).setOnClickListener(onClickListener);
+        }
+        return (VH) this;
+    }
+
+    public VH onLongClickListener(@IdRes int id, View.OnLongClickListener onLongClickListener) {
+        if (null != onLongClickListener) {
+            getView(id).setOnLongClickListener(onLongClickListener);
         }
         return (VH) this;
     }
@@ -212,5 +272,61 @@ public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.View
         return (VH) this;
     }
 
+    public VH imageResource(@IdRes int id, int resid) {
+        getImageView(id).setImageResource(resid);
+        return (VH) this;
+    }
+
+    public VH selected(@IdRes int id, boolean selected) {
+        getView(id).setSelected(selected);
+        return (VH) this;
+    }
+
+    public VH enabled(@IdRes int id, boolean enabled) {
+        getView(id).setEnabled(enabled);
+        return (VH) this;
+    }
+
+    public VH clickable(@IdRes int id, boolean clickable) {
+        getView(id).setClickable(clickable);
+        return (VH) this;
+    }
+
+    public VH elevation(@IdRes int id, float elevation) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getView(id).setElevation(elevation);
+        }
+        return (VH) this;
+    }
+
+    public VH checked(@IdRes int id, boolean checked) {
+        getCompoundButton(id).setChecked(checked);
+        return (VH) this;
+    }
+
+    public VH backgroundResource(@IdRes int id, @DrawableRes int resid) {
+        getView(id).setBackgroundResource(resid);
+        return (VH) this;
+    }
+
+    public VH layoutParams(@IdRes int id, ViewGroup.LayoutParams params) {
+        getView(id).setLayoutParams(params);
+        return (VH) this;
+    }
+
+    public VH padding(@IdRes int id, int left, int top, int right, int bottom) {
+        getView(id).setPadding(left, top, right, bottom);
+        return (VH) this;
+    }
+
+    public VH translationX(@IdRes int id, float translationX) {
+        getView(id).setTranslationX(translationX);
+        return (VH) this;
+    }
+
+    public VH translationY(@IdRes int id, float translationY) {
+        getView(id).setTranslationY(translationY);
+        return (VH) this;
+    }
 
 }

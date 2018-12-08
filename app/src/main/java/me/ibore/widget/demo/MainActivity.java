@@ -44,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
+        mAdapter.addData(new MainItem("RecyclerTabLayout", RecyclerTabLayoutActivity.class));
         mAdapter.addData(new MainItem("RecyclerView", RecyclerViewActivity.class));
         mAdapter.addData(new MainItem("WheelView", WheelActivity.class));
         mAdapter.addData(new MainItem("BannerView", BannerViewActivity.class));
         mAdapter.addData(new MainItem("HtmlText", HtmlTextActivity.class));
+        mAdapter.addData(new MainItem("CountdownView", CountdownActivity.class));
     }
 }

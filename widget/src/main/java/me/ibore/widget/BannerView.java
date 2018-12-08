@@ -28,6 +28,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 轮播图
+ */
 public class BannerView extends RelativeLayout {
 
     private ViewPager pager;

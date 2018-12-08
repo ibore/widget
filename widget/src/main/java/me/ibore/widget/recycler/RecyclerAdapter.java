@@ -2,44 +2,23 @@ package me.ibore.widget.recycler;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.ibore.widget.recycler.anim.helper.ViewHelper;
 
-/**
- * description:
- * author: Ibore Xie
- * date: 2017-11-26 00:24
- * website: ibore.me
- */
-
 public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends RecyclerView.Adapter<VH> {
 
     private List<T> mDatas;
-    private static final int TYPE_LOAD = 0x1000;
-    private static final int TYPE_HEADER = 0x1001;
-    private static final int TYPE_FOOTER = 0x1002;
-    private static final int TYPE_LOADMORE = 0x1003;
-    private FrameLayout mLoadView;
-    private FrameLayout mLoadMoreView;
-    private LinearLayout mHeaderView;
-    private LinearLayout mFooterView;
-    private boolean mIsShowContent = false;
+
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     private AnimatorType mAnimatorType = AnimatorType.NOANIMATOR;
     private int mLastPosition = -1;
@@ -47,28 +26,19 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     private long mAnimatorDuration = 300;
     private Interpolator mAnimatorInterpolator = new LinearInterpolator();
 
-    public enum AnimatorType {
-        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT
-    }
-
     public RecyclerAdapter() {
         this.mDatas = new ArrayList<>();
     }
 
     public void setDatas(List<T> datas) {
-        if (null == datas) {
-            clearDatas();
-        } else {
+        if (null != datas) {
             mDatas = datas;
-            if (mDatas.size() > 0) {
-                mIsShowContent = true;
-                if (null != mLoadMoreView) showLoadingMoreView();
-            } else {
-                if (null != mLoadView) showEmptyView();
-            }
+            notifyDataSetChanged();
+        } else {
+            clearDatas();
         }
-        notifyDataSetChanged();
     }
+
     public List<T> getDatas() {
         return mDatas;
     }
@@ -83,7 +53,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public void addData(T data, int position) {
         mDatas.add(position, data);
-        notifyItemInserted(hasHeaderView() ? position + 1 : position);
+        notifyItemInserted(getRecyclerPosition(position));
     }
 
     public void addDatas(List<T> datas) {
@@ -93,8 +63,17 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public void clearDatas() {
         mDatas.clear();
-        mIsShowContent = false;
         notifyDataSetChanged();
+    }
+
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
     }
 
     public void setAnimatorFirstOnly(boolean isFirstOnly) {
@@ -155,136 +134,22 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         return animators;
     }
 
-    @Override
-    public void onViewAttachedToWindow(VH holder) {
-        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
-            if (isLoadView(holder.getLayoutPosition())) {
-                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-            if (isHeaderView(holder.getLayoutPosition())) {
-                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-            if (isFooterView(holder.getLayoutPosition())) {
-                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-            if (isLoadMoreView(holder.getLayoutPosition())) {
-                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-        }
-    }
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    if (isLoadView(position)) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    if (isHeaderView(position)) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    if (isFooterView(position)) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    if (isLoadMoreView(position)) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    return 1;
-                }
-            });
-        }
-        onScrollListener(recyclerView, layoutManager);
-    }
+    protected abstract VH onCreateRecyclerHolder(ViewGroup parent, int viewType);
 
-    private void onScrollListener(RecyclerView recyclerView, final RecyclerView.LayoutManager layoutManager) {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (hasLoadMoreView() && mOnLoadMoreListener != null
-                        && newState == RecyclerView.SCROLL_STATE_IDLE
-                        && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
-                    int lastVisibleItem = findLastCompletelyVisibleItemPosition(layoutManager);
-                    int totalItemCount = layoutManager.getItemCount();
-                    if (lastVisibleItem == (totalItemCount - 1)) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (hasLoadMoreView() && mOnLoadMoreListener != null
-                        && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
-                    int lastVisibleItem = findLastCompletelyVisibleItemPosition(layoutManager);
-                    int totalItemCount = layoutManager.getItemCount();
-                    if (lastVisibleItem == (totalItemCount - 1)) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
-                }
-
-            }
-        });
-    }
-
-    private int findLastCompletelyVisibleItemPosition(RecyclerView.LayoutManager layoutManager) {
-        if (layoutManager instanceof LinearLayoutManager) {
-            return ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-        }
-        if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(null);
-            int max = lastVisibleItemPositions[0];
-            for (int value : lastVisibleItemPositions) {
-                if (value > max) max = value;
-            }
-            return max;
-        }
-        return -1;
-    }
+    protected abstract void onBindRecyclerHolder(VH holder, T t, int position);
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerHolder holder;
-        switch (viewType) {
-            case TYPE_LOAD:
-                holder = RecyclerHolder.create(mLoadView);
-                break;
-            case TYPE_HEADER:
-                holder = RecyclerHolder.create(mHeaderView);
-                break;
-            case TYPE_FOOTER:
-                holder = RecyclerHolder.create(mFooterView);
-                break;
-            case TYPE_LOADMORE:
-                holder = RecyclerHolder.create(mLoadMoreView);
-                break;
-            default:
-                holder = onCreateRecyclerHolder(parent, viewType);
-                break;
-        }
-        return (VH) holder;
+        return onCreateRecyclerHolder(parent, viewType);
     }
-
-    protected abstract VH onCreateRecyclerHolder(ViewGroup parent, int viewType);
-
-    protected abstract void onBindRecyclerHolder(VH holder, List<T> mDatas, int position);
 
     @Override
     public void onBindViewHolder(final VH holder, final int position) {
-        if (isLoadView(position)) return;
-        if (isHeaderView(position)) return;
-        if (isFooterView(position)) return;
-        if (isLoadMoreView(position)) return;
         if (null != onItemClickListener) {
             holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onClick(holder, hasHeaderView() ? position - 1 : position);
+                    onItemClickListener.onClick(holder, getRecyclerPosition(position));
                 }
             });
         }
@@ -292,11 +157,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return onItemLongClickListener.onLongClick(holder, hasHeaderView() ? position - 1 : position);
+                    return onItemLongClickListener.onLongClick(holder, getRecyclerPosition(position));
                 }
             });
         }
-        onBindRecyclerHolder(holder, mDatas, hasHeaderView() ? position - 1 : position);
+        onBindRecyclerHolder(holder, mDatas.get(getRecyclerPosition(position)), getRecyclerPosition(position));
         int adapterPosition = holder.getAdapterPosition();
         if (!isAnimatorFirstOnly || adapterPosition > mLastPosition) {
             for (Animator anim : getAnimators(holder.itemView)) {
@@ -309,258 +174,31 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         }
     }
 
-    @Override
-    public int getItemCount() {
-        int allPosition = 0;
-        if (hasLoadView()) {
-            allPosition++;
-        } else {
-            allPosition = allPosition + getRecyclerItemCount();
-            if (hasHeaderView()) allPosition++;
-            if (hasFooterView()) allPosition++;
-            if (hasLoadMoreView()) allPosition++;
-        }
-        return allPosition;
+    protected int getRecyclerPosition(int position) {
+        return position;
+    }
+
+    protected int getRecyclerItemViewType(T t, int position) {
+        return 0;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (isLoadView(position)) return TYPE_LOAD;
-
-        if (isHeaderView(position)) return TYPE_HEADER;
-
-        if (isFooterView(position)) return TYPE_FOOTER;
-
-        if (isLoadMoreView(position)) return TYPE_LOADMORE;
-
-        return getRecyclerItemViewType(mDatas, position);
+        return getRecyclerItemViewType(mDatas.get(getRecyclerPosition(position)), getRecyclerPosition(position));
     }
 
-    public int getRecyclerItemCount() {
-        if (null != mDatas) {
-            return mDatas.size();
-        }
-        return 0;
+    protected int getRecyclerItemCount() {
+        return mDatas.size();
     }
 
-    public int getRecyclerItemViewType(List<T> mDatas, int position) {
-        return 0;
+    @Override
+    public int getItemCount() {
+        return getRecyclerItemCount();
     }
 
-    /**************************************** LoadView ***************************************/
-
-    public void setLoadView(Context context, int loadingView, int emptyView, int errorView) {
-        if (null == mLoadView) {
-            mLoadView = new FrameLayout(context);
-            mLoadView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-        } else mLoadView.removeAllViews();
-        mLoadView.addView(LayoutInflater.from(context).inflate(loadingView, null));
-        mLoadView.addView(LayoutInflater.from(context).inflate(emptyView, null));
-        mLoadView.addView(LayoutInflater.from(context).inflate(errorView, null));
-        showLoadingView();
+    public enum AnimatorType {
+        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT;
     }
-
-    public void removeLoadView() {
-        mLoadView = null;
-        notifyDataSetChanged();
-    }
-
-    public boolean hasLoadView() {
-        if (!mIsShowContent && null != mLoadView) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isLoadView(int position) {
-        return hasLoadView();
-    }
-
-    public View showLoadingView() {
-        clearDatas();
-        return visibleView(mLoadView, 0);
-    }
-
-    public void showContentView() {
-        mIsShowContent = true;
-        notifyDataSetChanged();
-    }
-
-    public View showEmptyView() {
-        clearDatas();
-        return visibleView(mLoadView, 1);
-    }
-
-    public View showErrorView() {
-        clearDatas();
-        View view = visibleView(mLoadView, 2);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mOnLoadListener) mOnLoadListener.onLoadError();
-            }
-        });
-        return view;
-    }
-
-    /**************************************** LoadView ***************************************/
-    /**************************************** LoadMoreView ***************************************/
-
-    public void setLoadMoreView(Context context, int loadingView, int emptyView, int errorView) {
-        if (null == mLoadMoreView) {
-            mLoadMoreView = new FrameLayout(context);
-            mLoadMoreView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        } else mLoadMoreView.removeAllViews();
-        mLoadMoreView.addView(LayoutInflater.from(context).inflate(loadingView, null));
-        mLoadMoreView.addView(LayoutInflater.from(context).inflate(emptyView, null));
-        mLoadMoreView.addView(LayoutInflater.from(context).inflate(errorView, null));
-        showLoadingMoreView();
-    }
-
-    public void removeLoadMoreView() {
-        mLoadMoreView = null;
-        notifyDataSetChanged();
-    }
-
-    public boolean hasLoadMoreView() {
-        if (mIsShowContent && null != mLoadMoreView) {
-            return true;
-        } else {
-            return 0 != getRecyclerItemCount() && null != mLoadMoreView;
-        }
-    }
-
-    public boolean isLoadMoreView(int position) {
-        if (hasLoadMoreView()) {
-            int otherPosition = 1;
-            if (hasHeaderView()) otherPosition++;
-            if (hasFooterView()) otherPosition++;
-            return position + 1 == getRecyclerItemCount() + otherPosition;
-        }
-        return false;
-    }
-
-    public View showLoadingMoreView() {
-        return visibleView(mLoadMoreView, 0);
-    }
-
-    public View showEmptyMoreView() {
-        return visibleView(mLoadMoreView, 1);
-    }
-
-    public View showErrorMoreView() {
-        View view = visibleView(mLoadMoreView, 2);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mOnLoadMoreListener) mOnLoadMoreListener.onLoadError();
-            }
-        });
-        return view;
-    }
-
-    private View visibleView(FrameLayout frameLayout, int position) {
-        View view = null;
-        if (null == frameLayout) {
-            String message = null;
-            if (frameLayout == mLoadView) {
-                message = "Please invoking setLoadView() initialize LoadView";
-            } else if (frameLayout == mLoadMoreView) {
-                message = "Please invoking setLoadMoreView() initialize LoadMoreView";
-            }
-            throw new NullPointerException(message);
-        }
-        for (int i = 0; i < frameLayout.getChildCount(); i++) {
-            if (position == i) view = frameLayout.getChildAt(i);
-            frameLayout.getChildAt(i).setVisibility(i == position ? View.VISIBLE : View.INVISIBLE);
-        }
-        return view;
-    }
-
-    /**************************************** LoadMoreView ***************************************/
-    /**************************************** HeaderFooter ***************************************/
-
-    public void addHeaderView(View headerView) {
-        mHeaderView = new LinearLayout(headerView.getContext());
-        mHeaderView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mHeaderView.setOrientation(LinearLayout.VERTICAL);
-        mHeaderView.addView(headerView);
-    }
-    public View getHeaderView() {
-        if (null == mHeaderView) throw new NullPointerException("The HeaderView can't empty View");
-        return mHeaderView;
-    }
-    public void removeHeaderView() {
-        if (hasHeaderView()) mHeaderView.removeAllViews();
-        mHeaderView = null;
-        notifyDataSetChanged();
-    }
-    public boolean hasHeaderView() {
-        return null != mHeaderView;
-    }
-    public boolean isHeaderView(int position) {
-        if (hasHeaderView()) {
-            int otherPosition = 1;
-            return position + 1 == otherPosition;
-        }
-        return false;
-    }
-    public void addFooterView(View footerView) {
-        mFooterView = new LinearLayout(footerView.getContext());
-        mFooterView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mFooterView.setOrientation(LinearLayout.VERTICAL);
-        mFooterView.addView(footerView);
-    }
-    public View getFooterView() {
-        if (null == mFooterView) throw new NullPointerException("The FooterView can't empty View");
-        return mFooterView;
-    }
-    public void removeFooterView() {
-        if (hasHeaderView()) mFooterView.removeAllViews();
-        mFooterView = null;
-        notifyDataSetChanged();
-    }
-    public boolean hasFooterView() {
-        return null != mFooterView;
-    }
-    public boolean isFooterView(int position) {
-        if (hasFooterView()) {
-            int otherPosition = 1;
-            if (hasHeaderView()) otherPosition++;
-            otherPosition = otherPosition + getRecyclerItemCount();
-            return position + 1 == otherPosition;
-        }
-        return false;
-    }
-
-    /**************************************** HeaderFooter ***************************************/
-    /*************************************** 监听事件 ******************************************/
-    private OnLoadListener mOnLoadListener;
-    private OnLoadMoreListener mOnLoadMoreListener;
-    public void setOnLoadListener(OnLoadListener mOnLoadListener) {
-        this.mOnLoadListener = mOnLoadListener;
-    }
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
-    }
-    /*************************************** 监听事件 ******************************************/
-    /*************************************** 监听事件 ******************************************/
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
-        this.onItemLongClickListener = onItemLongClickListener;
-    }
-    private OnItemLongClickListener onItemLongClickListener;
-
-    /*************************************** 监听事件 ******************************************/
 
     public interface OnItemClickListener {
         void onClick(RecyclerHolder holder, int position);
@@ -568,16 +206,6 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public interface OnItemLongClickListener {
         boolean onLongClick(RecyclerHolder holder, int position);
-    }
-
-    public interface OnLoadListener {
-        void onLoadEmpty();
-        void onLoadError();
-    }
-
-    public interface OnLoadMoreListener {
-        void onLoadMore();
-        void onLoadError();
     }
 
 }

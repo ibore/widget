@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/21.
  */
 
-public abstract class MultiAdapter<T> extends RecyclerAdapter<T, RecyclerHolder> {
+public abstract class MultiAdapter<T> extends RecyclerHFAdapter<T, RecyclerHolder> {
 
     protected abstract int getMultiItemType(T t);
 
@@ -16,19 +16,18 @@ public abstract class MultiAdapter<T> extends RecyclerAdapter<T, RecyclerHolder>
 
     protected abstract void convertMulti(RecyclerHolder holder, T t, int position, int itemViewType);
 
-
     @Override
-    public int getRecyclerItemViewType(List<T> mDatas, int position) {
-        return getMultiItemType(mDatas.get(position));
+    protected void onBindRecyclerHolder(RecyclerHolder holder, T t, int position) {
+        convertMulti(holder, t, position, getMultiItemType(t));
     }
 
     @Override
     protected RecyclerHolder onCreateRecyclerHolder(ViewGroup parent, int viewType) {
         return RecyclerHolder.create(parent, getMultiItemId(viewType));
     }
-
+    
     @Override
-    protected void onBindRecyclerHolder(RecyclerHolder holder, List<T> mDatas, int position) {
-        convertMulti(holder, mDatas.get(position), position, holder.getItemViewType());
+    protected int getRecyclerItemViewType(T t, int position) {
+        return getMultiItemType(t);
     }
 }

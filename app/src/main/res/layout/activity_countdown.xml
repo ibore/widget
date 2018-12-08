@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <me.ibore.widget.CountdownView
+        android:id="@+id/countdown_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cvIsSuffixTextBold="false"
+        app:cvIsTimeTextBold="true"
+        app:cvShowDays="true"
+        app:cvSuffixBackground="@color/colorPrimary"
+        app:cvSuffixBackgroundPaddingX="5dp"
+        app:cvSuffixBackgroundPaddingY="1dp"
+        app:cvSuffixDayText="day"
+        app:cvSuffixTextColor="@android:color/white"
+        app:cvSuffixTextMargin="3dp"
+        app:cvSuffixTextSize="12sp"
+        app:cvTimeBackground="@color/colorAccent"
+        app:cvTimeBackgroundHeight="35dp"
+        app:cvTimeFormat="dd天hh时mm分ss秒"
+        app:cvTimeBackgroundWidth="20dp"
+        app:cvTimeTextColor="@android:color/white"
+        app:cvTimeTextLetterBackgroundSpacing="3dp"
+        app:cvTimeTextSize="16sp" />
+
+
+</android.support.constraint.ConstraintLayout>
