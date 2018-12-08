@@ -102,9 +102,6 @@ public class RecyclerTabLayout extends RecyclerView {
     public RecyclerTabLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setWillNotDraw(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
         mIndicatorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         getAttributes(context, attrs, defStyle);
         mLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false) {
