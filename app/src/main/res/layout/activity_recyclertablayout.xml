@@ -9,11 +9,11 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        app:tabIndicatorHeight="0dp"
+        app:tabIndicatorHeight="2dp"
         app:tabIndicatorMarginVertical="4dp"
         app:tabPadding="10dp"
-        app:tabIndicatorResourceId="@drawable/ll"
-        app:tabIndicatorMode="resource"
+        app:tabIndicatorResource="@drawable/ll"
+        app:tabIndicatorMode="triangle_up"
         app:tabScrollEnabled="false">
 
     </me.ibore.widget.RecyclerTabLayout>

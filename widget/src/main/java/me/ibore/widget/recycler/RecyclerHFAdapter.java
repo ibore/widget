@@ -1,6 +1,5 @@
 package me.ibore.widget.recycler;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,17 +22,26 @@ import java.util.List;
 
 public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends RecyclerAdapter<T, VH> {
 
-
-    private static final int TYPE_LOAD = 0x1000;
-    private static final int TYPE_HEADER = 0x1001;
-    private static final int TYPE_FOOTER = 0x1002;
-    private static final int TYPE_LOADMORE = 0x1003;
+    public static final int TYPE_LOAD = 0x1000;
+    public static final int TYPE_HEADER = 0x1001;
+    public static final int TYPE_FOOTER = 0x1002;
+    public static final int TYPE_LOAD_MORE = 0x1003;
     private FrameLayout mLoadView;
     private FrameLayout mLoadMoreView;
     private LinearLayout mHeaderView;
     private LinearLayout mFooterView;
     private boolean mIsShowContent = false;
 
+    private OnLoadListener mOnLoadListener;
+    private OnLoadMoreListener mOnLoadMoreListener;
+
+    public void setOnLoadListener(OnLoadListener mOnLoadListener) {
+        this.mOnLoadListener = mOnLoadListener;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.mOnLoadMoreListener = mOnLoadMoreListener;
+    }
 
     public void setDatas(List<T> datas) {
         if (null != datas && datas.size() > 0) {
@@ -59,7 +67,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     public void onViewAttachedToWindow(VH holder) {
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
-            if (isLoadView(holder.getLayoutPosition())) {
+            if (hasLoadView()) {
                 ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
             }
             if (isHeaderView(holder.getLayoutPosition())) {
@@ -82,7 +90,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (isLoadView(position)) {
+                    if (hasLoadView()) {
                         return gridLayoutManager.getSpanCount();
                     }
                     if (isHeaderView(position)) {
@@ -128,7 +136,6 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
                         mOnLoadMoreListener.onLoadMore();
                     }
                 }
-
             }
         });
     }
@@ -157,7 +164,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
                 return (VH) RecyclerHolder.create(mHeaderView);
             case TYPE_FOOTER:
                 return (VH) RecyclerHolder.create(mFooterView);
-            case TYPE_LOADMORE:
+            case TYPE_LOAD_MORE:
                 return (VH) RecyclerHolder.create(mLoadMoreView);
             default:
                 return super.onCreateViewHolder(parent, viewType);
@@ -166,12 +173,13 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     @Override
     public void onBindViewHolder(final VH holder, final int position) {
-        if (isLoadView(position)) return;
+        if (hasLoadView()) return;
         if (isHeaderView(position)) return;
         if (isFooterView(position)) return;
         if (isLoadMoreView(position)) return;
         super.onBindViewHolder(holder, position);
     }
+
 
     @Override
     public int getItemCount() {
@@ -189,33 +197,20 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     @Override
     protected int getRecyclerPosition(int position) {
-        return getDatas().size();
+        return hasHeaderView() ? position - 1 : position;
     }
-
-
 
     @Override
     public int getItemViewType(int position) {
-        if (isLoadView(position)) return TYPE_LOAD;
+        if (hasLoadView()) return TYPE_LOAD;
 
         if (isHeaderView(position)) return TYPE_HEADER;
 
         if (isFooterView(position)) return TYPE_FOOTER;
 
-        if (isLoadMoreView(position)) return TYPE_LOADMORE;
+        if (isLoadMoreView(position)) return TYPE_LOAD_MORE;
 
-        return getRecyclerItemViewType(getDatas(), position);
-    }
-
-    public int getRecyclerItemCount() {
-        if (null != getDatas()) {
-            return getDatas().size();
-        }
-        return 0;
-    }
-
-    public int getRecyclerItemViewType(List<T> mDatas, int position) {
-        return 0;
+        return super.getItemViewType(position);
     }
 
     /**************************************** LoadView ***************************************/
@@ -245,10 +240,6 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         }
     }
 
-    public boolean isLoadView(int position) {
-        return hasLoadView();
-    }
-
     public View showLoadingView() {
         clearDatas();
         return visibleView(mLoadView, 0);
@@ -275,9 +266,6 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         });
         return view;
     }
-
-    /**************************************** LoadView ***************************************/
-    /**************************************** LoadMoreView ***************************************/
 
     public void setLoadMoreView(Context context, int loadingView, int emptyView, int errorView) {
         if (null == mLoadMoreView) {
@@ -350,9 +338,6 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         return view;
     }
 
-    /**************************************** LoadMoreView ***************************************/
-    /**************************************** HeaderFooter ***************************************/
-
     public void addHeaderView(View headerView) {
         mHeaderView = new LinearLayout(headerView.getContext());
         mHeaderView.setLayoutParams(new ViewGroup.LayoutParams(
@@ -416,20 +401,6 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         }
         return false;
     }
-
-    /**************************************** HeaderFooter ***************************************/
-    /*************************************** 监听事件 ******************************************/
-    private OnLoadListener mOnLoadListener;
-    private OnLoadMoreListener mOnLoadMoreListener;
-
-    public void setOnLoadListener(OnLoadListener mOnLoadListener) {
-        this.mOnLoadListener = mOnLoadListener;
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
-    }
-    /*************************************** 监听事件 ******************************************/
 
     public interface OnLoadListener {
         void onLoadEmpty();

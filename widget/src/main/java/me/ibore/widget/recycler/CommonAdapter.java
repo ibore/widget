@@ -16,8 +16,8 @@ public abstract class CommonAdapter<T> extends RecyclerHFAdapter<T, RecyclerHold
     }
 
     @Override
-    protected void onBindRecyclerHolder(RecyclerHolder holder, List<T> mDatas, int position) {
-        convert(holder, mDatas.get(position), position);
+    protected void onBindRecyclerHolder(RecyclerHolder holder, T t, int position) {
+        convert(holder, t, position);
     }
 
     protected abstract int getLayoutId();

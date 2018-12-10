@@ -30,6 +30,8 @@
 
         <activity android:name=".RecyclerTabLayoutActivity" />
 
+        <activity android:name=".RecyclerViewActivity" />
+
     </application>
 
 </manifest>
