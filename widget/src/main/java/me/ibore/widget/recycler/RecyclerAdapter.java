@@ -61,6 +61,16 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         notifyDataSetChanged();
     }
 
+    public void remove(T data, int position) {
+        mDatas.remove(data);
+        notifyItemRemoved(getRecyclerPosition(position));
+    }
+
+    public void remove(T data) {
+        mDatas.remove(data);
+        notifyDataSetChanged();
+    }
+
     public void clearDatas() {
         mDatas.clear();
         notifyDataSetChanged();

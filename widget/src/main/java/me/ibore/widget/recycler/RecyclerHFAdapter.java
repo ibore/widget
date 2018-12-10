@@ -45,6 +45,10 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         super.setDatas(datas);
     }
 
+    @Override
+    public void addData(T data) {
+        super.addData(data);
+    }
 
     public void clearDatas() {
         mIsShowContent = false;
