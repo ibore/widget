@@ -242,7 +242,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     public View showLoadingView() {
         clearDatas();
-        return visibleView(mLoadView, 0);
+        return visibleView(mLoadView, 0, true);
     }
 
     public void showContentView() {
@@ -252,12 +252,12 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     public View showEmptyView() {
         clearDatas();
-        return visibleView(mLoadView, 1);
+        return visibleView(mLoadView, 1, true);
     }
 
     public View showErrorView() {
         clearDatas();
-        View view = visibleView(mLoadView, 2);
+        View view = visibleView(mLoadView, 2, true);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,15 +302,15 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     }
 
     public View showLoadingMoreView() {
-        return visibleView(mLoadMoreView, 0);
+        return visibleView(mLoadMoreView, 0, false);
     }
 
     public View showEmptyMoreView() {
-        return visibleView(mLoadMoreView, 1);
+        return visibleView(mLoadMoreView, 1, false);
     }
 
     public View showErrorMoreView() {
-        View view = visibleView(mLoadMoreView, 2);
+        View view = visibleView(mLoadMoreView, 2, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -320,17 +320,15 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         return view;
     }
 
-    private View visibleView(FrameLayout frameLayout, int position) {
-        View view = null;
+    private View visibleView(FrameLayout frameLayout, int position, boolean isLoadView) {
         if (null == frameLayout) {
-            String message = null;
-            if (frameLayout == mLoadView) {
-                message = "Please invoking setLoadView() initialize LoadView";
-            } else if (frameLayout == mLoadMoreView) {
-                message = "Please invoking setLoadMoreView() initialize LoadMoreView";
+            if (isLoadView) {
+                throw new NullPointerException("Please invoking setLoadView() initialize LoadView");
+            } else {
+                throw new NullPointerException("Please invoking setLoadMoreView() initialize LoadMoreView");
             }
-            throw new NullPointerException(message);
         }
+        View view = null;
         for (int i = 0; i < frameLayout.getChildCount(); i++) {
             if (position == i) view = frameLayout.getChildAt(i);
             frameLayout.getChildAt(i).setVisibility(i == position ? View.VISIBLE : View.INVISIBLE);

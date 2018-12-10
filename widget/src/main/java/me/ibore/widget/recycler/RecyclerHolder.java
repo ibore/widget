@@ -31,10 +31,9 @@ import android.widget.TextView;
 /**
  * description:
  * author: Ibore Xie
- * date: 2017-11-26 00:22
+ * date: 2017-11-26
  * website: ibore.me
  */
-
 public class RecyclerHolder<VH extends RecyclerHolder> extends RecyclerView.ViewHolder {
 
     private SparseArray<View> mViews;
