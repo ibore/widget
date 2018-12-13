@@ -53,22 +53,24 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public void addData(T data, int position) {
         mDatas.add(position, data);
-        notifyItemInserted(getRecyclerPosition(position));
+        notifyItemInserted(getAdapterPosition(position));
     }
 
     public void addDatas(List<T> datas) {
+        if (null == datas) return;
         mDatas.addAll(datas);
+        notifyItemRangeInserted(getAdapterPosition(mDatas.size() - 1), datas.size());
         notifyDataSetChanged();
     }
 
-    public void remove(T data, int position) {
-        mDatas.remove(data);
-        notifyItemRemoved(getRecyclerPosition(position));
+    public void remove(int position) {
+        mDatas.remove(position);
+        notifyItemRemoved(getAdapterPosition(position));
     }
 
     public void remove(T data) {
         mDatas.remove(data);
-        notifyDataSetChanged();
+        notifyItemRemoved(getAdapterPosition(mDatas.indexOf(data)));
     }
 
     public void clearDatas() {
@@ -182,9 +184,19 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         } else {
             clearAnimator(holder.itemView);
         }
+
     }
 
     protected int getRecyclerPosition(int position) {
+        return position;
+    }
+
+    /**
+     * recyclerPosition转成真正的Position
+     * @param position
+     * @return
+     */
+    protected int getAdapterPosition(int position) {
         return position;
     }
 

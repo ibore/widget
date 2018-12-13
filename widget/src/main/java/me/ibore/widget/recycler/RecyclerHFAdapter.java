@@ -201,6 +201,11 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     }
 
     @Override
+    protected int getAdapterPosition(int position) {
+        return hasHeaderView() ? position + 1 : position;
+    }
+
+    @Override
     public int getItemViewType(int position) {
         if (hasLoadView()) return TYPE_LOAD;
 
