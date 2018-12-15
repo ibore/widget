@@ -54,7 +54,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public void addData(T data, int position) {
         mDatas.add(position, data);
-        //notifyItemInserted();
+        notifyItemInserted(hasHeaderView() ? position + 1: position);
     }
 
     public void addDatas(List<T> datas) {
@@ -62,23 +62,6 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         mDatas.addAll(datas);
         int recyclerPosition = hasHeaderView() ? mDatas.size() : mDatas.size() - 1;
         notifyItemRangeInserted(recyclerPosition, datas.size());
-        notifyDataSetChanged();
-    }
-
-    public void remove(int position) {
-        if (position == -1) {
-            notifyDataSetChanged();
-            return;
-        }
-        mDatas.remove(position);
-        int adapterPosition = hasHeaderView() ? position + 1 : position;
-        notifyItemRemoved(adapterPosition);
-    }
-
-    public void remove(T data) {
-        mDatas.remove(data);
-        int adapterPosition = hasHeaderView() ? mDatas.indexOf(data) + 1 : mDatas.indexOf(data);
-        notifyItemRemoved(adapterPosition);
     }
 
     public void clearDatas() {
@@ -219,7 +202,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public enum AnimatorType {
-        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT;
+        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT
     }
 
     public interface OnItemClickListener {

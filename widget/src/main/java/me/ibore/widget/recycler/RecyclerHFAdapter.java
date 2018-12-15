@@ -248,7 +248,14 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     public View showEmptyView() {
         clearDatas();
-        return visibleView(mLoadView, 1, true);
+        View view = visibleView(mLoadView, 1, true);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnLoadListener) mOnLoadListener.onLoadEmpty();
+            }
+        });
+        return view;
     }
 
     public View showErrorView() {

@@ -43,7 +43,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 holder.onClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mAdapter.remove(position);
+                        mAdapter.getDatas().remove(position);
+                        mAdapter.notifyItemRemoved(holder.getAdapterPosition());
 //                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                     }
                 });
