@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.ibore.widget.recycler.CommonAdapter;
+import me.ibore.widget.recycler.RecyclerAdapter;
 import me.ibore.widget.recycler.RecyclerHFAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
+import me.ibore.widget.recycler.anim.holder.AnimateViewHolder;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
@@ -36,31 +38,43 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 return R.layout.item_main;
             }
             @Override
-            protected void convert(RecyclerHolder holder, final String s, int position) {
+            protected void convert(final RecyclerHolder holder, final String s, final int position) {
                 holder.getTextView(R.id.title).setText(s);
                 holder.onClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        mAdapter.remove(0);
+                        mAdapter.getDatas().remove(position);
+                        mAdapter.notifyItemRemoved(holder.getAdapterPosition());
 //                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         };
+        mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(RecyclerHolder holder, int position) {
+                Toast.makeText(getApplicationContext(), mAdapter.getData(position), Toast.LENGTH_SHORT).show();
+            }
+        });
         mAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.header, null));
         mAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer, null));
         mAdapter.setLoadView(this, R.layout.loading, R.layout.empty, R.layout.error);
         mAdapter.setLoadMoreView(this, R.layout.loading, R.layout.empty, R.layout.error);
-        mAdapter.getHeaderView().setOnClickListener(new View.OnClickListener() {
+        /*mAdapter.getHeaderView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         mAdapter.setOnLoadMoreListener(new RecyclerHFAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                Log.d("----", "onLoadMore");
+                /*Log.d("----", "onLoadMore");
+                mAdapter.addData("9999999");
+                mAdapter.addData("9999999");
+                mAdapter.addData("9999999");
+                mAdapter.addData("9999999");
+                mAdapter.addData("9999999");*/
             }
 
             @Override

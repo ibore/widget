@@ -35,12 +35,12 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     private OnLoadListener mOnLoadListener;
     private OnLoadMoreListener mOnLoadMoreListener;
 
-    public void setOnLoadListener(OnLoadListener mOnLoadListener) {
-        this.mOnLoadListener = mOnLoadListener;
+    public void setOnLoadListener(OnLoadListener onLoadListener) {
+        this.mOnLoadListener = onLoadListener;
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.mOnLoadMoreListener = onLoadMoreListener;
     }
 
     public void setDatas(List<T> datas) {
@@ -53,6 +53,10 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         super.setDatas(datas);
     }
 
+    @Override
+    public void addData(T data) {
+        super.addData(data);
+    }
 
     public void clearDatas() {
         mIsShowContent = false;
@@ -81,6 +85,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (null == layoutManager) return;
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -192,11 +197,6 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     }
 
     @Override
-    protected int getRecyclerPosition(int position) {
-        return hasHeaderView() ? position - 1 : position;
-    }
-
-    @Override
     public int getItemViewType(int position) {
         if (hasLoadView()) return TYPE_LOAD;
 
@@ -217,9 +217,9 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
             mLoadView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
         } else mLoadView.removeAllViews();
-        mLoadView.addView(LayoutInflater.from(context).inflate(loadingView, null));
-        mLoadView.addView(LayoutInflater.from(context).inflate(emptyView, null));
-        mLoadView.addView(LayoutInflater.from(context).inflate(errorView, null));
+        mLoadView.addView(LayoutInflater.from(context).inflate(loadingView, mLoadView, false));
+        mLoadView.addView(LayoutInflater.from(context).inflate(emptyView, mLoadView, false));
+        mLoadView.addView(LayoutInflater.from(context).inflate(errorView, mLoadView, false));
         showLoadingView();
     }
 
@@ -238,7 +238,7 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     public View showLoadingView() {
         clearDatas();
-        return visibleView(mLoadView, 0);
+        return visibleView(mLoadView, 0, true);
     }
 
     public void showContentView() {
@@ -248,12 +248,19 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
 
     public View showEmptyView() {
         clearDatas();
-        return visibleView(mLoadView, 1);
+        View view = visibleView(mLoadView, 1, true);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnLoadListener) mOnLoadListener.onLoadEmpty();
+            }
+        });
+        return view;
     }
 
     public View showErrorView() {
         clearDatas();
-        View view = visibleView(mLoadView, 2);
+        View view = visibleView(mLoadView, 2, true);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,9 +275,9 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
             mLoadMoreView = new FrameLayout(context);
             mLoadMoreView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else mLoadMoreView.removeAllViews();
-        mLoadMoreView.addView(LayoutInflater.from(context).inflate(loadingView, null));
-        mLoadMoreView.addView(LayoutInflater.from(context).inflate(emptyView, null));
-        mLoadMoreView.addView(LayoutInflater.from(context).inflate(errorView, null));
+        mLoadMoreView.addView(LayoutInflater.from(context).inflate(loadingView, mLoadMoreView, false));
+        mLoadMoreView.addView(LayoutInflater.from(context).inflate(emptyView, mLoadMoreView, false));
+        mLoadMoreView.addView(LayoutInflater.from(context).inflate(errorView, mLoadMoreView, false));
         showLoadingMoreView();
     }
 
@@ -298,15 +305,15 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
     }
 
     public View showLoadingMoreView() {
-        return visibleView(mLoadMoreView, 0);
+        return visibleView(mLoadMoreView, 0, false);
     }
 
     public View showEmptyMoreView() {
-        return visibleView(mLoadMoreView, 1);
+        return visibleView(mLoadMoreView, 1, false);
     }
 
     public View showErrorMoreView() {
-        View view = visibleView(mLoadMoreView, 2);
+        View view = visibleView(mLoadMoreView, 2, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,17 +323,15 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         return view;
     }
 
-    private View visibleView(FrameLayout frameLayout, int position) {
-        View view = null;
+    private View visibleView(FrameLayout frameLayout, int position, boolean isLoadView) {
         if (null == frameLayout) {
-            String message = null;
-            if (frameLayout == mLoadView) {
-                message = "Please invoking setLoadView() initialize LoadView";
-            } else if (frameLayout == mLoadMoreView) {
-                message = "Please invoking setLoadMoreView() initialize LoadMoreView";
+            if (isLoadView) {
+                throw new NullPointerException("Please invoking setLoadView() initialize LoadView");
+            } else {
+                throw new NullPointerException("Please invoking setLoadMoreView() initialize LoadMoreView");
             }
-            throw new NullPointerException(message);
         }
+        View view = null;
         for (int i = 0; i < frameLayout.getChildCount(); i++) {
             if (position == i) view = frameLayout.getChildAt(i);
             frameLayout.getChildAt(i).setVisibility(i == position ? View.VISIBLE : View.INVISIBLE);
@@ -353,14 +358,14 @@ public abstract class RecyclerHFAdapter<T, VH extends RecyclerHolder> extends Re
         notifyDataSetChanged();
     }
 
-    public boolean hasHeaderView() {
+    @Override
+    protected boolean hasHeaderView() {
         return null != mHeaderView;
     }
 
     public boolean isHeaderView(int position) {
         if (hasHeaderView()) {
-            int otherPosition = 1;
-            return position + 1 == otherPosition;
+            return position == 0;
         }
         return false;
     }

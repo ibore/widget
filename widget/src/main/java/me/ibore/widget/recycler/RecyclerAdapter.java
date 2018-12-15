@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
@@ -53,12 +54,14 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public void addData(T data, int position) {
         mDatas.add(position, data);
-        notifyItemInserted(getRecyclerPosition(position));
+        notifyItemInserted(hasHeaderView() ? position + 1: position);
     }
 
     public void addDatas(List<T> datas) {
+        if (null == datas) return;
         mDatas.addAll(datas);
-        notifyDataSetChanged();
+        int recyclerPosition = hasHeaderView() ? mDatas.size() : mDatas.size() - 1;
+        notifyItemRangeInserted(recyclerPosition, datas.size());
     }
 
     public void clearDatas() {
@@ -144,12 +147,13 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     @Override
-    public void onBindViewHolder(final VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
+        final int recyclerPosition = hasHeaderView() ? position - 1 : position;
         if (null != onItemClickListener) {
             holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onClick(holder, getRecyclerPosition(position));
+                    onItemClickListener.onClick(holder, recyclerPosition);
                 }
             });
         }
@@ -157,11 +161,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return onItemLongClickListener.onLongClick(holder, getRecyclerPosition(position));
+                    return onItemLongClickListener.onLongClick(holder, recyclerPosition);
                 }
             });
         }
-        onBindRecyclerHolder(holder, mDatas.get(getRecyclerPosition(position)), getRecyclerPosition(position));
+        onBindRecyclerHolder(holder, mDatas.get(recyclerPosition), recyclerPosition);
         int adapterPosition = holder.getAdapterPosition();
         if (!isAnimatorFirstOnly || adapterPosition > mLastPosition) {
             for (Animator anim : getAnimators(holder.itemView)) {
@@ -174,8 +178,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         }
     }
 
-    protected int getRecyclerPosition(int position) {
-        return position;
+    protected boolean hasHeaderView() {
+        return false;
     }
 
     protected int getRecyclerItemViewType(T t, int position) {
@@ -184,7 +188,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     @Override
     public int getItemViewType(int position) {
-        return getRecyclerItemViewType(mDatas.get(getRecyclerPosition(position)), getRecyclerPosition(position));
+        int recyclerPosition = hasHeaderView() ? position - 1 : position;
+        return getRecyclerItemViewType(mDatas.get(recyclerPosition), recyclerPosition);
     }
 
     protected int getRecyclerItemCount() {
@@ -197,7 +202,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public enum AnimatorType {
-        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT;
+        NOANIMATOR, SCALEIN, SLIDEINTOP, SLIDEINBOTTOM, SLIDEINLEFT, SLIDEINRIGHT
     }
 
     public interface OnItemClickListener {
