@@ -50,5 +50,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.addData(new MainItem("BannerView", BannerViewActivity.class));
         mAdapter.addData(new MainItem("HtmlText", HtmlTextActivity.class));
         mAdapter.addData(new MainItem("CountdownView", CountdownActivity.class));
+        mAdapter.addData(new MainItem("RadarProgressView", RadarProgressActivity.class));
     }
 }

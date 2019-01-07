@@ -32,6 +32,8 @@
 
         <activity android:name=".RecyclerViewActivity" />
 
+        <activity android:name=".RadarProgressActivity" />
+
     </application>
 
 </manifest>
