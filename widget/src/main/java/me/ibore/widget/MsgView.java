@@ -73,12 +73,12 @@ public class MsgView extends TextView {
     }
 
     public void setCornerRadius(int cornerRadius) {
-        this.mCornerRadius = UIUtils.dp2px(cornerRadius);
+        this.mCornerRadius = UIUtils.dp2px(getContext(), cornerRadius);
         setBgSelector();
     }
 
     public void setStrokeWidth(int strokeWidth) {
-        this.mStrokeWidth = UIUtils.dp2px(strokeWidth);
+        this.mStrokeWidth = UIUtils.dp2px(getContext(), strokeWidth);
         setBgSelector();
     }
 

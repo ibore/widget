@@ -103,10 +103,10 @@ public class TagLayout extends FlowLayout implements TagAdapter.OnDataChangedLis
                 MarginLayoutParams lp = new MarginLayoutParams(
                         LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
-                lp.setMargins(UIUtils.dp2px(5),
-                        UIUtils.dp2px(5),
-                        UIUtils.dp2px(5),
-                        UIUtils.dp2px(5));
+                lp.setMargins(UIUtils.dp2px(getContext(), 5),
+                        UIUtils.dp2px(getContext(), 5),
+                        UIUtils.dp2px(getContext(), 5),
+                        UIUtils.dp2px(getContext(), 5));
                 tagViewContainer.setLayoutParams(lp);
             }
             LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

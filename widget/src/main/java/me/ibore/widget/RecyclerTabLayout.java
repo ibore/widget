@@ -11,7 +11,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -25,11 +24,8 @@ import android.view.ViewGroup;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.List;
 
 import me.ibore.widget.recycler.RecyclerAdapter;
-import me.ibore.widget.recycler.RecyclerHFAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
 

@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.SweepGradient;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class RadarProgressView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //设置宽高,默认200dp
-        int defaultSize = UIUtils.dp2px(100);
+        int defaultSize = RadarProgressView.dp2px(getContext(), 100);
         setMeasuredDimension(measureWidth(widthMeasureSpec, defaultSize),
                 measureHeight(heightMeasureSpec, defaultSize));
     }
@@ -364,4 +365,8 @@ public class RadarProgressView extends View {
         return Color.argb(alpha, red, green, blue);
     }
 
+    private static int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
+    }
 }

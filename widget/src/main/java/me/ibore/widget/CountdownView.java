@@ -168,7 +168,7 @@ public class CountdownView extends View {
         setShowMinutes(mTypedArray.getBoolean(R.styleable.CountdownView_cvShowMinutes, false));
         setShowSeconds(mTypedArray.getBoolean(R.styleable.CountdownView_cvShowSeconds, false));
 
-        mTimeTextSize = mTypedArray.getDimensionPixelSize(R.styleable.CountdownView_cvTimeTextSize, UIUtils.sp2px(13));
+        mTimeTextSize = mTypedArray.getDimensionPixelSize(R.styleable.CountdownView_cvTimeTextSize, UIUtils.sp2px(getContext(), 13));
         mTimeTextColor = mTypedArray.getColor(R.styleable.CountdownView_cvTimeTextColor, Color.BLACK);
         isTimeTextBold = mTypedArray.getBoolean(R.styleable.CountdownView_cvIsTimeTextBold, false);
 
@@ -204,7 +204,7 @@ public class CountdownView extends View {
             setSuffixSecond(mTypedArray.getString(R.styleable.CountdownView_cvSuffixSecondText));
         }
 
-        mSuffixTextSize = mTypedArray.getDimensionPixelSize(R.styleable.CountdownView_cvSuffixTextSize, UIUtils.sp2px(16));
+        mSuffixTextSize = mTypedArray.getDimensionPixelSize(R.styleable.CountdownView_cvSuffixTextSize, UIUtils.sp2px(getContext(), 16));
         mSuffixTextColor = mTypedArray.getColor(R.styleable.CountdownView_cvSuffixTextColor, Color.BLACK);
         isSuffixTextBold = mTypedArray.getBoolean(R.styleable.CountdownView_cvIsSuffixTextBold, false);
 
@@ -1189,7 +1189,7 @@ public class CountdownView extends View {
     }
 
     public int getTimeTextSize() {
-        return UIUtils.px2dp(mTimeTextSize);
+        return UIUtils.px2dp(getContext(), mTimeTextSize);
     }
 
     public int getTimeTextColor() {
@@ -1201,11 +1201,11 @@ public class CountdownView extends View {
     }
 
     public float getTimeTextLetterSpacing() {
-        return UIUtils.px2dp(mTimeTextLetterSpacing);
+        return UIUtils.px2dp(getContext(), mTimeTextLetterSpacing);
     }
 
     public float getTimeTextLetterBackgroundSpacing() {
-        return UIUtils.px2dp(mTimeTextLetterBackgroundSpacing);
+        return UIUtils.px2dp(getContext(), mTimeTextLetterBackgroundSpacing);
     }
 
     public Drawable getTimeBackground() {
@@ -1213,43 +1213,43 @@ public class CountdownView extends View {
     }
 
     public float getTimeBackgroundWidth() {
-        return UIUtils.px2dp(mTimeBackgroundWidth);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundWidth);
     }
 
     public float getTimeBackgroundHeight() {
-        return UIUtils.px2dp(mTimeBackgroundHeight);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundHeight);
     }
 
     public float getTimeBackgroundPadding() {
-        return UIUtils.px2dp(mTimeBackgroundPadding);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPadding);
     }
 
     public float getTimeBackgroundPaddingX() {
-        return UIUtils.px2dp(mTimeBackgroundPaddingX);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPaddingX);
     }
 
     public float getTimeBackgroundPaddingY() {
-        return UIUtils.px2dp(mTimeBackgroundPaddingY);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPaddingY);
     }
 
     public float getTimeBackgroundPaddingLeft() {
-        return UIUtils.px2dp(mTimeBackgroundPaddingLeft);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPaddingLeft);
     }
 
     public float getTimeBackgroundPaddingRight() {
-        return UIUtils.px2dp(mTimeBackgroundPaddingRight);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPaddingRight);
     }
 
     public float getTimeBackgroundPaddingTop() {
-        return UIUtils.px2dp(mTimeBackgroundPaddingTop);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPaddingTop);
     }
 
     public float getTimeBackgroundPaddingBottom() {
-        return UIUtils.px2dp(mTimeBackgroundPaddingBottom);
+        return UIUtils.px2dp(getContext(), mTimeBackgroundPaddingBottom);
     }
 
     public int getSuffixTextSize() {
-        return UIUtils.px2sp(mSuffixTextSize);
+        return UIUtils.px2sp(getContext(), mSuffixTextSize);
     }
 
     public int getSuffixTextColor() {
@@ -1261,7 +1261,7 @@ public class CountdownView extends View {
     }
 
     public float getSuffixTextMargin() {
-        return UIUtils.px2dp(mSuffixTextMargin);
+        return UIUtils.px2dp(getContext(), mSuffixTextMargin);
     }
 
     public Drawable getSuffixBackground() {
@@ -1269,39 +1269,39 @@ public class CountdownView extends View {
     }
 
     public float getSuffixBackgroundWidth() {
-        return UIUtils.px2dp(mSuffixBackgroundWidth);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundWidth);
     }
 
     public float getSuffixBackgroundHeight() {
-        return UIUtils.px2dp(mSuffixBackgroundHeight);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundHeight);
     }
 
     public float getSuffixBackgroundPadding() {
-        return UIUtils.px2dp(mSuffixBackgroundPadding);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPadding);
     }
 
     public float getSuffixBackgroundPaddingX() {
-        return UIUtils.px2dp(mSuffixBackgroundPaddingX);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPaddingX);
     }
 
     public float getSuffixBackgroundPaddingY() {
-        return UIUtils.px2dp(mSuffixBackgroundPaddingY);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPaddingY);
     }
 
     public float getSuffixBackgroundPaddingLeft() {
-        return UIUtils.px2dp(mSuffixBackgroundPaddingLeft);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPaddingLeft);
     }
 
     public float getSuffixBackgroundPaddingRight() {
-        return UIUtils.px2dp(mSuffixBackgroundPaddingRight);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPaddingRight);
     }
 
     public float getSuffixBackgroundPaddingTop() {
-        return UIUtils.px2dp(mSuffixBackgroundPaddingTop);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPaddingTop);
     }
 
     public float getSuffixBackgroundPaddingBottom() {
-        return UIUtils.px2dp(mSuffixBackgroundPaddingBottom);
+        return UIUtils.px2dp(getContext(), mSuffixBackgroundPaddingBottom);
     }
 
     public String getSuffixDay() {
@@ -1349,7 +1349,7 @@ public class CountdownView extends View {
     }
 
     public void setTimeTextSize(int timeTextSize) {
-        this.mTimeTextSize = UIUtils.sp2px(timeTextSize);
+        this.mTimeTextSize = UIUtils.sp2px(getContext(), timeTextSize);
     }
 
     public void setTimeTextColor(int timeTextColor) {
@@ -1361,11 +1361,11 @@ public class CountdownView extends View {
     }
 
     public void setTimeTextLetterSpacing(float timeTextLetterSpacing) {
-        this.mTimeTextLetterSpacing = UIUtils.dp2px(timeTextLetterSpacing);
+        this.mTimeTextLetterSpacing = UIUtils.dp2px(getContext(), timeTextLetterSpacing);
     }
 
     public void setTimeTextLetterBackgroundSpacing(float timeTextLetterBackgroundSpacing) {
-        this.mTimeTextLetterBackgroundSpacing = UIUtils.dp2px(timeTextLetterBackgroundSpacing);
+        this.mTimeTextLetterBackgroundSpacing = UIUtils.dp2px(getContext(), timeTextLetterBackgroundSpacing);
     }
 
     public void setTimeBackground(Drawable timeBackground) {
@@ -1373,46 +1373,46 @@ public class CountdownView extends View {
     }
 
     public void setTimeBackgroundWidth(float timeBackgroundWidth) {
-        this.mTimeBackgroundWidth = UIUtils.dp2px(timeBackgroundWidth);
+        this.mTimeBackgroundWidth = UIUtils.dp2px(getContext(), timeBackgroundWidth);
     }
 
     public void setTimeBackgroundHeight(float timeBackgroundHeight) {
-        this.mTimeBackgroundHeight = UIUtils.dp2px(timeBackgroundHeight);
+        this.mTimeBackgroundHeight = UIUtils.dp2px(getContext(), timeBackgroundHeight);
     }
 
     public void setTimeBackgroundPadding(float timeBackgroundPadding) {
         hasSetTimeBackgroundPadding = true;
-        this.mTimeBackgroundPadding = UIUtils.dp2px(timeBackgroundPadding);
+        this.mTimeBackgroundPadding = UIUtils.dp2px(getContext(), timeBackgroundPadding);
     }
 
     public void setTimeBackgroundPaddingX(float timeBackgroundPaddingX) {
         hasSetTimeBackgroundPaddingX = true;
-        this.mTimeBackgroundPaddingX = UIUtils.dp2px(timeBackgroundPaddingX);
+        this.mTimeBackgroundPaddingX = UIUtils.dp2px(getContext(), timeBackgroundPaddingX);
     }
 
     public void setTimeBackgroundPaddingY(float timeBackgroundPaddingY) {
         hasSetTimeBackgroundPaddingY = true;
-        this.mTimeBackgroundPaddingY = UIUtils.dp2px(timeBackgroundPaddingY);
+        this.mTimeBackgroundPaddingY = UIUtils.dp2px(getContext(), timeBackgroundPaddingY);
     }
 
     public void setTimeBackgroundPaddingLeft(float timeBackgroundPaddingLeft) {
-        this.mTimeBackgroundPaddingLeft = UIUtils.dp2px(timeBackgroundPaddingLeft);
+        this.mTimeBackgroundPaddingLeft = UIUtils.dp2px(getContext(), timeBackgroundPaddingLeft);
     }
 
     public void setTimeBackgroundPaddingRight(float timeBackgroundPaddingRight) {
-        this.mTimeBackgroundPaddingRight = UIUtils.dp2px(timeBackgroundPaddingRight);
+        this.mTimeBackgroundPaddingRight = UIUtils.dp2px(getContext(), timeBackgroundPaddingRight);
     }
 
     public void setTimeBackgroundPaddingTop(float timeBackgroundPaddingTop) {
-        this.mTimeBackgroundPaddingTop = UIUtils.dp2px(timeBackgroundPaddingTop);
+        this.mTimeBackgroundPaddingTop = UIUtils.dp2px(getContext(), timeBackgroundPaddingTop);
     }
 
     public void setTimeBackgroundPaddingBottom(float timeBackgroundPaddingBottom) {
-        this.mTimeBackgroundPaddingBottom = UIUtils.dp2px(timeBackgroundPaddingBottom);
+        this.mTimeBackgroundPaddingBottom = UIUtils.dp2px(getContext(), timeBackgroundPaddingBottom);
     }
 
     public void setSuffixTextSize(int suffixTextSize) {
-        this.mSuffixTextSize = UIUtils.sp2px(suffixTextSize);
+        this.mSuffixTextSize = UIUtils.sp2px(getContext(), suffixTextSize);
     }
 
     public void setSuffixTextColor(int suffixTextColor) {
@@ -1424,7 +1424,7 @@ public class CountdownView extends View {
     }
 
     public void setSuffixTextMargin(float suffixTextMargin) {
-        this.mSuffixTextMargin = UIUtils.dp2px(suffixTextMargin);
+        this.mSuffixTextMargin = UIUtils.dp2px(getContext(), suffixTextMargin);
     }
 
     public void setSuffixBackground(Drawable suffixBackground) {
@@ -1432,42 +1432,42 @@ public class CountdownView extends View {
     }
 
     public void setSuffixBackgroundWidth(float suffixBackgroundWidth) {
-        this.mSuffixBackgroundWidth = UIUtils.dp2px(suffixBackgroundWidth);
+        this.mSuffixBackgroundWidth = UIUtils.dp2px(getContext(), suffixBackgroundWidth);
     }
 
     public void setSuffixBackgroundHeight(float suffixBackgroundHeight) {
-        this.mSuffixBackgroundHeight = UIUtils.dp2px(suffixBackgroundHeight);
+        this.mSuffixBackgroundHeight = UIUtils.dp2px(getContext(), suffixBackgroundHeight);
     }
 
     public void setSuffixBackgroundPadding(float suffixBackgroundPadding) {
-        this.mSuffixBackgroundPadding = UIUtils.dp2px(suffixBackgroundPadding);
+        this.mSuffixBackgroundPadding = UIUtils.dp2px(getContext(), suffixBackgroundPadding);
         hasSetSuffixBackgroundPadding = true;
     }
 
     public void setSuffixBackgroundPaddingX(float suffixBackgroundPaddingX) {
-        this.mSuffixBackgroundPaddingX = UIUtils.dp2px(suffixBackgroundPaddingX);
+        this.mSuffixBackgroundPaddingX = UIUtils.dp2px(getContext(), suffixBackgroundPaddingX);
         hasSetSuffixBackgroundPaddingX = true;
     }
 
     public void setSuffixBackgroundPaddingY(float suffixBackgroundPaddingY) {
-        this.mSuffixBackgroundPaddingY = UIUtils.dp2px(suffixBackgroundPaddingY);
+        this.mSuffixBackgroundPaddingY = UIUtils.dp2px(getContext(), suffixBackgroundPaddingY);
         hasSetSuffixBackgroundPaddingY = true;
     }
 
     public void setSuffixBackgroundPaddingLeft(float suffixBackgroundPaddingLeft) {
-        this.mSuffixBackgroundPaddingLeft = UIUtils.dp2px(suffixBackgroundPaddingLeft);
+        this.mSuffixBackgroundPaddingLeft = UIUtils.dp2px(getContext(), suffixBackgroundPaddingLeft);
     }
 
     public void setSuffixBackgroundPaddingRight(float suffixBackgroundPaddingRight) {
-        this.mSuffixBackgroundPaddingRight = UIUtils.dp2px(suffixBackgroundPaddingRight);
+        this.mSuffixBackgroundPaddingRight = UIUtils.dp2px(getContext(), suffixBackgroundPaddingRight);
     }
 
     public void setSuffixBackgroundPaddingTop(float suffixBackgroundPaddingTop) {
-        this.mSuffixBackgroundPaddingTop = UIUtils.dp2px(suffixBackgroundPaddingTop);
+        this.mSuffixBackgroundPaddingTop = UIUtils.dp2px(getContext(), suffixBackgroundPaddingTop);
     }
 
     public void setSuffixBackgroundPaddingBottom(float suffixBackgroundPaddingBottom) {
-        this.mSuffixBackgroundPaddingBottom = UIUtils.dp2px(suffixBackgroundPaddingBottom);
+        this.mSuffixBackgroundPaddingBottom = UIUtils.dp2px(getContext(), suffixBackgroundPaddingBottom);
     }
 
     public void setSuffixDay(String suffixDay) {

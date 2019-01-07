@@ -17,7 +17,7 @@
         app:rpvFlicker="3"
         app:rpvRaindropNum="4"
         app:rpvShowCross="false"
-        app:rpvSpeed="5"
+        app:rpvSpeed="10"
         app:rpvSweepColor="#565cd6" />
 
     <Button

@@ -1,7 +1,6 @@
 package me.ibore.widget;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Camera;
 import android.graphics.Canvas;
@@ -24,7 +23,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -40,12 +38,6 @@ import java.util.Locale;
 
 public class WheelView<T> extends View implements Runnable {
 
-    private static final float DEFAULT_LINE_SPACING = UIUtils.dp2px(2);
-    private static final float DEFAULT_TEXT_SIZE = UIUtils.sp2px(15);
-    private static final float DEFAULT_TEXT_BOUNDARY_MARGIN = UIUtils.dp2px(2);
-    private static final float DEFAULT_DIVIDER_HEIGHT = UIUtils.dp2px(1);
-    private static final int DEFAULT_NORMAL_TEXT_COLOR = Color.DKGRAY;
-    private static final int DEFAULT_SELECTED_TEXT_COLOR = Color.BLACK;
     private static final int DEFAULT_VISIBLE_ITEM = 5;
     private static final int DEFAULT_SCROLL_DURATION = 250;
     private static final long DEFAULT_CLICK_CONFIRM = 120;
@@ -226,14 +218,14 @@ public class WheelView<T> extends View implements Runnable {
      */
     private void initAttrsAndDefault(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelView);
-        mTextSize = typedArray.getDimension(R.styleable.WheelView_wvTextSize, DEFAULT_TEXT_SIZE);
+        mTextSize = typedArray.getDimension(R.styleable.WheelView_wvTextSize, UIUtils.sp2px(getContext(), 15));
         isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wvAutoFitTextSize, false);
         mTextAlign = typedArray.getInt(R.styleable.WheelView_wvTextAlign, TEXT_ALIGN_CENTER);
         mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelView_wvTextBoundaryMargin,
-                DEFAULT_TEXT_BOUNDARY_MARGIN);
-        mTextColor = typedArray.getColor(R.styleable.WheelView_wvNormalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
-        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelView_wvSelectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wvLineSpacing, DEFAULT_LINE_SPACING);
+                UIUtils.dp2px(getContext(), 2));
+        mTextColor = typedArray.getColor(R.styleable.WheelView_wvNormalItemTextColor, Color.DKGRAY);
+        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelView_wvSelectedItemTextColor, Color.BLACK);
+        mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wvLineSpacing, UIUtils.dp2px(getContext(), 2));
         isIntegerNeedFormat = typedArray.getBoolean(R.styleable.WheelView_wvIntegerNeedFormat, false);
         mIntegerFormat = typedArray.getString(R.styleable.WheelView_wvIntegerFormat);
         if (TextUtils.isEmpty(mIntegerFormat)) {
@@ -250,9 +242,9 @@ public class WheelView<T> extends View implements Runnable {
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wvShowDivider, false);
         mDividerType = typedArray.getInt(R.styleable.WheelView_wvDividerType, DIVIDER_TYPE_FILL);
-        mDividerSize = typedArray.getDimension(R.styleable.WheelView_wvDividerHeight, DEFAULT_DIVIDER_HEIGHT);
-        mDividerColor = typedArray.getColor(R.styleable.WheelView_wvDividerColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wvDividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
+        mDividerSize = typedArray.getDimension(R.styleable.WheelView_wvDividerHeight, UIUtils.dp2px(getContext(), 1));
+        mDividerColor = typedArray.getColor(R.styleable.WheelView_wvDividerColor, Color.BLACK);
+        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wvDividerPaddingForWrap, UIUtils.dp2px(getContext(), 2));
 
         isDrawSelectedRect = typedArray.getBoolean(R.styleable.WheelView_wvDrawSelectedRect, false);
         mSelectedRectColor = typedArray.getColor(R.styleable.WheelView_wvSelectedRectColor, Color.TRANSPARENT);
@@ -1264,7 +1256,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     public void setTextSize(float textSize, boolean isSp) {
         float tempTextSize = mTextSize;
-        mTextSize = isSp ? UIUtils.sp2px(textSize) : textSize;
+        mTextSize = isSp ? UIUtils.sp2px(getContext(), textSize) : textSize;
         if (tempTextSize == mTextSize) {
             return;
         }
@@ -1446,7 +1438,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     public void setTextBoundaryMargin(float textBoundaryMargin, boolean isDp) {
         float tempTextBoundaryMargin = mTextBoundaryMargin;
-        mTextBoundaryMargin = isDp ? UIUtils.dp2px(textBoundaryMargin) : textBoundaryMargin;
+        mTextBoundaryMargin = isDp ? UIUtils.dp2px(getContext(), textBoundaryMargin) : textBoundaryMargin;
         if (tempTextBoundaryMargin == mTextBoundaryMargin) {
             return;
         }
@@ -1480,7 +1472,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     public void setLineSpacing(float lineSpacing, boolean isDp) {
         float tempLineSpace = mLineSpacing;
-        mLineSpacing = isDp ? UIUtils.dp2px(lineSpacing) : lineSpacing;
+        mLineSpacing = isDp ? UIUtils.dp2px(getContext(), lineSpacing) : lineSpacing;
         if (tempLineSpace == mLineSpacing) {
             return;
         }
@@ -1778,7 +1770,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     public void setDividerHeight(float dividerHeight, boolean isDp) {
         float tempDividerHeight = mDividerSize;
-        mDividerSize = isDp ? UIUtils.dp2px(dividerHeight) : dividerHeight;
+        mDividerSize = isDp ? UIUtils.dp2px(getContext(), dividerHeight) : dividerHeight;
         if (tempDividerHeight == mDividerSize) {
             return;
         }
@@ -1837,7 +1829,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     public void setDividerPaddingForWrap(float dividerPaddingForWrap, boolean isDp) {
         float tempDividerPadding = mDividerPaddingForWrap;
-        mDividerPaddingForWrap = isDp ? UIUtils.dp2px(dividerPaddingForWrap) : dividerPaddingForWrap;
+        mDividerPaddingForWrap = isDp ? UIUtils.dp2px(getContext(), dividerPaddingForWrap) : dividerPaddingForWrap;
         if (tempDividerPadding == mDividerPaddingForWrap) {
             return;
         }
