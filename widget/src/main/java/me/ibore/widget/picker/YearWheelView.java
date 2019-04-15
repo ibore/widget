@@ -2,13 +2,13 @@ package me.ibore.widget.picker;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import me.ibore.widget.R;
 import me.ibore.widget.WheelView;
 

@@ -13,7 +13,9 @@ import me.ibore.widget.FlowLayout;
 import me.ibore.widget.TagLayout;
 
 public abstract class TagAdapter<T> {
+
     private List<T> mTagDatas;
+
     private OnDataChangedListener mOnDataChangedListener;
 
     private HashSet<Integer> mCheckedPosList = new HashSet<Integer>();

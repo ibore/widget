@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 public class CountdownView extends View {
+
     private static final String TAG = "CountdownView";
 
     /**

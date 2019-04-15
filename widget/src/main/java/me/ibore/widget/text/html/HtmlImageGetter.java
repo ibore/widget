@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class HtmlImageGetter implements Html.ImageGetter {
+import me.ibore.widget.UIUtils;
+
+public class HtmlImageGetter implements Html.ImageGetter {
+
     private static final String IMAGE_TAG_REGULAR = "<(img|IMG)\\s+([^>]*)>";
     private static final Pattern IMAGE_TAG_PATTERN = Pattern.compile(IMAGE_TAG_REGULAR);
     private static final Pattern IMAGE_WIDTH_PATTERN = Pattern.compile("(width|WIDTH)\\s*=\\s*\"?(\\w+)\"?");
@@ -64,11 +67,10 @@ class HtmlImageGetter implements Html.ImageGetter {
             imageDrawable.setDrawable(imageLoader.getDefaultDrawable(), false);
             imageLoader.loadImage(source, new HtmlImageLoader.Callback() {
                 @Override
-                public void onLoadComplete(final Bitmap bitmap) {
+                public void onLoadComplete(final Drawable drawable) {
                     runOnUi(new Runnable() {
                         @Override
                         public void run() {
-                            Drawable drawable = new BitmapDrawable(textView.getResources(), bitmap);
                             imageDrawable.setDrawable(drawable, true);
                             textView.setText(textView.getText());
                         }
@@ -108,17 +110,19 @@ class HtmlImageGetter implements Html.ImageGetter {
     }
 
     private static class ImageSize {
+
         private final int width;
         private final int height;
 
-        public ImageSize(int width, int height) {
+        ImageSize(int width, int height) {
             this.width = width;
             this.height = height;
         }
 
-        public boolean valid() {
+        boolean valid() {
             return width >= 0 && height >= 0;
         }
+
     }
 
     private class ImageDrawable extends BitmapDrawable {
@@ -126,12 +130,12 @@ class HtmlImageGetter implements Html.ImageGetter {
         private final int position;
         private Drawable mDrawable;
 
-        public ImageDrawable(int position) {
-            super();
+        ImageDrawable(int position) {
+            super(null, (Bitmap) null);
             this.position = position;
         }
 
-        public void setDrawable(Drawable drawable, boolean fitSize) {
+        void setDrawable(Drawable drawable, boolean fitSize) {
             mDrawable = drawable;
 
             if (mDrawable == null) {
@@ -145,8 +149,8 @@ class HtmlImageGetter implements Html.ImageGetter {
             if (fitSize) { // real image
                 ImageSize imageSize = (imageSizeList.size() > position) ? imageSizeList.get(position) : null;
                 if (imageSize != null && imageSize.valid()) {
-                    width = dp2px(imageSize.width);
-                    height = dp2px(imageSize.height);
+                    width = UIUtils.dp2px(textView.getContext(), imageSize.width);
+                    height = UIUtils.dp2px(textView.getContext(), imageSize.height);
                 } else {
                     width = mDrawable.getIntrinsicWidth();
                     height = mDrawable.getIntrinsicHeight();
@@ -183,10 +187,6 @@ class HtmlImageGetter implements Html.ImageGetter {
             }
         }
 
-        private int dp2px(float dpValue) {
-            float scale = textView.getResources().getDisplayMetrics().density;
-            return (int) (dpValue * scale + 0.5f);
-        }
     }
 }
 

@@ -2,13 +2,13 @@ package me.ibore.widget.picker;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.FloatRange;
-import android.support.annotation.Nullable;
-import android.support.annotation.RawRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.FloatRange;
+import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -43,7 +43,7 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
 
     public DatePickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.layout_date_picker_view, this);
+        LayoutInflater.from(context).inflate(R.layout.widget_layout_date_picker_view, this);
 
         mYearWv = findViewById(R.id.wv_year);
         mMonthWv = findViewById(R.id.wv_month);

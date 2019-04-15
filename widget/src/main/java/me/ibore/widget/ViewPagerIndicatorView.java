@@ -6,9 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -65,10 +66,8 @@ public class ViewPagerIndicatorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int flags = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas
-                .CLIP_TO_LAYER_SAVE_FLAG;
         @SuppressLint("WrongConstant")
-        int sc = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, flags);
+        int sc = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
 
         int wg = mItemWidth + mItemGap;
         int x = (getWidth() - mWidth) / 2;

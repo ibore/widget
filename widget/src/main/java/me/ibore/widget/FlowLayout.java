@@ -2,22 +2,17 @@ package me.ibore.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.support.v4.text.TextUtilsCompat;
+
+import androidx.core.text.TextUtilsCompat;
 import android.util.AttributeSet;
 import android.util.LayoutDirection;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import me.ibore.widget.listener.OnItemClickListener;
 
 /**
  * Created by Administrator on 2018/2/27.

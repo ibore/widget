@@ -24,9 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import me.ibore.widget.UIUtils;
 import me.ibore.widget.text.span.NumberSpan;
 
 class HtmlTagHandler implements Html.TagHandler {
+
     private static final String UNORDERED_LIST = "HTML_TEXT_TAG_UL";
     private static final String ORDERED_LIST = "HTML_TEXT_TAG_OL";
     private static final String LIST_ITEM = "HTML_TEXT_TAG_LI";
@@ -364,14 +366,10 @@ class HtmlTagHandler implements Html.TagHandler {
         s = Math.max(s, 1);
         s = Math.min(s, 7);
 
-        int baseSize = px2dp(mTextPaint.getTextSize());
+        int baseSize = UIUtils.px2dp(mContext, mTextPaint.getTextSize());
 
         return (s - 3) + baseSize;
     }
 
-    private int px2dp(float pxValue) {
-        float density = mContext.getResources().getDisplayMetrics().density;
-        return (int) (pxValue / density + 0.5f);
-    }
 }
 

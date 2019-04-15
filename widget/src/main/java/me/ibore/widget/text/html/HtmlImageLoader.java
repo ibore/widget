@@ -1,6 +1,5 @@
 package me.ibore.widget.text.html;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 public interface HtmlImageLoader {
@@ -12,7 +11,7 @@ public interface HtmlImageLoader {
         /**
          * 加载成功
          */
-        void onLoadComplete(Bitmap bitmap);
+        void onLoadComplete(Drawable drawable);
 
         /**
          * 加载失败

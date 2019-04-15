@@ -52,7 +52,9 @@
     </declare-styleable>
 
     <declare-styleable name="BottomBarLayout">
+
         <attr name="bbSmoothScroll" format="boolean" />
+
     </declare-styleable>
 
     <declare-styleable name="ShapeImageView">
@@ -216,19 +218,29 @@
         <attr name="wvSelectedRectColor" format="color" />
     </declare-styleable>
 
+    <!-- 年选择器 -->
     <declare-styleable name="YearWheelView">
+        <!-- 开始年份 -->
         <attr name="ywvStartYear" format="integer" />
+        <!-- 结束年份 -->
         <attr name="ywvEndYear" format="integer" />
+        <!-- 当前选择的年份 -->
         <attr name="ywvSelectedYear" format="integer" />
     </declare-styleable>
 
+    <!-- 月选择器 -->
     <declare-styleable name="MonthWheelView">
+        <!-- 当前选择的月份 -->
         <attr name="mwvSelectedMonth" format="integer" />
     </declare-styleable>
 
+    <!-- 天选择器 -->
     <declare-styleable name="DayWheelView">
+        <!-- 当前的年份 -->
         <attr name="dwvYear" format="integer" />
+        <!-- 当前的月份 -->
         <attr name="dwvMonth" format="integer" />
+        <!-- 当前选择的天 -->
         <attr name="dwvSelectedDay" format="integer" />
     </declare-styleable>
 
@@ -273,23 +285,29 @@
 
     <!-- 轮播图 -->
     <declare-styleable name="BannerView">
-        <!--  -->
+        <!-- 未选择状态资源文件 -->
         <attr name="bvUnSelectedDrawable" format="reference" />
+        <!-- 选择状态资源文件 -->
         <attr name="bvSelectedDrawable" format="reference" />
-
+        <!--  -->
         <attr name="bvSelectedIndicatorColor" format="color|reference" />
         <attr name="bvUnSelectedIndicatorColor" format="color|reference" />
+        <!-- 指示器样式（矩形、椭圆形） -->
         <attr name="bvIndicatorShape" format="enum">
+            <!-- 矩形 -->
             <enum name="rect" value="0" />
+            <!-- 椭圆形 -->
             <enum name="oval" value="1" />
         </attr>
-
+        <!-- 选择状态指示器高度 -->
         <attr name="bvSelectedIndicatorHeight" format="dimension|reference" />
+        <!-- 选择状态指示器宽度 -->
         <attr name="bvSelectedIndicatorWidth" format="dimension|reference" />
-
+        <!-- 默认状态指示器高度 -->
         <attr name="bvUnSelectedIndicatorHeight" format="dimension|reference" />
+        <!-- 默认状态指示器宽度 -->
         <attr name="bvUnSelectedIndicatorWidth" format="dimension|reference" />
-
+        <!-- 指示器显示的位置 -->
         <attr name="bvIndicatorPosition" format="enum">
             <enum name="centerBottom" value="0" />
             <enum name="rightBottom" value="1" />
@@ -298,19 +316,27 @@
             <enum name="rightTop" value="4" />
             <enum name="leftTop" value="5" />
         </attr>
-
+        <!-- 每个指示的间隔距离 -->
         <attr name="bvIndicatorSpace" format="dimension|reference" />
+        <!-- 指示器的边缘距离 -->
         <attr name="bvIndicatorMargin" format="dimension|reference" />
+        <!-- 轮播时间 -->
         <attr name="bvAutoPlayDuration" format="integer|reference" />
+        <!-- 滚动时间 -->
         <attr name="bvScrollDuration" format="integer|reference" />
+        <!-- 是否自动轮播 -->
         <attr name="bvIsAutoPlay" format="boolean|reference" />
+        <!-- 是否显示指示器 -->
         <attr name="bvIsShowIndicator" format="boolean|reference" />
     </declare-styleable>
 
-
+    <!-- 状态视图 -->
     <declare-styleable name="LoadLayout">
+        <!-- 加载中布局 -->
         <attr name="loadingLayout" format="reference" />
+        <!-- 空布局 -->
         <attr name="emptyLayout" format="reference" />
+        <!-- 错误布局 -->
         <attr name="errorLayout" format="reference" />
     </declare-styleable>
 

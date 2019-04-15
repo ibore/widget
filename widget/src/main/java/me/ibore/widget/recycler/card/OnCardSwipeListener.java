@@ -1,6 +1,6 @@
 package me.ibore.widget.recycler.card;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 public interface OnCardSwipeListener<T> {
 

@@ -9,9 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -27,6 +24,10 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * 轮播图
@@ -470,12 +471,12 @@ public class BannerView extends RelativeLayout {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
             return view == object;
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public @NonNull Object instantiateItem(@NonNull ViewGroup container, int position) {
             if (views.size() > 0) {
                 //position % view.size()是指虚拟的position会在[0，view.size()）之间循环
                 View view = views.get(position % views.size());
@@ -489,7 +490,7 @@ public class BannerView extends RelativeLayout {
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         }
     }
 

@@ -23,7 +23,7 @@ import android.util.AttributeSet;
  * website: ibore.me
  */
 
-public class ShapeImageView extends android.support.v7.widget.AppCompatImageView {
+public class ShapeImageView extends androidx.appcompat.widget.AppCompatImageView {
 
     protected int borderColor;
     protected int borderWidth;

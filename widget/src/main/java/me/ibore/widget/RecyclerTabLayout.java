@@ -11,11 +11,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.support.annotation.IntDef;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -25,6 +20,11 @@ import android.view.ViewGroup;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import androidx.annotation.IntDef;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import me.ibore.widget.recycler.RecyclerAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
@@ -112,7 +112,7 @@ public class RecyclerTabLayout extends RecyclerView {
     }
 
     private void getAttributes(Context context, AttributeSet attrs, int defStyle) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecyclerTabLayout, defStyle, R.style.RecyclerTabLayout);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecyclerTabLayout, defStyle, R.style.Widget_RecyclerTabLayout);
         setIndicatorColor(a.getColor(R.styleable.RecyclerTabLayout_tabIndicatorColor, 0));
         setIndicatorHeight(a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorHeight, 0));
         setIndicatorWidth(a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorWidth, -1));
@@ -121,7 +121,7 @@ public class RecyclerTabLayout extends RecyclerView {
         mIndicatorResourceId = a.getResourceId(R.styleable.RecyclerTabLayout_tabIndicatorResource, 0);
 
         mTabTextAppearance = a.getResourceId(R.styleable.RecyclerTabLayout_tabTextAppearance,
-                R.style.RecyclerTabLayout_Tab);
+                R.style.Widget_RecyclerTabLayout_Tab);
 
         mTabPaddingStart = mTabPaddingTop = mTabPaddingEnd = mTabPaddingBottom = a
                 .getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabPadding, 0);
@@ -661,7 +661,7 @@ public class RecyclerTabLayout extends RecyclerView {
         }
     }
 
-    public static class TabTextView extends android.support.v7.widget.AppCompatTextView {
+    public static class TabTextView extends androidx.appcompat.widget.AppCompatTextView {
 
         public TabTextView(Context context) {
             super(context);

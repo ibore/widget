@@ -34,6 +34,7 @@
 
         <activity android:name=".RadarProgressActivity" />
 
+        <activity android:name=".HtmlTextActivity" />
     </application>
 
 </manifest>

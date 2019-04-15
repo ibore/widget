@@ -23,7 +23,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="14dp"
             android:layout_marginLeft="14dp"
-            android:background="@drawable/bottom_bar_unread"
+            android:background="@drawable/widget_bottom_bar_unread"
             android:gravity="center"
             android:minWidth="15dp"
             android:textColor="@android:color/white"
@@ -37,7 +37,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="14dp"
             android:layout_marginLeft="14dp"
-            android:background="@drawable/bottom_bar_msg"
+            android:background="@drawable/widget_bottom_bar_msg"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="6sp"
@@ -50,7 +50,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/bottom_bar_point"
+            android:background="@drawable/widget_bottom_bar_point"
             android:gravity="center"
             android:textSize="6sp"
             android:visibility="gone" />
@@ -58,7 +58,8 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/tv_text"
+        android:id="@+id/widget_tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

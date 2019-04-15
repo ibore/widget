@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="date_picker_view_year">年</string>
-    <string name="date_picker_view_month">月</string>
-    <string name="date_picker_view_day">日</string>
+    <string name="widget_date_picker_view_year">年</string>
+    <string name="widget_date_picker_view_month">月</string>
+    <string name="widget_date_picker_view_day">日</string>
 </resources>

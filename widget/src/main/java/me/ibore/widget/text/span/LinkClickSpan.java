@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import me.ibore.widget.text.html.OnTagClickListener;
 
 public class LinkClickSpan extends ClickableSpan {
@@ -22,7 +23,7 @@ public class LinkClickSpan extends ClickableSpan {
     }
 
     @Override
-    public void onClick(View widget) {
+    public void onClick(@NonNull View widget) {
         if (listener != null) {
             listener.onLinkClick(context, url);
         }

@@ -16,7 +16,8 @@ import java.util.List;
 import me.ibore.widget.text.span.ImageClickSpan;
 import me.ibore.widget.text.span.LinkClickSpan;
 
-public class HtmlText {
+public final class HtmlText {
+
     private HtmlImageLoader imageLoader;
     private OnTagClickListener onTagClickListener;
     private After after;

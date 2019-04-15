@@ -3,8 +3,8 @@ package me.ibore.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -126,15 +126,15 @@ public class BottomBarItem extends LinearLayout {
         }
 
         if (mUnreadTextBg == null){
-            mUnreadTextBg = getResources().getDrawable(R.drawable.bottom_bar_unread);
+            mUnreadTextBg = getResources().getDrawable(R.drawable.widget_bottom_bar_unread);
         }
 
         if (mMsgTextBg == null){
-            mMsgTextBg = getResources().getDrawable(R.drawable.bottom_bar_msg);
+            mMsgTextBg = getResources().getDrawable(R.drawable.widget_bottom_bar_msg);
         }
 
         if (mNotifyPointBg == null){
-            mNotifyPointBg = getResources().getDrawable(R.drawable.bottom_bar_point);
+            mNotifyPointBg = getResources().getDrawable(R.drawable.widget_bottom_bar_point);
         }
     }
 
@@ -183,7 +183,7 @@ public class BottomBarItem extends LinearLayout {
 
     @NonNull
     private View initView() {
-        View view = View.inflate(mContext, R.layout.layout_bottom_bar_item, null);
+        View view = View.inflate(mContext, R.layout.widget_layout_bottom_bar_item, null);
         if (mItemPadding != 0) {
             //如果有设置item的padding
             view.setPadding(mItemPadding, mItemPadding, mItemPadding, mItemPadding);
@@ -192,7 +192,7 @@ public class BottomBarItem extends LinearLayout {
         mTvUnread = view.findViewById(R.id.tv_unread_num);
         mTvMsg = view.findViewById(R.id.tv_msg);
         mTvNotify = view.findViewById(R.id.tv_point);
-        mTextView = view.findViewById(R.id.tv_text);
+        mTextView = view.findViewById(R.id.widget_tv_text);
         return view;
     }
 

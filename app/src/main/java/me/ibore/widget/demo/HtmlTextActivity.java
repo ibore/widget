@@ -3,21 +3,29 @@ package me.ibore.widget.demo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import me.ibore.widget.text.html.HtmlImageLoader;
 import me.ibore.widget.text.html.HtmlText;
 import me.ibore.widget.text.html.OnTagClickListener;
@@ -29,54 +37,37 @@ public class HtmlTextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_htmltext);
         TextView textView = findViewById(R.id.textView);
-        HtmlText.from("<h2>Hello world</h2>\n" +
-                "<p><font size='6' color='#FF0000'>Font size</font></p>\n" +
-                "<ul>\n" +
-                "    <li><a href=\"http://www.jianshu.com/users/3231579893ac\">Blog</a></li>\n" +
-                "    <li><a href=\"https://github.com/wangchenyan\">Github</a>, welcome to star or fork,\n" +
-                "        if you have issues, please tell me.\n" +
-                "    </li>\n" +
-                "</ul>\n" +
-                "<br/>\n" +
-                "<ol>\n" +
-                "    <li>first</li>\n" +
-                "    <li>second\n" +
-                "        <ol>\n" +
-                "            <li>second - first\n" +
-                "                <br/>\n" +
-                "                newline\n" +
-                "            </li>\n" +
-                "        </ol>\n" +
-                "    </li>\n" +
-                "</ol>\n" +
-                "<br/>\n" +
-                "<img width=\"200\" height=\"200\"\n" +
-                "     src=\"http://bp.googleblog.cn/ggpt/Su3f9QSJx6CqXkjEiOvDzSAAML6RNq9YD6kSCIPov5eudHyou61mN2trSJfydldf067uImrYOPmyFBw7DDlvNSa65vCMSqJ7LLdfcDSgdteYZjE4YQo23vaNooXyhh7xcAkCGCmJ\">\n" +
-                "<br/>\n" +
-                "<p>\n" +
-                "    With billions of Android devices around the world, Android has surpassed our wildest\n" +
-                "    expectations. Today at Google I/O, we showcased a number of ways we’re pushing\n" +
-                "    Android forward, with the\n" +
-                "    <a href=\"https://developer.android.com/preview/index.html\">O Release</a>, new\n" +
-                "    tools for developers to help create more performant apps, and an early preview of a\n" +
-                "    project we call Android Go -- a new experience that we’re building for entry-level\n" +
-                "    devices.\n" +
-                "</p>")
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        HtmlText.from("<html><head><title>TextView使用HTML</title></head><body><p><strong>强调</strong></p><p><em>斜体</em></p>"
+                + "<p><a href=\"http://www.dreamdu.com/xhtml/\">超链接HTML入门</a>学习HTML!</p><p><font color=\"#aabb00\">颜色1"
+                + "</p><p><font color=\"#00bbaa\">颜色2</p><p><font color=\"#aabb00\">颜色1"
+                + "</p><p><font color=\"#00bbaa\">颜色2</p><p><font color=\"#aabb00\">颜色1"
+                + "</p><p><font color=\"#00bbaa\">颜色2</p><p><font color=\"#aabb00\">颜色1"
+                + "</p><p><font color=\"#00bbaa\">颜色2</p><p><font color=\"#aabb00\">颜色1"
+                + "</p><p><font color=\"#00bbaa\">颜色2</p><h1>标题1</h1><h3>标题2</h3><h6>标题3</h6><p>大于>小于<</p><p>"
+                + "下面是网络图片</p><img src=\"http://h.hiphotos.baidu.com/image/pic/item/a6efce1b9d16fdfad03ef192ba8f8c5494ee7b7f.jpg\"/></body></html>")
                 .setImageLoader(new HtmlImageLoader() {
                     @Override
                     public void loadImage(String url, final Callback callback) {
-                        Glide.with(getApplicationContext())
+                        Glide.with(getBaseContext())
+                                .asDrawable()
                                 .load(url)
-                                .asBitmap()
-                                .into(new SimpleTarget<Bitmap>() {
+                                .into(new CustomTarget<Drawable>() {
+
                                     @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                                         callback.onLoadComplete(resource);
                                     }
 
                                     @Override
-                                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        callback.onLoadComplete(placeholder);
+                                    }
+
+                                    @Override
+                                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
                                         callback.onLoadFailed();
+                                        super.onLoadFailed(errorDrawable);
                                     }
                                 });
                     }
@@ -98,18 +89,20 @@ public class HtmlTextActivity extends AppCompatActivity {
 
                     @Override
                     public boolean fitWidth() {
-                        return false;
+                        return true;
                     }
                 })
                 .setOnTagClickListener(new OnTagClickListener() {
                     @Override
                     public void onImageClick(Context context, List<String> imageUrlList, int position) {
-                        Toast.makeText(context, "image click, position: " + position + ", url: " + imageUrlList.get(position), Toast.LENGTH_SHORT).show();
+                        Log.d("----", "image click, position: " + position + ", url: " + imageUrlList.get(position));
+                        Toast.makeText(getApplicationContext(), "image click, position: " + position + ", url: " + imageUrlList.get(position), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onLinkClick(Context context, String url) {
-                        Toast.makeText(context, "url click: " + url, Toast.LENGTH_SHORT).show();
+                        Log.d("----", "url click: " + url);
+                        Toast.makeText(getApplicationContext(), "url click: " + url, Toast.LENGTH_SHORT).show();
                         try {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             intent.setData(Uri.parse(url));
