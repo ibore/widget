@@ -15,7 +15,6 @@ import java.util.List;
 
 import me.ibore.widget.recycler.CommonAdapter;
 import me.ibore.widget.recycler.RecyclerAdapter;
-import me.ibore.widget.recycler.RecyclerHFAdapter;
 import me.ibore.widget.recycler.RecyclerHolder;
 
 public class RecyclerViewActivity extends AppCompatActivity {
