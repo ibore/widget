@@ -1,16 +1,18 @@
 package me.ibore.widget.demo;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.ibore.widget.recycler.CommonAdapter;
@@ -34,25 +36,26 @@ public class RecyclerViewActivity extends AppCompatActivity {
             protected int getLayoutId() {
                 return R.layout.item_main;
             }
+
             @Override
             protected void convert(final RecyclerHolder holder, final String s, final int position) {
                 holder.getTextView(R.id.title).setText(s);
                 holder.onClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mAdapter.getDatas().remove(position);
-                        mAdapter.notifyItemRemoved(holder.getAdapterPosition());
+                        mAdapter.removeData(holder);
 //                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         };
-        mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener<String>() {
             @Override
-            public void onClick(RecyclerHolder holder, int position) {
+            public void onItemClick(RecyclerHolder holder, String s, int position) {
                 Toast.makeText(getApplicationContext(), mAdapter.getData(position), Toast.LENGTH_SHORT).show();
             }
         });
+
         mAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.header, null));
         mAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer, null));
         mAdapter.setLoadView(this, R.layout.loading, R.layout.empty, R.layout.error);
@@ -63,7 +66,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), mAdapter.hasHeaderView() + "ddd", Toast.LENGTH_SHORT).show();
             }
         });*/
-        mAdapter.setOnLoadMoreListener(new RecyclerHFAdapter.OnLoadMoreListener() {
+        mAdapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 /*Log.d("----", "onLoadMore");
@@ -142,7 +145,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
         content_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.addData("9999999999");
+                List<String> strings = new ArrayList<>();
+                strings.add("99999999999");
+                strings.add("99999999999");
+                strings.add("99999999999");
+                strings.add("99999999999");
+                strings.add("99999999999");
+                mAdapter.addDatas(strings);
             }
         });
         empty_more.setOnClickListener(new View.OnClickListener() {

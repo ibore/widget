@@ -449,4 +449,34 @@
         <attr name="rpvFlicker" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="LabelView">
+        <!-- 设置文字内容 -->
+        <attr name="lvText" format="string"/>
+        <!-- 设置文字颜色,默认#ffffff -->
+        <attr name="lvTextColor" format="color"/>
+        <!-- 设置文字大小,默认11sp -->
+        <attr name="lvTextSize" format="dimension"/>
+        <!-- 设置文字是否支持加粗,默认true -->
+        <attr name="lvTextBold" format="boolean"/>
+        <!-- 设置文字是否支持全部大写,默认true-->
+        <attr name="lvTextAllCaps" format="boolean"/>
+        <!-- 设置背景颜色,默认"#FF4081"-->
+        <attr name="lvBackgroundColor" format="color"/>
+        <!-- 设置LabelView所在矩形最小宽高,默认mFillTriangle?35dp:50dp-->
+        <attr name="lvMinSize" format="dimension"/>
+        <!-- 设置文字上下padding,默认3.5dp,mFillTriangle为true时无效-->
+        <attr name="lvPadding" format="dimension"/>
+        <!-- 设置LabelView方向 -->
+        <attr name="lvGravity" format="enum">
+            <enum name="TOP_LEFT" value="51"/>
+            <enum name="TOP_RIGHT" value="53"/>
+            <enum name="BOTTOM_LEFT" value="83"/>
+            <enum name="BOTTOM_RIGHT" value="85"/>
+        </attr>
+        <!-- 设置是否填充三角区域,默认false -->
+        <attr name="lvFillTriangle" format="boolean"/>
+        <!-- 设置是否浮嵌显示大小 -->
+        <attr name="lvFillSize" format="dimension"/>
+    </declare-styleable>
+
 </resources>

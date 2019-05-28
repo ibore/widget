@@ -11,13 +11,15 @@ import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import androidx.core.view.ViewCompat;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends RecyclerView.Adapter<VH> {
@@ -66,23 +68,50 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         return mDatas;
     }
 
-    public T getData(int postion) {
-        return mDatas.get(postion);
+    public T getData(int position) {
+        return mDatas.get(position);
     }
 
     public void addData(T data) {
-        mDatas.add(data);
-        notifyItemChanged(mDatas.size() - 1);
+        if (null == data) return;
+        if (mDatas.size() == 0) {
+            ArrayList<T> list = new ArrayList<>();
+            list.add(data);
+            setDatas(list);
+        } else {
+            mDatas.add(data);
+            notifyItemChanged(hasHeaderView() ? mDatas.size() : mDatas.size() - 1);
+        }
     }
 
-    public void addData(T data, int postion) {
-        mDatas.add(postion, data);
-        notifyItemInserted(hasHeaderView() ? postion + 1 : postion);
+    public void addData(T data, int position) {
+        if (null == data || position > mDatas.size()) return;
+        if (mDatas.size() == 0) {
+            addData(data);
+        } else {
+            mDatas.add(position, data);
+            notifyItemInserted(hasHeaderView() ? position + 1 : position);
+        }
     }
 
     public void addDatas(List<T> datas) {
-        mDatas.addAll(datas);
-        notifyDataSetChanged();
+        if (mDatas.size() == 0) {
+            setDatas(datas);
+        } else {
+            ArrayList<T> list = new ArrayList<>(datas);
+            mDatas.addAll(list);
+            notifyItemRangeRemoved(hasHeaderView() ? mDatas.size() - datas.size() + 1 : mDatas.size() - datas.size(), datas.size());
+        }
+    }
+
+    public void removeData(RecyclerHolder holder, T t) {
+        mDatas.remove(t);
+        notifyItemRemoved(holder.getAdapterPosition());
+    }
+
+    public void removeData(RecyclerHolder holder) {
+        mDatas.remove(hasHeaderView() ? holder.getAdapterPosition() - 1 : holder.getAdapterPosition());
+        notifyItemRemoved(holder.getAdapterPosition());
     }
 
     public void clearDatas() {
@@ -110,17 +139,17 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public void clearAnimator(View v) {
-        ViewCompat.setAlpha(v, 1);
-        ViewCompat.setScaleY(v, 1);
-        ViewCompat.setScaleX(v, 1);
-        ViewCompat.setTranslationY(v, 0);
-        ViewCompat.setTranslationX(v, 0);
-        ViewCompat.setRotation(v, 0);
-        ViewCompat.setRotationY(v, 0);
-        ViewCompat.setRotationX(v, 0);
-        ViewCompat.setPivotY(v, v.getMeasuredHeight() / 2);
-        ViewCompat.setPivotX(v, v.getMeasuredWidth() / 2);
-        ViewCompat.animate(v).setInterpolator(null).setStartDelay(0);
+        v.setAlpha(1);
+        v.setScaleY(1);
+        v.setScaleX(1);
+        v.setTranslationY(0);
+        v.setTranslationX(0);
+        v.setRotation(0);
+        v.setRotationY(0);
+        v.setRotationX(0);
+        v.setPivotY(v.getMeasuredHeight() / 2f);
+        v.setPivotX(v.getMeasuredWidth() / 2f);
+        v.animate().setInterpolator(null).setStartDelay(0);
     }
 
     protected Animator[] getAnimators(View view) {
@@ -160,7 +189,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     @Override
-    public void onViewAttachedToWindow(VH holder) {
+    public void onViewAttachedToWindow(@NonNull VH holder) {
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
             if (isLoadView(holder.getLayoutPosition())) {
@@ -179,7 +208,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
@@ -208,7 +237,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     private void onScrollListener(RecyclerView recyclerView, final RecyclerView.LayoutManager layoutManager) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (hasLoadMoreView() && mOnLoadMoreListener != null
                         && newState == RecyclerView.SCROLL_STATE_IDLE
@@ -222,7 +251,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (hasLoadMoreView() && mOnLoadMoreListener != null
                         && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
@@ -253,7 +282,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public @NonNull
+    VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerHolder holder;
         switch (viewType) {
             case TYPE_LOAD:
@@ -280,7 +310,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     protected abstract void onBindRecyclerHolder(VH holder, T t, int position);
 
     @Override
-    public void onBindViewHolder(final VH holder, final int position) {
+    public void onBindViewHolder(@NonNull final VH holder, final int position) {
         if (isLoadView(position)) return;
         if (isHeaderView(position)) return;
         if (isFooterView(position)) return;
@@ -317,16 +347,16 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     @Override
     public int getItemCount() {
-        int allPostion = 0;
+        int allPosition = 0;
         if (hasLoadView()) {
-            allPostion++;
+            allPosition++;
         } else {
-            allPostion = allPostion + getRecyclerItemCount();
-            if (hasHeaderView()) allPostion++;
-            if (hasFooterView()) allPostion++;
-            if (hasLoadMoreView()) allPostion++;
+            allPosition = allPosition + getRecyclerItemCount();
+            if (hasHeaderView()) allPosition++;
+            if (hasFooterView()) allPosition++;
+            if (hasLoadMoreView()) allPosition++;
         }
-        return allPostion;
+        return allPosition;
     }
 
     @Override
@@ -335,7 +365,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         if (isHeaderView(position)) return TYPE_HEADER;
         if (isFooterView(position)) return TYPE_FOOTER;
         if (isLoadMoreView(position)) return TYPE_LOADMORE;
-        return getRecyclerItemViewType(getData(position), position);
+        final int realPosition = hasHeaderView() ? position - 1 : position;
+        return getRecyclerItemViewType(getData(realPosition), realPosition);
     }
 
     public int getRecyclerItemCount() {
@@ -357,9 +388,9 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             mLoadView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
         } else mLoadView.removeAllViews();
-        mLoadView.addView(LayoutInflater.from(context).inflate(loadingView, mLoadView, false));
-        mLoadView.addView(LayoutInflater.from(context).inflate(emptyView, mLoadView, false));
-        mLoadView.addView(LayoutInflater.from(context).inflate(errorView, mLoadView, false));
+        mLoadView.addView(LayoutInflater.from(context).inflate(loadingView, null));
+        mLoadView.addView(LayoutInflater.from(context).inflate(emptyView, null));
+        mLoadView.addView(LayoutInflater.from(context).inflate(errorView, null));
         showLoadingView();
     }
 
@@ -426,10 +457,10 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public boolean isLoadMoreView(int position) {
         if (hasLoadMoreView()) {
-            int otherPostion = 1;
-            if (hasHeaderView()) otherPostion++;
-            if (hasFooterView()) otherPostion++;
-            return position + 1 == getRecyclerItemCount() + otherPostion;
+            int otherPosition = 1;
+            if (hasHeaderView()) otherPosition++;
+            if (hasFooterView()) otherPosition++;
+            return position + 1 == getRecyclerItemCount() + otherPosition;
         }
         return false;
     }
@@ -453,7 +484,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         return view;
     }
 
-    private View visibleView(FrameLayout frameLayout, int postion) {
+    private View visibleView(FrameLayout frameLayout, int position) {
         View view = null;
         if (null == frameLayout) {
             String message = null;
@@ -465,8 +496,10 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             throw new NullPointerException(message);
         }
         for (int i = 0; i < frameLayout.getChildCount(); i++) {
-            view = i == postion ? frameLayout.getChildAt(i) : null;
-            frameLayout.getChildAt(i).setVisibility(i == postion ? View.VISIBLE : View.INVISIBLE);
+            if (i == position) {
+                view = frameLayout.getChildAt(i);
+            }
+            frameLayout.getChildAt(i).setVisibility(i == position ? View.VISIBLE : View.INVISIBLE);
         }
         return view;
     }
@@ -509,8 +542,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public boolean isHeaderView(int position) {
         if (hasHeaderView()) {
-            int otherPostion = 1;
-            return position + 1 == otherPostion;
+            int otherPosition = 1;
+            return position + 1 == otherPosition;
         }
         return false;
     }
@@ -550,10 +583,10 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     public boolean isFooterView(int position) {
         if (hasFooterView()) {
-            int otherPostion = 1;
-            if (hasHeaderView()) otherPostion++;
-            otherPostion = otherPostion + getRecyclerItemCount();
-            return position + 1 == otherPostion;
+            int otherPosition = 1;
+            if (hasHeaderView()) otherPosition++;
+            otherPosition = otherPosition + getRecyclerItemCount();
+            return position + 1 == otherPosition;
         }
         return false;
     }

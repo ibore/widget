@@ -52,5 +52,4 @@ public class UIUtils {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
-
 }
