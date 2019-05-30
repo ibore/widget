@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends RecyclerView.Adapter<VH> {
@@ -226,12 +224,17 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
                     }
                     if (isLoadMoreView(position)) {
                         return gridLayoutManager.getSpanCount();
+                    } else {
+                        return getGridSpanSize(position);
                     }
-                    return 1;
                 }
             });
         }
         onScrollListener(recyclerView, layoutManager);
+    }
+
+    protected int getGridSpanSize(int position) {
+        return hasHeaderView() ? position - 1 : position;
     }
 
     private void onScrollListener(RecyclerView recyclerView, final RecyclerView.LayoutManager layoutManager) {
