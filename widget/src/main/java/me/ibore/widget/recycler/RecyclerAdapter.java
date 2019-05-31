@@ -136,7 +136,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         this.mAnimatorInterpolator = value;
     }
 
-    public void clearAnimator(View v) {
+    protected void clearAnimator(View v) {
         v.setAlpha(1);
         v.setScaleY(1);
         v.setScaleX(1);
@@ -225,7 +225,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
                     if (isLoadMoreView(position)) {
                         return gridLayoutManager.getSpanCount();
                     } else {
-                        return getGridSpanSize(position);
+                        return getGridSpanSize(hasHeaderView() ? position - 1 : position);
                     }
                 }
             });
@@ -234,7 +234,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     protected int getGridSpanSize(int position) {
-        return hasHeaderView() ? position - 1 : position;
+        return 1;
     }
 
     private void onScrollListener(RecyclerView recyclerView, final RecyclerView.LayoutManager layoutManager) {
