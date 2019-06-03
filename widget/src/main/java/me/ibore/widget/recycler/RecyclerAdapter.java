@@ -32,6 +32,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     private LinearLayout mHeaderView;
     private LinearLayout mFooterView;
     private boolean mIsShowContent = false;
+    private boolean mIsLoadingMoreView = false;
 
     private AnimatorType mAnimatorType = AnimatorType.NOANIMATOR;
     private int mLastPosition = -1;
@@ -192,17 +193,21 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
             if (isLoadView(holder.getLayoutPosition())) {
                 ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-            if (isHeaderView(holder.getLayoutPosition())) {
+            } else if (isHeaderView(holder.getLayoutPosition())) {
                 ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-            if (isFooterView(holder.getLayoutPosition())) {
+            } else if (isFooterView(holder.getLayoutPosition())) {
                 ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
-            }
-            if (isLoadMoreView(holder.getLayoutPosition())) {
+            } else if (isLoadMoreView(holder.getLayoutPosition())) {
                 ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
+            } else {
+                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(isStaggeredFullSpan());
             }
+
         }
+    }
+
+    protected boolean isStaggeredFullSpan() {
+        return false;
     }
 
     @Override
@@ -225,7 +230,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
                     if (isLoadMoreView(position)) {
                         return gridLayoutManager.getSpanCount();
                     } else {
-                        return getGridSpanSize(hasHeaderView() ? position - 1 : position);
+                        int realPosition = hasHeaderView() ? position - 1 : position;
+                        return getGridSpanSize(getData(realPosition), realPosition);
                     }
                 }
             });
@@ -233,7 +239,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         onScrollListener(recyclerView, layoutManager);
     }
 
-    protected int getGridSpanSize(int position) {
+    protected int getGridSpanSize(T data, int position) {
         return 1;
     }
 
@@ -242,9 +248,10 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (hasLoadMoreView() && mOnLoadMoreListener != null
-                        && newState == RecyclerView.SCROLL_STATE_IDLE
-                        && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
+                if (hasLoadMoreView() && mOnLoadMoreListener != null &&
+                        newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE &&
+                        !mIsLoadingMoreView) {
                     int lastVisibleItem = findLastCompletelyVisibleItemPosition(layoutManager);
                     int totalItemCount = layoutManager.getItemCount();
                     if (lastVisibleItem == (totalItemCount - 1)) {
@@ -256,8 +263,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (hasLoadMoreView() && mOnLoadMoreListener != null
-                        && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
+                if (hasLoadMoreView() && mOnLoadMoreListener != null && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
                     int lastVisibleItem = findLastCompletelyVisibleItemPosition(layoutManager);
                     int totalItemCount = layoutManager.getItemCount();
                     if (lastVisibleItem == (totalItemCount - 1)) {
@@ -469,14 +475,17 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public View showLoadingMoreView() {
+        mIsLoadingMoreView = true;
         return visibleView(mLoadMoreView, 0);
     }
 
     public View showEmptyMoreView() {
+        mIsLoadingMoreView = false;
         return visibleView(mLoadMoreView, 1);
     }
 
     public View showErrorMoreView() {
+        mIsLoadingMoreView = false;
         View view = visibleView(mLoadMoreView, 2);
         view.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -69,8 +69,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mAdapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                /*Log.d("----", "onLoadMore");
-                mAdapter.addData("9999999");
+                Log.d("----", "onLoadMore");
+                /*mAdapter.addData("9999999");
                 mAdapter.addData("9999999");
                 mAdapter.addData("9999999");
                 mAdapter.addData("9999999");
