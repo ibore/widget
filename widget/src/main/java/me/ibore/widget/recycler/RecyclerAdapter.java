@@ -11,6 +11,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import java.util.List;
 public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends RecyclerView.Adapter<VH> {
 
     private List<T> mDatas;
+
     private static final int TYPE_LOAD = 0x1000;
     private static final int TYPE_HEADER = 0x1001;
     private static final int TYPE_FOOTER = 0x1002;
@@ -32,7 +34,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     private LinearLayout mHeaderView;
     private LinearLayout mFooterView;
     private boolean mIsShowContent = false;
-    private boolean mIsLoadingMoreView = false;
+    private boolean mCanLoadingMore = false;
 
     private AnimatorType mAnimatorType = AnimatorType.NOANIMATOR;
     private int mLastPosition = -1;
@@ -78,8 +80,9 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
             list.add(data);
             setDatas(list);
         } else {
+            mCanLoadingMore = true;
             mDatas.add(data);
-            notifyItemChanged(hasHeaderView() ? mDatas.size() : mDatas.size() - 1);
+            notifyDataSetChanged();
         }
     }
 
@@ -88,18 +91,22 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         if (mDatas.size() == 0) {
             addData(data);
         } else {
+            mCanLoadingMore = true;
             mDatas.add(position, data);
-            notifyItemInserted(hasHeaderView() ? position + 1 : position);
+            notifyDataSetChanged();
         }
     }
 
     public void addDatas(List<T> datas) {
+        if (null == datas || datas.size() == 0) return;
         if (mDatas.size() == 0) {
+            mCanLoadingMore = true;
             setDatas(datas);
         } else {
+            mCanLoadingMore = true;
             ArrayList<T> list = new ArrayList<>(datas);
             mDatas.addAll(list);
-            notifyItemRangeRemoved(hasHeaderView() ? mDatas.size() - datas.size() + 1 : mDatas.size() - datas.size(), datas.size());
+            notifyDataSetChanged();
         }
     }
 
@@ -236,46 +243,41 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
                 }
             });
         }
-        onScrollListener(recyclerView, layoutManager);
-    }
-
-    protected int getGridSpanSize(T data, int position) {
-        return 1;
-    }
-
-    private void onScrollListener(RecyclerView recyclerView, final RecyclerView.LayoutManager layoutManager) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (hasLoadMoreView() && mOnLoadMoreListener != null &&
-                        newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE &&
-                        !mIsLoadingMoreView) {
-                    int lastVisibleItem = findLastCompletelyVisibleItemPosition(layoutManager);
-                    int totalItemCount = layoutManager.getItemCount();
-                    if (lastVisibleItem == (totalItemCount - 1)) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    onLoadingMore(recyclerView, layoutManager);
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (hasLoadMoreView() && mOnLoadMoreListener != null && mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE) {
-                    int lastVisibleItem = findLastCompletelyVisibleItemPosition(layoutManager);
-                    int totalItemCount = layoutManager.getItemCount();
-                    if (lastVisibleItem == (totalItemCount - 1)) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
-                }
-
+                onLoadingMore(recyclerView, layoutManager);
             }
         });
     }
 
-    private int findLastCompletelyVisibleItemPosition(RecyclerView.LayoutManager layoutManager) {
+    protected int getGridSpanSize(T data, int position) {
+        return 1;
+    }
+
+    protected void onLoadingMore(RecyclerView recyclerView, RecyclerView.LayoutManager layoutManager) {
+        if (hasLoadMoreView() && mOnLoadMoreListener != null &&
+                mLoadMoreView.getChildAt(0).getVisibility() == View.VISIBLE &&
+                mCanLoadingMore) {
+            int lastVisibleItem = findLastVisibleItemPosition(layoutManager);
+            int totalItemCount = layoutManager.getItemCount();
+            if (lastVisibleItem == (totalItemCount - 1)) {
+                mCanLoadingMore = false;
+                mOnLoadMoreListener.onLoadMoreLoading();
+            }
+        }
+    }
+
+    private int findLastVisibleItemPosition(RecyclerView.LayoutManager layoutManager) {
         if (layoutManager instanceof LinearLayoutManager) {
             return ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
         }
@@ -291,8 +293,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     @Override
-    public @NonNull
-    VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public @NonNull VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerHolder holder;
         switch (viewType) {
             case TYPE_LOAD:
@@ -391,15 +392,22 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
 
     /**************************************** LoadView ***************************************/
 
-    public void setLoadView(Context context, int loadingView, int emptyView, int errorView) {
+    public void setLoadView(Context context, int loadingId, int emptyId, int errorId) {
+        View loadingView = LayoutInflater.from(context).inflate(loadingId, null);
+        View emptyView = LayoutInflater.from(context).inflate(emptyId, null);
+        View errorView = LayoutInflater.from(context).inflate(errorId, null);
+        setLoadView(context, loadingView, emptyView, errorView);
+    }
+
+    public void setLoadView(Context context, View loadingView, View emptyView, View errorView) {
         if (null == mLoadView) {
             mLoadView = new FrameLayout(context);
             mLoadView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
         } else mLoadView.removeAllViews();
-        mLoadView.addView(LayoutInflater.from(context).inflate(loadingView, null));
-        mLoadView.addView(LayoutInflater.from(context).inflate(emptyView, null));
-        mLoadView.addView(LayoutInflater.from(context).inflate(errorView, null));
+        mLoadView.addView(loadingView);
+        mLoadView.addView(emptyView);
+        mLoadView.addView(errorView);
         showLoadingView();
     }
 
@@ -456,6 +464,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
         showLoadingMoreView();
     }
 
+    public void removeLoadMoreView() {
+        mLoadMoreView = null;
+        notifyDataSetChanged();
+    }
+
     public boolean hasLoadMoreView() {
         if (mIsShowContent && null != mLoadMoreView) {
             return true;
@@ -475,28 +488,26 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public View showLoadingMoreView() {
-        mIsLoadingMoreView = true;
         return visibleView(mLoadMoreView, 0);
     }
 
     public View showEmptyMoreView() {
-        mIsLoadingMoreView = false;
         return visibleView(mLoadMoreView, 1);
     }
 
     public View showErrorMoreView() {
-        mIsLoadingMoreView = false;
         View view = visibleView(mLoadMoreView, 2);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mOnLoadMoreListener) mOnLoadMoreListener.onLoadError();
+                if (null != mOnLoadMoreListener) mOnLoadMoreListener.onLoadMoreError();
             }
         });
         return view;
     }
 
     private View visibleView(FrameLayout frameLayout, int position) {
+        mCanLoadingMore = true;
         View view = null;
         if (null == frameLayout) {
             String message = null;
@@ -618,17 +629,78 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     /*************************************** 监听事件 ******************************************/
     /*************************************** 监听事件 ******************************************/
 
+    private OnItemClickListener<T> onItemClickListener;
+    private OnItemLongClickListener<T> onItemLongClickListener;
+
+    private OnChildClickListener<T> onChildClickListener;
+    private OnChildLongClickListener<T> onChildLongClickListener;
+
     public void setOnItemClickListener(OnItemClickListener<T> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
-
-    private OnItemClickListener<T> onItemClickListener;
 
     public void setOnItemLongClickListener(OnItemLongClickListener<T> onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
     }
 
-    private OnItemLongClickListener<T> onItemLongClickListener;
+    public OnChildClickListener<T> getOnChildClickListener() {
+        return onChildClickListener;
+    }
+
+    public void setOnChildClickListener(OnChildClickListener<T> onChildClickListener) {
+        this.onChildClickListener = onChildClickListener;
+    }
+
+    protected void registerChildClickListener(final RecyclerHolder holder, @IdRes int id, final T t, final int position) {
+        if (null != onChildClickListener) {
+            holder.getView(id).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onChildClickListener.onClick(holder, v, t, position);
+                }
+            });
+        }
+    }
+
+    protected void registerChildClickListener(final RecyclerHolder holder, View v, final T t, final int position) {
+        if (null != onChildClickListener) {
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onChildClickListener.onClick(holder, v, t, position);
+                }
+            });
+        }
+    }
+
+    protected void registerChildLongClickListener(final RecyclerHolder holder, @IdRes int id, final T t, final int position) {
+        if (null != onChildLongClickListener) {
+            holder.getView(id).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return onChildLongClickListener.onLongClick(holder, v, t, position);
+                }
+            });
+        }
+    }
+    protected void registerChildLongClickListener(final RecyclerHolder holder, View v, final T t, final int position) {
+        if (null != onChildLongClickListener) {
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return onChildLongClickListener.onLongClick(holder, v, t, position);
+                }
+            });
+        }
+    }
+
+    public OnChildLongClickListener<T> getOnChildLongClickListener() {
+        return onChildLongClickListener;
+    }
+
+    public void setOnChildLongClickListener(OnChildLongClickListener<T> onChildLongClickListener) {
+        this.onChildLongClickListener = onChildLongClickListener;
+    }
 
     /*************************************** 监听事件 ******************************************/
 
@@ -647,8 +719,17 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public interface OnLoadMoreListener {
-        void onLoadMore();
+        void onLoadMoreLoading();
 
-        void onLoadError();
+        void onLoadMoreError();
     }
+
+    public interface OnChildClickListener<T> {
+        void onClick(RecyclerHolder holder, View v, T t, int position);
+    }
+
+    public interface OnChildLongClickListener<T> {
+        boolean onLongClick(RecyclerHolder holder, View v, T t, int position);
+    }
+
 }

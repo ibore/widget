@@ -1,6 +1,7 @@
 package me.ibore.widget.demo;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -68,19 +69,21 @@ public class RecyclerViewActivity extends AppCompatActivity {
         });*/
         mAdapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
             @Override
-            public void onLoadMore() {
+            public void onLoadMoreLoading() {
                 Log.d("----", "onLoadMore");
-                /*mAdapter.addData("9999999");
-                mAdapter.addData("9999999");
-                mAdapter.addData("9999999");
-                mAdapter.addData("9999999");
-                mAdapter.addData("9999999");*/
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.addData("9999999");
+                    }
+                }, 2000);
             }
 
             @Override
-            public void onLoadError() {
+            public void onLoadMoreError() {
                 Log.d("----", "onLoadError");
             }
+
         });
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         recyclerView.setAdapter(mAdapter);
