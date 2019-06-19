@@ -420,7 +420,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerHolder> extends Recy
     }
 
     public boolean isLoadView(int position) {
-        return hasLoadView();
+        return position == 0 && hasLoadView();
     }
 
     public View showLoadingView() {
