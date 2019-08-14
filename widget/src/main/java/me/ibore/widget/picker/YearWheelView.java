@@ -54,7 +54,7 @@ public class YearWheelView extends WheelView<Integer> {
      */
     private void updateYear() {
         List<Integer> list = new ArrayList<>(1);
-        for (int i = mStartYear; i < mEndYear; i++) {
+        for (int i = mStartYear; i <= mEndYear; i++) {
             list.add(i);
         }
         super.setData(list);
@@ -118,4 +118,3 @@ public class YearWheelView extends WheelView<Integer> {
         throw new UnsupportedOperationException("You can not invoke setData method in " + YearWheelView.class.getSimpleName() + ".");
     }
 }
-

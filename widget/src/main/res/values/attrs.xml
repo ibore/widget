@@ -197,8 +197,6 @@
         <attr name="wvDividerHeight" format="dimension" />
         <!--wrap类型下分割线内边距-->
         <attr name="wvDividerPaddingForWrap" format="dimension" />
-
-
         <!--是否是弯曲（3D）效果-->
         <attr name="wvCurved" format="boolean" />
         <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
@@ -209,13 +207,14 @@
         </attr>
         <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
         <attr name="wvCurvedArcDirectionFactor" format="float" />
-        <!--弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显-->
-        <attr name="wvCurvedRefractRatio" format="float" />
-
+        <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <attr name="wvRefractRatio" format="float"/>
         <!--是否绘制选中区域-->
         <attr name="wvDrawSelectedRect" format="boolean" />
         <!--选中区域颜色-->
         <attr name="wvSelectedRectColor" format="color" />
+        <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
+        <attr name="wvDividerOffset" format="dimension"/>
     </declare-styleable>
 
     <!-- 年选择器 -->
@@ -340,17 +339,35 @@
         <attr name="errorLayout" format="reference" />
     </declare-styleable>
 
+    <!-- 阴影布局 -->
     <declare-styleable name="ShadowLayout">
-        <attr name="slShape">
-            <enum name="ROUND" value="1" />
-            <enum name="CIRCLE" value="2" />
-        </attr>
-        <attr name="slBgColor" format="color|reference" />
-        <attr name="slShapeRadius" format="dimension|reference" />
-        <attr name="slShadowColor" format="color|reference" />
-        <attr name="slShadowRadius" format="dimension|reference" />
-        <attr name="slOffsetX" format="dimension|reference" />
-        <attr name="slOffsetY" format="dimension|reference" />
+        <!--阴影的圆角大小-->
+        <attr name="slRadius" format="dimension" />
+        <attr name="slTopLeftRadius" format="dimension" />
+        <attr name="slTopRightRadius" format="dimension" />
+        <attr name="slBottomLeftRadius" format="dimension" />
+        <attr name="slBottomRightRadius" format="dimension" />
+        <!--阴影的扩散范围(也可以理解为扩散程度)-->
+        <attr name="slShadowLimit" format="dimension" />
+        <!--阴影的扩散颜色-->
+        <attr name="slShadowColor" format="color" /> https://github.com/HenleyLee/ShadowLayout.git
+        <!-- 背景颜色 -->
+        <attr name="slBackgroundColor" format="color" />
+        <!--x轴的偏移量-->
+        <attr name="slOffsetX" format="dimension" />
+        <!--y轴的偏移量-->
+        <attr name="slOffsetY" format="dimension" />
+        <!--左边是否显示阴影-->
+        <attr name="slShowLeft" format="boolean" />
+        <!--右边是否显示阴影-->
+        <attr name="slShowRight" format="boolean" />
+        <!--上边是否显示阴影-->
+        <attr name="slShowTop" format="boolean" />
+        <!--下面是否显示阴影-->
+        <attr name="slShowBottom" format="boolean" />
+        <!-- 是否一直显示圆角,当隐藏阴影时 -->
+        <attr name="slAlwaysShowRadius" format="boolean" />
+
     </declare-styleable>
 
     <declare-styleable name="MarqueeView">

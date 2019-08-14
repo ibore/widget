@@ -20,11 +20,8 @@ import me.ibore.widget.WheelView;
 /**
  * 选项选择器
  *
- * @author zyyoona7
- * @version v1.0.0
- * @since 2018/8/21.
  */
-public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnItemSelectedListener<T> {
+public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnItemSelectedListener<T>, WheelView.OnWheelChangedListener  {
 
     private static final int ID_OPTIONS_WV_1 = 1;
     private static final int ID_OPTIONS_WV_2 = 2;
@@ -45,6 +42,7 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
     private boolean isResetSelectedPosition;
 
     private OnOptionsSelectedListener<T> mOnOptionsSelectedListener;
+    private OnPickerScrollStateChangedListener mOnPickerScrollStateChangedListener;
 
     public OptionsPickerView(Context context) {
         this(context, null);
@@ -86,6 +84,10 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
         mOptionsWv1.setAutoFitTextSize(true);
         mOptionsWv2.setAutoFitTextSize(true);
         mOptionsWv3.setAutoFitTextSize(true);
+
+        mOptionsWv1.setOnWheelChangedListener(this);
+        mOptionsWv2.setOnWheelChangedListener(this);
+        mOptionsWv3.setOnWheelChangedListener(this);
     }
 
     /**
@@ -627,10 +629,20 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
      *
      * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
      */
+    @Deprecated
     public void setCurvedRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
-        mOptionsWv1.setCurvedRefractRatio(curvedRefractRatio);
-        mOptionsWv2.setCurvedRefractRatio(curvedRefractRatio);
-        mOptionsWv3.setCurvedRefractRatio(curvedRefractRatio);
+        setRefractRatio(curvedRefractRatio);
+    }
+
+    /**
+     * 设置选中条目折射偏移比例
+     *
+     * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
+     */
+    public void setRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
+        mOptionsWv1.setRefractRatio(curvedRefractRatio);
+        mOptionsWv2.setRefractRatio(curvedRefractRatio);
+        mOptionsWv3.setRefractRatio(curvedRefractRatio);
     }
 
     /**
@@ -649,6 +661,15 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
      */
     public void setOnOptionsSelectedListener(OnOptionsSelectedListener<T> onOptionsSelectedListener) {
         mOnOptionsSelectedListener = onOptionsSelectedListener;
+    }
+
+    /**
+     * 设置滚动状态变化监听
+     *
+     * @param listener 滚动状态变化监听器
+     */
+    public void setOnPickerScrollStateChangedListener(OnPickerScrollStateChangedListener listener) {
+        mOnPickerScrollStateChangedListener = listener;
     }
 
     /**
@@ -837,6 +858,28 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
         return mOptionsWv3;
     }
 
+    @Override
+    public void onWheelScroll(int scrollOffsetY) {
+
+    }
+
+    @Override
+    public void onWheelItemChanged(int oldPosition, int newPosition) {
+
+    }
+
+    @Override
+    public void onWheelSelected(int position) {
+
+    }
+
+    @Override
+    public void onWheelScrollStateChanged(int state) {
+        if (mOnPickerScrollStateChangedListener != null) {
+            mOnPickerScrollStateChangedListener.onScrollStateChanged(state);
+        }
+    }
+
     /**
      * 选项选中回调
      *
@@ -856,5 +899,10 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
          */
         void onOptionsSelected(int opt1Pos, @Nullable T opt1Data, int opt2Pos,
                                @Nullable T opt2Data, int opt3Pos, @Nullable T opt3Data);
+    }
+
+    public interface OnPickerScrollStateChangedListener {
+
+        void onScrollStateChanged(int state);
     }
 }

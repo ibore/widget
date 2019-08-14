@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void convert(RecyclerHolder holder, final MainItem mainItem, int position) {
                 holder.getTextView(R.id.title).setText(mainItem.getTitle());
-                holder.setOnClickListener(new View.OnClickListener() {
+                holder.onClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(), mainItem.getClazz());
@@ -51,5 +51,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.addData(new MainItem("HtmlText", HtmlTextActivity.class));
         mAdapter.addData(new MainItem("CountdownView", CountdownActivity.class));
         mAdapter.addData(new MainItem("RadarProgressView", RadarProgressActivity.class));
+        mAdapter.addData(new MainItem("ShadowLayout", ShadowLayoutActivity.class));
     }
 }
