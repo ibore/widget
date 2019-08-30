@@ -3,4 +3,7 @@
     <string name="widget_date_picker_view_year">年</string>
     <string name="widget_date_picker_view_month">月</string>
     <string name="widget_date_picker_view_day">日</string>
+
+    <string name="widget_title_bar_search_hint">搜索</string>
+
 </resources>

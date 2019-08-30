@@ -42,7 +42,6 @@ public class DatePickerView extends BaseDatePickerView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
         mYearTv = findViewById(R.id.tv_year);
         mMonthTv = findViewById(R.id.tv_month);
         mDayTv = findViewById(R.id.tv_day);

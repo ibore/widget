@@ -208,13 +208,13 @@
         <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
         <attr name="wvCurvedArcDirectionFactor" format="float" />
         <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
-        <attr name="wvRefractRatio" format="float"/>
+        <attr name="wvRefractRatio" format="float" />
         <!--是否绘制选中区域-->
         <attr name="wvDrawSelectedRect" format="boolean" />
         <!--选中区域颜色-->
         <attr name="wvSelectedRectColor" format="color" />
         <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
-        <attr name="wvDividerOffset" format="dimension"/>
+        <attr name="wvDividerOffset" format="dimension" />
     </declare-styleable>
 
     <!-- 年选择器 -->
@@ -350,7 +350,8 @@
         <!--阴影的扩散范围(也可以理解为扩散程度)-->
         <attr name="slShadowLimit" format="dimension" />
         <!--阴影的扩散颜色-->
-        <attr name="slShadowColor" format="color" /> https://github.com/HenleyLee/ShadowLayout.git
+        <attr name="slShadowColor" format="color" />
+        https://github.com/HenleyLee/ShadowLayout.git
         <!-- 背景颜色 -->
         <attr name="slBackgroundColor" format="color" />
         <!--x轴的偏移量-->
@@ -432,17 +433,17 @@
 
     <declare-styleable name="MsgView">
         <!-- 圆角矩形背景色 -->
-        <attr name="mvBackgroundColor" format="color"/>
+        <attr name="mvBackgroundColor" format="color" />
         <!-- 圆角弧度,单位dp-->
-        <attr name="mvCornerRadius" format="dimension"/>
+        <attr name="mvCornerRadius" format="dimension" />
         <!-- 圆角弧度,单位dp-->
-        <attr name="mvStrokeWidth" format="dimension"/>
+        <attr name="mvStrokeWidth" format="dimension" />
         <!-- 圆角边框颜色-->
-        <attr name="mvStrokeColor" format="color"/>
+        <attr name="mvStrokeColor" format="color" />
         <!-- 圆角弧度是高度一半-->
-        <attr name="mvIsRadiusHalfHeight" format="boolean"/>
+        <attr name="mvIsRadiusHalfHeight" format="boolean" />
         <!-- 圆角矩形宽高相等,取较宽高中大值-->
-        <attr name="mvIsWidthHeightEqual" format="boolean"/>
+        <attr name="mvIsWidthHeightEqual" format="boolean" />
     </declare-styleable>
     <declare-styleable name="RadarProgressView">
 
@@ -468,32 +469,216 @@
 
     <declare-styleable name="LabelView">
         <!-- 设置文字内容 -->
-        <attr name="lvText" format="string"/>
+        <attr name="lvText" format="string" />
         <!-- 设置文字颜色,默认#ffffff -->
-        <attr name="lvTextColor" format="color"/>
+        <attr name="lvTextColor" format="color" />
         <!-- 设置文字大小,默认11sp -->
-        <attr name="lvTextSize" format="dimension"/>
+        <attr name="lvTextSize" format="dimension" />
         <!-- 设置文字是否支持加粗,默认true -->
-        <attr name="lvTextBold" format="boolean"/>
+        <attr name="lvTextBold" format="boolean" />
         <!-- 设置文字是否支持全部大写,默认true-->
-        <attr name="lvTextAllCaps" format="boolean"/>
+        <attr name="lvTextAllCaps" format="boolean" />
         <!-- 设置背景颜色,默认"#FF4081"-->
-        <attr name="lvBackgroundColor" format="color"/>
+        <attr name="lvBackgroundColor" format="color" />
         <!-- 设置LabelView所在矩形最小宽高,默认mFillTriangle?35dp:50dp-->
-        <attr name="lvMinSize" format="dimension"/>
+        <attr name="lvMinSize" format="dimension" />
         <!-- 设置文字上下padding,默认3.5dp,mFillTriangle为true时无效-->
-        <attr name="lvPadding" format="dimension"/>
+        <attr name="lvPadding" format="dimension" />
         <!-- 设置LabelView方向 -->
         <attr name="lvGravity" format="enum">
-            <enum name="TOP_LEFT" value="51"/>
-            <enum name="TOP_RIGHT" value="53"/>
-            <enum name="BOTTOM_LEFT" value="83"/>
-            <enum name="BOTTOM_RIGHT" value="85"/>
+            <enum name="TOP_LEFT" value="51" />
+            <enum name="TOP_RIGHT" value="53" />
+            <enum name="BOTTOM_LEFT" value="83" />
+            <enum name="BOTTOM_RIGHT" value="85" />
         </attr>
         <!-- 设置是否填充三角区域,默认false -->
-        <attr name="lvFillTriangle" format="boolean"/>
+        <attr name="lvFillTriangle" format="boolean" />
         <!-- 设置是否浮嵌显示大小 -->
-        <attr name="lvFillSize" format="dimension"/>
+        <attr name="lvFillSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="CommonTitleBar">
+        <!-- 标题栏背景 图片或颜色 -->
+        <attr name="titleBarColor" format="color" />
+        <!-- 填充状态栏 -->
+        <attr name="fillStatusBar" format="boolean" />
+        <!-- 状态栏颜色 -->
+        <attr name="statusBarColor" format="color" />
+        <!-- 状态栏模式 -->
+        <attr name="statusBarMode" format="enum">
+            <enum name="dark" value="0" />
+            <enum name="light" value="1" />
+        </attr>
+        <!-- 标题栏高度 -->
+        <attr name="titleBarHeight" format="dimension" />
+        <!-- 显示标题栏分割线 -->
+        <attr name="showBottomLine" format="boolean" />
+        <!-- 标题栏分割线颜色 -->
+        <attr name="bottomLineColor" format="color" />
+        <!-- 底部阴影高度 showBottomLine = false时有效 -->
+        <attr name="bottomShadowHeight" format="dimension" />
+
+        <!-- 左边视图类型 -->
+        <attr name="leftType">
+            <enum name="none" value="0" />
+            <enum name="textView" value="1" />
+            <enum name="imageButton" value="2" />
+            <enum name="customView" value="3" />
+        </attr>
+        <!-- TextView 文字, 对应leftType_TextView -->
+        <attr name="leftText" format="string" />
+        <!-- TextView 颜色, 对应leftType_TextView -->
+        <attr name="leftTextColor" format="color" />
+        <!-- TextView 字体大小, 对应leftType_TextView -->
+        <attr name="leftTextSize" format="dimension" />
+        <!-- TextView 左边图片, 对应leftType_TextView -->
+        <attr name="leftDrawable" format="reference" />
+        <!-- TextView 左边padding, 对应leftType_TextView -->
+        <attr name="leftDrawablePadding" format="dimension" />
+        <!-- ImageView 资源, 对应leftType_ImageBotton -->
+        <attr name="leftImageResource" format="reference" />
+        <!-- 左边自定义布局, 对应leftType_CustomView -->
+        <attr name="leftCustomView" format="reference" />
+
+        <!-- 右边视图类型 -->
+        <attr name="rightType">
+            <enum name="none" value="0" />
+            <enum name="textView" value="1" />
+            <enum name="imageButton" value="2" />
+            <enum name="customView" value="3" />
+        </attr>
+        <!-- TextView 文字, 对应rightType_TextView -->
+        <attr name="rightText" format="string" />
+        <!-- TextView 颜色, 对应rightType_TextView -->
+        <attr name="rightTextColor" format="color" />
+        <!-- TextView 字体大小, 对应rightType_TextView -->
+        <attr name="rightTextSize" format="dimension" />
+        <!-- ImageView 资源, 对应rightType_ImageBotton -->
+        <attr name="rightImageResource" format="reference" />
+        <!-- 右边自定义布局, 对应rightType_CustomView -->
+        <attr name="rightCustomView" format="reference" />
+
+        <!-- 中间视图类型 -->
+        <attr name="centerType">
+            <enum name="none" value="0" />
+            <enum name="textView" value="1" />
+            <enum name="searchView" value="2" />
+            <enum name="customView" value="3" />
+        </attr>
+        <attr name="centerSearchRightType">
+            <enum name="voice" value="0" />
+            <enum name="delete" value="1" />
+        </attr>
+        <!-- TextView 文字, 对应centerType_TextView -->
+        <attr name="centerText" format="string" />
+        <!-- TextView 颜色, 对应centerType_TextView -->
+        <attr name="centerTextColor" format="color" />
+        <!-- TextView 字体大小, 对应centerType_TextView -->
+        <attr name="centerTextSize" format="dimension" />
+        <!-- TextView 跑马灯效果, 默认打开, 对应centerType_TextView -->
+        <attr name="centerTextMarquee" format="boolean" />
+        <!-- 子标题TextView 文字, 对应centerType_TextView -->
+        <attr name="centerSubText" format="string" />
+        <!-- 子标题TextView 颜色, 对应centerType_TextView -->
+        <attr name="centerSubTextColor" format="color" />
+        <!-- 子标题TextView 字体大小, 对应centerType_TextView -->
+        <attr name="centerSubTextSize" format="dimension" />
+        <!-- 搜索输入框是否可输入 -->
+        <attr name="centerSearchEditable" format="boolean" />
+        <!-- 搜索框背景 -->
+        <attr name="centerSearchBg" format="reference" />
+        <!-- 中间自定义布局, 对应centerType_CustomView -->
+        <attr name="centerCustomView" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="TitleBar">
+
+        <!--  标题设置 -->
+        <attr name="tbTitleText" format="string" />
+        <attr name="tbTitleSize" format="dimension" />
+        <attr name="tbTitleColor" format="color" />
+        <attr name="tbTitleImage" format="reference" />
+        <attr name="tbTitlePadding" format="dimension" />
+        <attr name="tbTitleDirection">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="tbTitleResource" format="reference" />
+
+        <attr name="tbSubTitleText" format="string" />
+        <attr name="tbSubTitleSize" format="dimension" />
+        <attr name="tbSubTitleColor" format="color" />
+        <attr name="tbSubTitleImage" format="reference" />
+        <attr name="tbSubTitlePadding" format="dimension" />
+        <attr name="tbSubTitleDirection">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="tbSubTitleResource" format="reference" />
+
+        <attr name="tbStartText" format="string" />
+        <attr name="tbStartSize" format="dimension" />
+        <attr name="tbStartColor" format="color" />
+        <attr name="tbStartIcon" format="reference" />
+        <attr name="tbStartImage" format="reference" />
+        <attr name="tbStartPadding" format="dimension" />
+        <attr name="tbStartDirection">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="tbStartViewWidth" format="dimension">
+            <enum name="match_parent" value="-1" />
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <attr name="tbStartResource" format="reference" />
+
+        <attr name="tbEndText" format="string" />
+        <attr name="tbEndSize" format="dimension" />
+        <attr name="tbEndColor" format="color" />
+        <attr name="tbEndIcon" format="reference" />
+        <attr name="tbEndImage" format="reference" />
+        <attr name="tbEndPadding" format="dimension" />
+        <attr name="tbEndDirection">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="tbEndViewWidth" format="dimension">
+            <enum name="match_parent" value="-1" />
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <attr name="tbEndResource" format="reference" />
+
+    </declare-styleable>
+
+    <declare-styleable name="SwitchButton">
+        <attr name="sbShadowRadius" format="reference|dimension"/>
+        <attr name="sbShadowOffset" format="reference|dimension"/>
+        <attr name="sbShadowColor" format="reference|color"/>
+        <attr name="sbUncheckColor" format="reference|color"/>
+        <attr name="sbCheckedColor" format="reference|color"/>
+
+        <attr name="sbBorderWidth" format="reference|dimension"/>
+        <attr name="sbCheckLineColor" format="reference|color"/>
+        <attr name="sbCheckLineWidth" format="reference|dimension"/>
+        <attr name="sbUncheckCircleColor" format="reference|color"/>
+        <attr name="sbUncheckCircleWidth" format="reference|dimension"/>
+        <attr name="sbUncheckCircleRadius" format="reference|dimension"/>
+
+        <attr name="sbChecked" format="reference|boolean"/>
+        <attr name="sbShadowEffect" format="reference|boolean"/>
+        <attr name="sbEffectDuration" format="reference|integer"/>
+        <attr name="sbButtonColor" format="reference|color"/>
+        <attr name="sbShowIndicator" format="reference|boolean"/>
+        <attr name="sbBackground" format="reference|color"/>
+        <attr name="sbEnableEffect" format="reference|boolean"/>
     </declare-styleable>
 
 </resources>

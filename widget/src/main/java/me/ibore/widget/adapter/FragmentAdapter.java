@@ -3,6 +3,7 @@ package me.ibore.widget.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -18,12 +19,16 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> mFragments;
     private List<String> mPageTitles = new ArrayList<>();
 
-    public FragmentAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public FragmentAdapter(@NonNull FragmentManager fm) {
+        super(fm);
+    }
+
+    public FragmentAdapter(@NonNull FragmentManager fm, List<Fragment> fragments) {
         super(fm);
         this.mFragments = fragments;
     }
 
-    public FragmentAdapter(FragmentManager fm, List<Fragment> fragments, List<String> pageTitles) {
+    public FragmentAdapter(@NonNull FragmentManager fm, List<Fragment> fragments, List<String> pageTitles) {
         super(fm);
         this.mFragments = fragments;
         this.mPageTitles = pageTitles;
@@ -45,7 +50,13 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
         return super.getPageTitle(position);
     }
 
-    public void setPageTitles(List<String> pageTitles) {
+    public void setFragments(List<String> pageTitles, List<Fragment> fragments) {
         this.mPageTitles = pageTitles;
+        this.mFragments = fragments;
     }
+
+    /*public void addPage
+    public static FragmentAdapter create(@NonNull FragmentManager fm) {
+
+    }*/
 }
