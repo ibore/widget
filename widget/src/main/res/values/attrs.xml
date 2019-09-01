@@ -659,26 +659,57 @@
     </declare-styleable>
 
     <declare-styleable name="SwitchButton">
-        <attr name="sbShadowRadius" format="reference|dimension"/>
-        <attr name="sbShadowOffset" format="reference|dimension"/>
-        <attr name="sbShadowColor" format="reference|color"/>
-        <attr name="sbUncheckColor" format="reference|color"/>
-        <attr name="sbCheckedColor" format="reference|color"/>
+        <attr name="sbShadowRadius" format="reference|dimension" />
+        <attr name="sbShadowOffset" format="reference|dimension" />
+        <attr name="sbShadowColor" format="reference|color" />
+        <attr name="sbUncheckColor" format="reference|color" />
+        <attr name="sbCheckedColor" format="reference|color" />
 
-        <attr name="sbBorderWidth" format="reference|dimension"/>
-        <attr name="sbCheckLineColor" format="reference|color"/>
-        <attr name="sbCheckLineWidth" format="reference|dimension"/>
-        <attr name="sbUncheckCircleColor" format="reference|color"/>
-        <attr name="sbUncheckCircleWidth" format="reference|dimension"/>
-        <attr name="sbUncheckCircleRadius" format="reference|dimension"/>
+        <attr name="sbBorderWidth" format="reference|dimension" />
+        <attr name="sbCheckLineColor" format="reference|color" />
+        <attr name="sbCheckLineWidth" format="reference|dimension" />
+        <attr name="sbUncheckCircleColor" format="reference|color" />
+        <attr name="sbUncheckCircleWidth" format="reference|dimension" />
+        <attr name="sbUncheckCircleRadius" format="reference|dimension" />
 
-        <attr name="sbChecked" format="reference|boolean"/>
-        <attr name="sbShadowEffect" format="reference|boolean"/>
-        <attr name="sbEffectDuration" format="reference|integer"/>
-        <attr name="sbButtonColor" format="reference|color"/>
-        <attr name="sbShowIndicator" format="reference|boolean"/>
-        <attr name="sbBackground" format="reference|color"/>
-        <attr name="sbEnableEffect" format="reference|boolean"/>
+        <attr name="sbChecked" format="reference|boolean" />
+        <attr name="sbShadowEffect" format="reference|boolean" />
+        <attr name="sbEffectDuration" format="reference|integer" />
+        <attr name="sbButtonColor" format="reference|color" />
+        <attr name="sbShowIndicator" format="reference|boolean" />
+        <attr name="sbBackground" format="reference|color" />
+        <attr name="sbEnableEffect" format="reference|boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="StateButton">
+
+        <!--text color-->
+        <attr name="sbNormalTextColor" format="color|reference" />
+        <attr name="sbPressedTextColor" format="color|reference" />
+        <attr name="sbUnableTextColor" format="color|reference" />
+
+        <!--stroke width and color, dash width, dash gap-->
+        <attr name="sbStrokeDashWidth" format="dimension|reference" />
+        <attr name="sbStrokeDashGap" format="dimension|reference" />
+        <attr name="sbNormalStrokeWidth" format="dimension|reference" />
+        <attr name="sbPressedStrokeWidth" format="dimension|reference" />
+        <attr name="sbUnableStrokeWidth" format="dimension|reference" />
+        <attr name="sbNormalStrokeColor" format="color|reference" />
+        <attr name="sbPressedStrokeColor" format="color|reference" />
+        <attr name="sbUnableStrokeColor" format="color|reference" />
+
+        <!--background color-->
+        <attr name="sbNormalBackgroundColor" format="color|reference" />
+        <attr name="sbPressedBackgroundColor" format="color|reference" />
+        <attr name="sbUnableBackgroundColor" format="color|reference" />
+
+        <!--background radius-->
+        <attr name="radius" format="dimension|reference" />
+        <attr name="round" format="boolean|reference" />
+
+        <!--animation duration-->
+        <attr name="sbAnimationDuration" format="integer|reference" />
+
     </declare-styleable>
 
 </resources>

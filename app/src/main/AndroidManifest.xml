@@ -38,6 +38,8 @@
 
         <activity android:name=".ShadowLayoutActivity" />
 
+        <activity android:name=".StateButtonActivity" />
+
     </application>
 
 </manifest>
