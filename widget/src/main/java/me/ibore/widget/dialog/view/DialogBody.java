@@ -1,19 +1,18 @@
 package me.ibore.widget.dialog.view;
 
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.ColorRes;
-
+import me.ibore.widget.R;
 import me.ibore.widget.UIUtils;
+import me.ibore.widget.dialog.AlertDialog;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-public class DialogBody extends FrameLayout {
+public class DialogBody implements IDialogView {
 
     private int gravity;
     private int layoutGravity;
@@ -21,174 +20,125 @@ public class DialogBody extends FrameLayout {
     private int paddingBottom;
     private int paddingLeft;
     private int paddingRight;
-    @ColorRes
+
     private int bgColor;
+
     // Content
     private CharSequence content;
-    @ColorRes
-    private int contentTextColor;
-    private int contentTextSize;
-    private boolean bottomDivider;
+    private int contentColor;
+    private int contentSize;
+    private FrameLayout bodyView;
 
-    private DialogBody(Builder builder) {
-        super(builder.context);
-        this.gravity = builder.gravity;
-        this.layoutGravity = builder.layoutGravity;
-        this.paddingTop = builder.paddingTop;
-        this.paddingBottom = builder.paddingBottom;
-        this.paddingLeft = builder.paddingLeft;
-        this.paddingRight = builder.paddingRight;
-        this.bgColor = builder.bgColor;
-        // Content
-        this.content = builder.content;
-        this.contentTextColor = builder.contentTextColor;
-        this.contentTextSize = builder.contentTextSize;
-        this.bottomDivider = builder.bottomDivider;
-        initView();
+    public static DialogBody create() {
+        return new DialogBody();
     }
 
-    private void initView() {
-        this.setBackgroundResource(bgColor);
+    public static DialogBody create(String content) {
+        return new DialogBody().setContent(content);
+    }
 
-        TextView tv = new TextView(getContext());
+    private DialogBody() {
+        this.gravity = Gravity.CENTER;
+        this.layoutGravity = Gravity.CENTER;
+        this.paddingTop = 16;
+        this.paddingBottom = 16;
+        this.paddingLeft = this.paddingRight = 26;
+        this.bgColor = android.R.color.white;
+        this.content = "";
+        this.contentColor = R.color.widget_dialog_content;
+        this.contentSize = 14;
+    }
+
+    public DialogBody setContent(CharSequence content) {
+        this.content = content;
+        return this;
+    }
+
+    public DialogBody setContentColor(int contentColor) {
+        this.contentColor = contentColor;
+        return this;
+    }
+
+    public DialogBody setContentSize(int contentSize) {
+        this.contentSize = contentSize;
+        return this;
+    }
+
+    public DialogBody setGravity(int gravity) {
+        this.gravity = gravity;
+        return this;
+    }
+
+    public DialogBody setLayoutGravity(int layoutGravity) {
+        this.layoutGravity = layoutGravity;
+        return this;
+    }
+
+    public DialogBody setPaddingTop(int paddingTop) {
+        this.paddingTop = paddingTop;
+        return this;
+    }
+
+    public DialogBody setPaddingBottom(int paddingBottom) {
+        this.paddingBottom = paddingBottom;
+        return this;
+    }
+
+    public DialogBody setPaddingLeft(int paddingLeft) {
+        this.paddingLeft = paddingLeft;
+        return this;
+    }
+
+    public DialogBody setPaddingRight(int paddingRight) {
+        this.paddingRight = paddingRight;
+        return this;
+    }
+
+    public DialogBody setBgColor(int bgColor) {
+        this.bgColor = bgColor;
+        return this;
+    }
+
+    public void addBottomDivider() {
+        View divider = new View(bodyView.getContext());
+        divider.setBackgroundColor(bodyView.getResources().getColor(R.color.widget_dialog_line));
+        FrameLayout.LayoutParams lp =
+                new FrameLayout.LayoutParams(MATCH_PARENT, 2);
+        lp.gravity = Gravity.BOTTOM;
+        divider.setLayoutParams(lp);
+        bodyView.addView(divider);
+    }
+
+    @Override
+    public View getView(AlertDialog dialog, int cornerRadius) {
+        int radius = UIUtils.dp2px(dialog.getContext(), cornerRadius);
+
+        bodyView = new FrameLayout(dialog.getContext());
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setCornerRadii(new float[]{radius, radius, radius, radius, 0, 0, 0, 0});
+        drawable.setColor(bodyView.getResources().getColor(bgColor));
+        bodyView.setBackground(drawable);
+
+        TextView tv = new TextView(dialog.getContext());
         tv.setText(content);
-        tv.setTextSize(contentTextSize);
-        tv.setTextColor(getResources().getColor(contentTextColor));
+        tv.setTextSize(contentSize);
+        tv.setTextColor(dialog.getContext().getResources().getColor(contentColor));
         tv.setGravity(gravity);
 
         // LayoutGravity
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         lp.gravity = layoutGravity;
         tv.setLayoutParams(lp);
 
         // Padding
-        tv.setPadding(UIUtils.dp2px(getContext(), paddingLeft), UIUtils.dp2px(getContext(), paddingTop),
-                UIUtils.dp2px(getContext(), paddingRight), UIUtils.dp2px(getContext(), paddingBottom));
+        tv.setPadding(UIUtils.dp2px(dialog.getContext(), paddingLeft),
+                UIUtils.dp2px(dialog.getContext(), paddingTop),
+                UIUtils.dp2px(dialog.getContext(), paddingRight),
+                UIUtils.dp2px(dialog.getContext(),paddingBottom));
 
-        addView(tv);
-
-        if (bottomDivider) {
-            View divider = new View(getContext());
-            //divider.setBackgroundColor(getResources().getColor(R.color.gray_line));
-            LayoutParams layoutParams = new LayoutParams(MATCH_PARENT, UIUtils.dp2px(getContext(), 1f));
-            layoutParams.gravity = Gravity.BOTTOM;
-            divider.setLayoutParams(layoutParams);
-            addView(divider);
-        }
-    }
-
-    public void setCornerRadius(int cornerRadius) {
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setCornerRadii(new float[]{
-                UIUtils.dp2px(getContext(), cornerRadius), UIUtils.dp2px(getContext(), cornerRadius),
-                UIUtils.dp2px(getContext(), cornerRadius), UIUtils.dp2px(getContext(), cornerRadius),
-                0, 0,
-                0, 0});
-        drawable.setColor(getResources().getColor(bgColor));
-        this.setBackground(drawable);
-    }
-
-    public DialogBody addBottomDivider() {
-        View divider = new View(getContext());
-        divider.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-        LayoutParams lp =
-                new LayoutParams(MATCH_PARENT, UIUtils.dp2px(getContext(), 1f));
-        lp.gravity = Gravity.BOTTOM;
-        divider.setLayoutParams(lp);
-        this.addView(divider);
-        return this;
-    }
-
-    public static class Builder {
-
-        private Context context;
-        private int gravity;
-        private int layoutGravity;
-        private int paddingTop;
-        private int paddingBottom;
-        private int paddingLeft;
-        private int paddingRight;
-        @ColorRes
-        private int bgColor;
-        // Content
-        private CharSequence content;
-        @ColorRes
-        private int contentTextColor;
-        private int contentTextSize;
-        private boolean bottomDivider;
-
-        public Builder(Context context) {
-            this.context = context;
-            this.gravity = Gravity.CENTER;
-            this.layoutGravity = Gravity.CENTER;
-            this.paddingTop = 16;
-            this.paddingBottom = 16;
-            this.paddingLeft = 16;
-            this.paddingRight = 16;
-            this.bgColor = android.R.color.white;
-            // Content
-            this.content = "";
-            this.contentTextColor = android.R.color.tab_indicator_text;
-            this.contentTextSize = 14;
-            this.bottomDivider = true;
-        }
-
-        public Builder setGravity(int gravity) {
-            this.gravity = gravity;
-            return this;
-        }
-
-        public Builder setLayoutGravity(int layoutGravity) {
-            this.layoutGravity = layoutGravity;
-            return this;
-        }
-
-        public Builder setPaddingTop(int paddingTop) {
-            this.paddingTop = paddingTop;
-            return this;
-        }
-
-        public Builder setPaddingBottom(int paddingBottom) {
-            this.paddingBottom = paddingBottom;
-            return this;
-        }
-
-        public Builder setPaddingLeft(int paddingLeft) {
-            this.paddingLeft = paddingLeft;
-            return this;
-        }
-
-        public Builder setPaddingRight(int paddingRight) {
-            this.paddingRight = paddingRight;
-            return this;
-        }
-
-        public Builder setBgColor(@ColorRes int bgColor) {
-            this.bgColor = bgColor;
-            return this;
-        }
-
-        public Builder setContent(String content) {
-            this.content = content;
-            return this;
-        }
-
-        public Builder setContentTextColor(@ColorRes int contentTextColor) {
-            this.contentTextColor = contentTextColor;
-            return this;
-        }
-
-        public Builder setContentTextSize(int contentTextSize) {
-            this.contentTextSize = contentTextSize;
-            return this;
-        }
-
-        public void setBottomDivider(boolean bottomDivider) {
-            this.bottomDivider = bottomDivider;
-        }
-
-        public DialogBody builder() {
-            return new DialogBody(this);
-        }
+        bodyView.addView(tv);
+        addBottomDivider();
+        return bodyView;
     }
 }

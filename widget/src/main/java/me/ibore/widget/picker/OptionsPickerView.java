@@ -54,7 +54,6 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
 
     public OptionsPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         initViews(context);
     }
 

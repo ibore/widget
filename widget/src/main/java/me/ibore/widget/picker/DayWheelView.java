@@ -119,6 +119,14 @@ public class DayWheelView extends WheelView<Integer> {
     public int getSelectedDay() {
         return getSelectedItemData();
     }
+    /**
+     * 获取选中的日
+     *
+     * @return 选中的日
+     */
+    public String getSelectedDayString() {
+        return getSelectedItemData() < 10 ? "0" + getSelectedItemData() : String.valueOf(getSelectedItemData());
+    }
 
     /**
      * 设置选中的日

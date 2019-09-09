@@ -2,21 +2,15 @@ package me.ibore.widget.picker;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.AttributeSet;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.AppCompatTextView;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import androidx.core.content.ContextCompat;
 
 import me.ibore.widget.R;
 import me.ibore.widget.WheelView;
@@ -37,11 +31,6 @@ public class DatePickerView extends BaseDatePickerView {
 
     public DatePickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
         mYearTv = findViewById(R.id.tv_year);
         mMonthTv = findViewById(R.id.tv_month);
         mDayTv = findViewById(R.id.tv_day);
@@ -210,6 +199,14 @@ public class DatePickerView extends BaseDatePickerView {
     public int getSelectedYear() {
         return mYearWv.getSelectedYear();
     }
+    /**
+     * 获取选中的年份
+     *
+     * @return 选中的年份
+     */
+    public String getSelectedYearString() {
+        return String.valueOf(mYearWv.getSelectedYear());
+    }
 
     /**
      * 设置选中的年份
@@ -248,6 +245,15 @@ public class DatePickerView extends BaseDatePickerView {
      */
     public int getSelectedMonth() {
         return mMonthWv.getSelectedMonth();
+    }
+
+    /**
+     * 获取选中的月
+     *
+     * @return 选中的月
+     */
+    public String getSelectedMonthString() {
+        return mMonthWv.getSelectedMonthString();
     }
 
     /**
@@ -290,6 +296,15 @@ public class DatePickerView extends BaseDatePickerView {
     }
 
     /**
+     * 获取选中的日
+     *
+     * @return 选中的日
+     */
+    public String getSelectedDayString() {
+        return mDayWv.getSelectedDayString();
+    }
+
+    /**
      * 设置选中的日
      *
      * @param day 日
@@ -325,7 +340,7 @@ public class DatePickerView extends BaseDatePickerView {
      * @return 选中的日期 格式 2018-08-22
      */
     public String getSelectedDate() {
-        return getSelectedYear() + "-" + getSelectedMonth() + "-" + getSelectedDay();
+        return getSelectedYearString() + "-" + getSelectedMonthString() + "-" + getSelectedDayString();
     }
 
     /**
@@ -374,12 +389,12 @@ public class DatePickerView extends BaseDatePickerView {
      * 设置WheelView 字体大小
      *
      * @param textSize 字体大小
-     * @param isDp     单位是否是dp
+     * @param isSp     单位是否是dp
      */
-    public void setTextSize(float textSize, boolean isDp) {
-        mYearWv.setTextSize(textSize, isDp);
-        mMonthWv.setTextSize(textSize, isDp);
-        mDayWv.setTextSize(textSize, isDp);
+    public void setTextSize(float textSize, boolean isSp) {
+        mYearWv.setTextSize(textSize, isSp);
+        mMonthWv.setTextSize(textSize, isSp);
+        mDayWv.setTextSize(textSize, isSp);
     }
 
     /**

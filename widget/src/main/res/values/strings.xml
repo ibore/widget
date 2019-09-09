@@ -5,5 +5,8 @@
     <string name="widget_date_picker_view_day">日</string>
 
     <string name="widget_title_bar_search_hint">搜索</string>
+    <string name="widget_dialog_positive">确定</string>
+    <string name="widget_dialog_negative">取消</string>
+    <string name="widget_dialog_date_title">选择日期</string>
 
 </resources>

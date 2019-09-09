@@ -3,7 +3,7 @@ package me.ibore.widget.picker;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import me.ibore.widget.WheelView;
 
-public abstract class BaseDatePickerView extends FrameLayout implements WheelView.OnItemSelectedListener<Integer>, WheelView.OnWheelChangedListener {
+public abstract class BaseDatePickerView extends LinearLayout implements WheelView.OnItemSelectedListener<Integer>, WheelView.OnWheelChangedListener {
 
     private final SimpleDateFormat mYmdSdf;
     private final SimpleDateFormat mYmSdf;
@@ -43,21 +43,15 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
         if (getDatePickerViewLayoutId() != 0) {
             LayoutInflater.from(context).inflate(getDatePickerViewLayoutId(), this);
         }
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        int yearId=getYearWheelViewId();
+        int yearId = getYearWheelViewId();
         if (!isNoId(yearId)) {
             mYearWv = findViewById(yearId);
         }
-        int monthId=getMonthWheelViewId();
+        int monthId = getMonthWheelViewId();
         if (!isNoId(monthId)) {
             mMonthWv = findViewById(monthId);
         }
-        int dayId=getDayWheelViewId();
+        int dayId = getDayWheelViewId();
         if (!isNoId(dayId)) {
             mDayWv = findViewById(dayId);
         }
@@ -175,8 +169,8 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
                 && mMonthWv != null && mMonthWv.getVisibility() == VISIBLE;
     }
 
-    private boolean isNoId(@IdRes int idRes){
-        return idRes==0 || idRes==NO_ID;
+    private boolean isNoId(@IdRes int idRes) {
+        return idRes == 0 || idRes == NO_ID;
     }
 
     /**
@@ -244,5 +238,6 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
     public interface OnPickerScrollStateChangedListener {
 
         void onScrollStateChanged(int state);
+
     }
 }

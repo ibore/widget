@@ -40,6 +40,8 @@
 
         <activity android:name=".StateButtonActivity" />
 
+        <activity android:name=".AlertDialogActivity" />
+
     </application>
 
 </manifest>

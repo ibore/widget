@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="widget_dialog_title">#333333</color>
+    <color name="widget_dialog_positive">#4BB1FF</color>
+    <color name="widget_dialog_neutral">#4D4D4D</color>
+    <color name="widget_dialog_negative">#999999</color>
+    <color name="widget_dialog_button_bg">#FFFFFF</color>
+    <color name="widget_dialog_button_bg_pressed">#D2D2D2</color>
+    <color name="widget_dialog_line">#E6E6E6</color>
+    <color name="widget_dialog_content">#333333</color>
+
+</resources>

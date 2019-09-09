@@ -2,8 +2,9 @@ package me.ibore.widget.picker;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +50,15 @@ public class MonthWheelView extends WheelView<Integer> {
      */
     public int getSelectedMonth() {
         return getSelectedItemData();
+    }
+
+    /**
+     * 获取选中的月
+     *
+     * @return 选中的月
+     */
+    public String getSelectedMonthString() {
+        return getSelectedItemData() < 10 ? "0" + getSelectedItemData() : String.valueOf(getSelectedItemData());
     }
 
     /**
