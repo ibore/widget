@@ -7,6 +7,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.ibore.widget.dialog.AlertDialog;
 import me.ibore.widget.dialog.DialogView;
 import me.ibore.widget.dialog.view.DialogButton;
@@ -106,6 +109,33 @@ public class AlertDialogActivity extends AppCompatActivity {
     }
 
     public void onPickerDialogClick(View view) {
-        DialogView.showPickDialog(this, "测试", null, null, null);
+        List<String> data1 = new ArrayList<>();
+        data1.add("语文");
+        data1.add("数学");
+        data1.add("英语");
+        data1.add("化学");
+        data1.add("物理");
+        data1.add("地理");
+        data1.add("政治");
+        data1.add("生物");
+        data1.add("历史");
+        List<String> data2 = new ArrayList<>();
+        data2.add("星期一");
+        data2.add("星期二");
+        data2.add("星期三");
+        data2.add("星期四");
+        data2.add("星期五");
+        data2.add("星期六");
+        data2.add("星期日");
+        List<String> data3 = new ArrayList<>();
+        data3.add("星期一");
+        data3.add("星期二");
+        data3.add("星期三");
+        data3.add("星期四");
+        data3.add("星期五");
+        data3.add("星期六");
+        data3.add("星期日");
+
+        DialogView.showPickDialog(this, "测试", data1, data2, data3);
     }
 }

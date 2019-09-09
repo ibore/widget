@@ -82,7 +82,7 @@ public final class DialogView {
                 .show();
     }
 
-    public static void showPickDialog(FragmentActivity activity, CharSequence title, List<?> linkageData1, List<List<?>> linkageData2, List<List<List<?>>> linkageData3) {
+    public static void showPickDialog(FragmentActivity activity, CharSequence title, List<?> data1, List<?> data2, List<?> data3) {
         AlertDialog.create(activity)
                 .setHeader(DialogHeader.create(title)
                         .setLeftButton(DialogButton.create(NEGATIVE)
@@ -97,7 +97,29 @@ public final class DialogView {
 
                                     }
                                 })))
-                .setBody(DialogPicker.create())
+                .setBody(DialogPicker.create().setData(data1, data2, data3))
+                .setCancelOnTouchBack(false)
+                .setTouchOutsideCancelable(false)
+                .setDialogWidth(MATCH_PARENT)
+                .show();
+    }
+
+    public static void showLinkagePickDialog(FragmentActivity activity, CharSequence title, List<?> linkageData1, List<List<?>> linkageData2, List<List<List<?>>> linkageData3) {
+        AlertDialog.create(activity)
+                .setHeader(DialogHeader.create(title)
+                        .setLeftButton(DialogButton.create(NEGATIVE)
+                                .setBgColor(android.R.color.transparent)
+                                .setBgColorPressed(android.R.color.transparent))
+                        .setRightButton(DialogButton.create(POSITIVE)
+                                .setBgColor(android.R.color.transparent)
+                                .setBgColorPressed(android.R.color.transparent)
+                                .setOnButtonClickListener(new DialogButton.OnButtonClickListener() {
+                                    @Override
+                                    public void buttonClick(AlertDialog dialog) {
+
+                                    }
+                                })))
+                .setBody(DialogPicker.create().setLinkageData(linkageData1, linkageData2, linkageData3))
                 .setCancelOnTouchBack(false)
                 .setTouchOutsideCancelable(false)
                 .setDialogWidth(MATCH_PARENT)

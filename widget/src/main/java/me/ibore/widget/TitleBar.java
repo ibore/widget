@@ -9,17 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.IntDef;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import static me.ibore.widget.TitleBar.Direction.BOTTOM;
-import static me.ibore.widget.TitleBar.Direction.END;
-import static me.ibore.widget.TitleBar.Direction.START;
-import static me.ibore.widget.TitleBar.Direction.TOP;
 
 public class TitleBar extends ConstraintLayout {
 
@@ -47,7 +39,7 @@ public class TitleBar extends ConstraintLayout {
      */
     public int DEFAULT_PADDING = UIUtils.dp2px(getContext(), 6);
 
-    private TextView tbTitleView;
+    private TextView mTitleView;
     private CharSequence tbTitleText;
     private int tbTitleSize;
     @ColorInt
@@ -107,22 +99,22 @@ public class TitleBar extends ConstraintLayout {
         tbTitleColor = ta.getColor(R.styleable.TitleBar_tbTitleColor, Color.parseColor("#333333"));
         tbTitleImage = ta.getResourceId(R.styleable.TitleBar_tbTitleImage, 0);
         tbTitlePadding = ta.getDimensionPixelSize(R.styleable.TitleBar_tbTitlePadding, DEFAULT_PADDING);
-        tbTitleDirection = ta.getInt(R.styleable.TitleBar_tbTitleDirection, START);
-        //tbTitleView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT));
+
+        //mTitleView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT));
 
         tbSubTitleText = ta.getText(R.styleable.TitleBar_tbSubTitleText);
         tbSubTitleSize = ta.getDimensionPixelSize(R.styleable.TitleBar_tbSubTitleText, 12);
         tbSubTitleColor = ta.getColor(R.styleable.TitleBar_tbSubTitleColor, Color.parseColor("#333333"));
         tbSubTitleImage = ta.getResourceId(R.styleable.TitleBar_tbSubTitleImage, 0);
         tbSubTitlePadding = ta.getDimensionPixelSize(R.styleable.TitleBar_tbSubTitlePadding, DEFAULT_PADDING);
-        tbSubTitleDirection = ta.getInt(R.styleable.TitleBar_tbSubTitleDirection, START);
+
 
         tbStartText = ta.getText(R.styleable.TitleBar_tbStartText);
         tbStartSize = ta.getDimensionPixelSize(R.styleable.TitleBar_tbStartText, 15);
         tbStartColor = ta.getColor(R.styleable.TitleBar_tbStartColor, Color.parseColor("#333333"));
         tbStartImage = ta.getResourceId(R.styleable.TitleBar_tbStartImage, 0);
         tbStartPadding = ta.getDimensionPixelSize(R.styleable.TitleBar_tbStartPadding, DEFAULT_PADDING);
-        tbStartDirection = ta.getInt(R.styleable.TitleBar_tbStartDirection, START);
+
         tbStartViewWidth = ta.getDimensionPixelSize(R.styleable.TitleBar_tbStartViewWidth, 0);
 
         tbEndText = ta.getText(R.styleable.TitleBar_tbEndText);
@@ -130,7 +122,7 @@ public class TitleBar extends ConstraintLayout {
         tbEndColor = ta.getColor(R.styleable.TitleBar_tbEndColor, Color.parseColor("#333333"));
         tbEndImage = ta.getResourceId(R.styleable.TitleBar_tbEndImage, 0);
         tbEndPadding = ta.getDimensionPixelSize(R.styleable.TitleBar_tbEndPadding, DEFAULT_PADDING);
-        tbEndDirection = ta.getInt(R.styleable.TitleBar_tbEndDirection, START);
+
         //tbEndViewWidth = ta.getDimensionPixelSize(R.styleable.TitleBar_tbEndViewWidth, 0);
 
         ta.recycle();
@@ -139,15 +131,15 @@ public class TitleBar extends ConstraintLayout {
 
     public void initTitleView() {
         if (0 == tbTitleImage) {
-            tbTitleView = new TextView(getContext());
-            tbTitleView.setText(tbTitleText);
-            tbTitleView.setTextColor(tbTitleColor);
-            tbTitleView.setSingleLine();
-            tbTitleView.setMarqueeRepeatLimit(-1);
-            tbTitleView.setHorizontallyScrolling(true);
-            tbTitleView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            tbTitleView.setCompoundDrawablePadding(tbTitlePadding);
-            tbTitleView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            mTitleView = new TextView(getContext());
+            mTitleView.setText(tbTitleText);
+            mTitleView.setTextColor(tbTitleColor);
+            mTitleView.setSingleLine();
+            mTitleView.setMarqueeRepeatLimit(-1);
+            mTitleView.setHorizontallyScrolling(true);
+            mTitleView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            mTitleView.setCompoundDrawablePadding(tbTitlePadding);
+            mTitleView.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     tbTitleDirection == 0 ? tbTitleImage : 0, tbTitleDirection == 1 ? tbTitleImage : 0,
                     tbTitleDirection == 2 ? tbTitleImage : 0, tbTitleDirection == 3 ? tbTitleImage : 0);
         }
@@ -212,17 +204,6 @@ public class TitleBar extends ConstraintLayout {
         // 设置宽高
         set.clone(this);
 
-
-    }
-
-    @IntDef({START, TOP, END, BOTTOM})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Direction {
-
-        int START = 0;
-        int TOP = 1;
-        int END = 2;
-        int BOTTOM = 3;
 
     }
 

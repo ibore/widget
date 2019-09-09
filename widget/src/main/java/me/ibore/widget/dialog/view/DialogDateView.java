@@ -1,12 +1,14 @@
 package me.ibore.widget.dialog.view;
 
 import android.annotation.SuppressLint;
-import android.view.Gravity;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.FloatRange;
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,15 +18,12 @@ import java.util.Date;
 
 import me.ibore.widget.R;
 import me.ibore.widget.UIUtils;
+import me.ibore.widget.WheelView;
 import me.ibore.widget.dialog.AlertDialog;
 import me.ibore.widget.picker.BaseDatePickerView;
 import me.ibore.widget.picker.DatePickerView;
 
 public class DialogDateView implements IDialogView {
-
-    public static DialogDateView create() {
-        return new DialogDateView();
-    }
 
     public static final int YYYY = 1;
     public static final int YYYY_MM = 2;
@@ -35,7 +34,10 @@ public class DialogDateView implements IDialogView {
     public @interface Mode {
     }
 
-    private static final String pattern = "((((19|20)\\d{2})-(0?(1|[3-9])|1[012])-(0?[1-9]|[12]\\d|30))|(((19|20)\\d{2})-(0?[13578]|1[02])-31)|(((19|20)\\d{2})-0?2-(0?[1-9]|1\\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$";
+    public static DialogDateView create() {
+        return new DialogDateView();
+    }
+
     private String selectDate;
     private String startDate;
     private String endDate;
@@ -47,7 +49,6 @@ public class DialogDateView implements IDialogView {
     private int paddingBottom = 22;
     private int paddingLeft = 16;
     private int paddingRight = 16;
-
 
     public DialogDateView setSelectDate(String selectDate) {
         this.selectDate = selectDate;
@@ -101,7 +102,6 @@ public class DialogDateView implements IDialogView {
         pickerView.setBackgroundResource(bgColor);
         pickerView.setPadding(UIUtils.dp2px(dialog.getContext(), paddingLeft), UIUtils.dp2px(dialog.getContext(), paddingTop),
                 UIUtils.dp2px(dialog.getContext(), paddingRight), UIUtils.dp2px(dialog.getContext(), paddingBottom));
-        pickerView.setGravity(Gravity.CENTER);
         pickerView.setBackgroundResource(android.R.color.white);
         pickerView.setAutoFitTextSize(true);
         pickerView.setDividerHeight(1, true);
@@ -111,6 +111,7 @@ public class DialogDateView implements IDialogView {
         pickerView.setTextBoundaryMargin(16, true);
         pickerView.setShowDivider(true);
         pickerView.setTextSize(18, true);
+        initPickerView(pickerView);
         String dateFormat;
         if (mode == YYYY) {
             dateFormat = "yyyy";
