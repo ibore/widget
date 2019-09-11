@@ -25,17 +25,31 @@ public class DialogHeader implements IDialogView {
 
     private CharSequence titleText;
     @ColorRes
-    private int titleColor = R.color.widget_dialog_title;
-    private int titleSize = 16;
+    private int titleColor;
+    private int titleSize;
     @ColorRes
-    private int bgColor = android.R.color.white;
-    private int paddingTop = 12;
-    private int paddingBottom = 12;
-    private int paddingLeft = 16;
-    private int paddingRight = 16;
+    private int bgColor;
+    private int paddingTop;
+    private int paddingBottom;
+    private int paddingLeft;
+    private int paddingRight;
+
+    public static DialogHeader create() {
+        return new DialogHeader();
+    }
 
     public static DialogHeader create(CharSequence titleText) {
         return new DialogHeader().setTitleText(titleText);
+    }
+
+    private DialogHeader() {
+        titleColor = R.color.widget_dialog_title;
+        titleSize = 16;
+        bgColor = android.R.color.white;
+        paddingTop = 12;
+        paddingBottom = 12;
+        paddingLeft = 16;
+        paddingRight = 16;
     }
 
     public DialogHeader setTitleText(CharSequence titleText) {
@@ -89,8 +103,8 @@ public class DialogHeader implements IDialogView {
     }
 
     @Override
-    public View getView(AlertDialog dialog, int cornerRadius) {
-        int radius = UIUtils.dp2px(dialog.getContext(), cornerRadius);
+    public View getView(AlertDialog dialog) {
+        int radius = UIUtils.dp2px(dialog.getContext(), dialog.getCornerRadius());
         final int iPaddingLeft = UIUtils.dp2px(dialog.getContext(), paddingLeft);
         final int iPaddingTop = UIUtils.dp2px(dialog.getContext(), paddingTop);
         final int iPaddingRight = UIUtils.dp2px(dialog.getContext(), paddingRight);

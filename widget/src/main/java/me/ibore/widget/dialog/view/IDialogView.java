@@ -6,7 +6,7 @@ import me.ibore.widget.dialog.AlertDialog;
 
 public interface IDialogView {
 
-    View getView(AlertDialog dialog, int cornerRadius);
+    View getView(AlertDialog dialog);
 
 }
 

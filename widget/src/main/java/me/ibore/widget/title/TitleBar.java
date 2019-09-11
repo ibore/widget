@@ -1,4 +1,4 @@
-package me.ibore.widget;
+package me.ibore.widget.title;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +11,9 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+
+import me.ibore.widget.R;
+import me.ibore.widget.UIUtils;
 
 
 public class TitleBar extends ConstraintLayout {

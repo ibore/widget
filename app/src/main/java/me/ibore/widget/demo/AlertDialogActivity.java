@@ -14,6 +14,7 @@ import me.ibore.widget.dialog.AlertDialog;
 import me.ibore.widget.dialog.DialogView;
 import me.ibore.widget.dialog.view.DialogButton;
 import me.ibore.widget.listener.OnSelectListener;
+import me.ibore.widget.picker.OptionsPickerView;
 
 public class AlertDialogActivity extends AppCompatActivity {
 
@@ -33,8 +34,7 @@ public class AlertDialogActivity extends AppCompatActivity {
     }
 
     public void onSelectDialogClick(View view) {
-        DialogButton btnNegative = DialogButton.create().setText("取消")
-                .setStyle(DialogButton.NEGATIVE)
+        DialogButton btnNegative = DialogButton.create(DialogButton.NEGATIVE)
                 .setOnButtonClickListener(new DialogButton.OnButtonClickListener() {
                     @Override
                     public void buttonClick(AlertDialog dialog) {
@@ -42,8 +42,7 @@ public class AlertDialogActivity extends AppCompatActivity {
                     }
                 });
 
-        DialogButton btnPositive = DialogButton.create()
-                .setText("确认")
+        DialogButton btnPositive = DialogButton.create(DialogButton.POSITIVE)
                 .setOnButtonClickListener(new DialogButton.OnButtonClickListener() {
                     @Override
                     public void buttonClick(AlertDialog dialog) {
@@ -136,6 +135,11 @@ public class AlertDialogActivity extends AppCompatActivity {
         data3.add("星期六");
         data3.add("星期日");
 
-        DialogView.showPickDialog(this, "测试", data1, data2, data3);
+        DialogView.showPickDialog(this, "测试", data1, 2, data2, 3, data3, 3, new OptionsPickerView.OnOptionsSelectedListener<String>() {
+            @Override
+            public void onOptionsSelected(int opt1Pos, @Nullable String opt1Data, int opt2Pos, @Nullable String opt2Data, int opt3Pos, @Nullable String opt3Data) {
+                Toast.makeText(getApplicationContext(), opt1Data + opt2Data + opt3Data, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

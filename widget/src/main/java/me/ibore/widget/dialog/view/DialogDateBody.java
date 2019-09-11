@@ -3,12 +3,9 @@ package me.ibore.widget.dialog.view;
 import android.annotation.SuppressLint;
 import android.view.View;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.FloatRange;
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,12 +15,12 @@ import java.util.Date;
 
 import me.ibore.widget.R;
 import me.ibore.widget.UIUtils;
-import me.ibore.widget.WheelView;
 import me.ibore.widget.dialog.AlertDialog;
+import me.ibore.widget.listener.OnInitViewListener;
 import me.ibore.widget.picker.BaseDatePickerView;
 import me.ibore.widget.picker.DatePickerView;
 
-public class DialogDateView implements IDialogView {
+public class DialogDateBody implements IDialogView {
 
     public static final int YYYY = 1;
     public static final int YYYY_MM = 2;
@@ -34,8 +31,8 @@ public class DialogDateView implements IDialogView {
     public @interface Mode {
     }
 
-    public static DialogDateView create() {
-        return new DialogDateView();
+    public static DialogDateBody create() {
+        return new DialogDateBody();
     }
 
     private String selectDate;
@@ -44,74 +41,94 @@ public class DialogDateView implements IDialogView {
     @Mode
     private int mode = YYYY_MM_DD;
     @ColorRes
-    private int bgColor = android.R.color.white;
-    private int paddingTop = 16;
-    private int paddingBottom = 22;
-    private int paddingLeft = 16;
-    private int paddingRight = 16;
+    private int bgColor;
+    private int paddingLeft;
+    private int paddingTop;
+    private int paddingRight;
+    private int paddingBottom;
 
-    public DialogDateView setSelectDate(String selectDate) {
+    protected DatePickerView datePickerView;
+    private OnInitViewListener<DatePickerView> onInitViewListener;
+
+    private DialogDateBody() {
+        bgColor = android.R.color.white;
+        paddingLeft = 16;
+        paddingTop = 16;
+        paddingRight = 16;
+        paddingBottom = 22;
+    }
+
+    public DialogDateBody setSelectDate(String selectDate) {
         this.selectDate = selectDate;
         return this;
     }
 
-    public DialogDateView setStartDate(String startDate) {
+    public DialogDateBody setStartDate(String startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public DialogDateView setEndDate(String endDate) {
+    public DialogDateBody setEndDate(String endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public DialogDateView setMode(@Mode int mode) {
+    public DialogDateBody setMode(@Mode int mode) {
         this.mode = mode;
         return this;
     }
 
-    public DialogDateView setBgColor(int bgColor) {
+    public DialogDateBody setBgColor(int bgColor) {
         this.bgColor = bgColor;
         return this;
     }
 
-    public DialogDateView setPaddingTop(int paddingTop) {
+    public DialogDateBody setPaddingTop(int paddingTop) {
         this.paddingTop = paddingTop;
         return this;
     }
 
-    public DialogDateView setPaddingBottom(int paddingBottom) {
+    public DialogDateBody setPaddingBottom(int paddingBottom) {
         this.paddingBottom = paddingBottom;
         return this;
     }
 
-    public DialogDateView setPaddingLeft(int paddingLeft) {
+    public DialogDateBody setPaddingLeft(int paddingLeft) {
         this.paddingLeft = paddingLeft;
         return this;
     }
 
-    public DialogDateView setPaddingRight(int paddingRight) {
+    public DialogDateBody setPaddingRight(int paddingRight) {
         this.paddingRight = paddingRight;
+        return this;
+    }
+
+
+    public DialogDateBody setOnInitViewListener(OnInitViewListener<DatePickerView> onInitViewListener) {
+        this.onInitViewListener = onInitViewListener;
         return this;
     }
 
     @SuppressLint("SimpleDateFormat")
     @Override
-    public View getView(AlertDialog dialog, int cornerRadius) {
-        final DatePickerView pickerView = new DatePickerView(dialog.getContext());
-        pickerView.setBackgroundResource(bgColor);
-        pickerView.setPadding(UIUtils.dp2px(dialog.getContext(), paddingLeft), UIUtils.dp2px(dialog.getContext(), paddingTop),
+    public View getView(AlertDialog dialog) {
+        datePickerView = new DatePickerView(dialog.getContext());
+        datePickerView.setPadding(UIUtils.dp2px(dialog.getContext(), paddingLeft), UIUtils.dp2px(dialog.getContext(), paddingTop),
                 UIUtils.dp2px(dialog.getContext(), paddingRight), UIUtils.dp2px(dialog.getContext(), paddingBottom));
-        pickerView.setBackgroundResource(android.R.color.white);
-        pickerView.setAutoFitTextSize(true);
-        pickerView.setDividerHeight(1, true);
-        pickerView.setDividerColorRes(R.color.widget_dialog_line);
-        pickerView.setVisibleItems(5);
-        pickerView.setLineSpacing(16, true);
-        pickerView.setTextBoundaryMargin(16, true);
-        pickerView.setShowDivider(true);
-        pickerView.setTextSize(18, true);
-        initPickerView(pickerView);
+        datePickerView.setBackgroundResource(bgColor);
+        if (null != onInitViewListener) {
+            onInitViewListener.initView(this.datePickerView);
+        } else {
+            datePickerView.setAutoFitTextSize(true);
+            datePickerView.setDividerHeight(1, true);
+            datePickerView.setDividerColorRes(R.color.widget_dialog_line);
+            datePickerView.setVisibleItems(5);
+            datePickerView.setLineSpacing(16, true);
+            datePickerView.setTextBoundaryMargin(16, true);
+            datePickerView.setShowDivider(true);
+            datePickerView.setTextSize(18, true);
+        }
+
         String dateFormat;
         if (mode == YYYY) {
             dateFormat = "yyyy";
@@ -124,49 +141,49 @@ public class DialogDateView implements IDialogView {
         String[] starts = (isValidDate(startDate, dateFormat) ? startDate : "1900-01-01").split("-");
         String[] ends = (isValidDate(endDate, dateFormat) ? endDate : "2099-01-01").split("-");
         try {
-            pickerView.setYearRange(Integer.parseInt(starts[0]), Integer.parseInt(ends[0]));
+            datePickerView.setYearRange(Integer.parseInt(starts[0]), Integer.parseInt(ends[0]));
         } catch (Exception ignored) {
         }
         switch (mode) {
             case YYYY:
-                pickerView.hideMonthItem();
-                pickerView.hideDayItem();
+                datePickerView.hideMonthItem();
+                datePickerView.hideDayItem();
                 try {
-                    pickerView.setSelectedYear(Integer.parseInt(selects[0]));
+                    datePickerView.setSelectedYear(Integer.parseInt(selects[0]));
                 } catch (Exception ignored) {
                 }
 
                 break;
             case YYYY_MM:
-                pickerView.hideDayItem();
+                datePickerView.hideDayItem();
                 try {
-                    pickerView.setSelectedYear(Integer.parseInt(selects[0]));
-                    pickerView.setSelectedMonth(Integer.parseInt(selects[1]));
+                    datePickerView.setSelectedYear(Integer.parseInt(selects[0]));
+                    datePickerView.setSelectedMonth(Integer.parseInt(selects[1]));
                 } catch (Exception ignored) {
                 }
                 break;
             case YYYY_MM_DD:
                 try {
-                    pickerView.setSelectedYear(Integer.parseInt(selects[0]));
-                    pickerView.setSelectedMonth(Integer.parseInt(selects[1]));
-                    pickerView.setSelectedDay(Integer.parseInt(selects[2]));
+                    datePickerView.setSelectedYear(Integer.parseInt(selects[0]));
+                    datePickerView.setSelectedMonth(Integer.parseInt(selects[1]));
+                    datePickerView.setSelectedDay(Integer.parseInt(selects[2]));
                 } catch (Exception ignored) {
                 }
                 break;
         }
-        pickerView.setOnDateSelectedListener(new BaseDatePickerView.OnDateSelectedListener() {
+        datePickerView.setOnDateSelectedListener(new BaseDatePickerView.OnDateSelectedListener() {
             @Override
-            public void onDateSelected(BaseDatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
+            public void onDateSelected(BaseDatePickerView baseDatePickerView, int year, int month, int day, @Nullable Date date) {
                 if (mode == YYYY) {
-                    selectDate = pickerView.getSelectedYearString();
+                    selectDate = datePickerView.getSelectedYearString();
                 } else if (mode == YYYY_MM) {
-                    selectDate = pickerView.getSelectedYearString() + "-" + pickerView.getSelectedMonthString();
+                    selectDate = datePickerView.getSelectedYearString() + "-" + datePickerView.getSelectedMonthString();
                 } else {
-                    selectDate = pickerView.getSelectedDate();
+                    selectDate = datePickerView.getSelectedDate();
                 }
             }
         });
-        return pickerView;
+        return datePickerView;
     }
 
     public String getSelectDate() {

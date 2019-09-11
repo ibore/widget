@@ -33,7 +33,7 @@ public class DialogBody implements IDialogView {
         return new DialogBody();
     }
 
-    public static DialogBody create(String content) {
+    public static DialogBody create(CharSequence content) {
         return new DialogBody().setContent(content);
     }
 
@@ -107,16 +107,20 @@ public class DialogBody implements IDialogView {
         lp.gravity = Gravity.BOTTOM;
         divider.setLayoutParams(lp);
         bodyView.addView(divider);
+
+
     }
 
     @Override
-    public View getView(AlertDialog dialog, int cornerRadius) {
-        int radius = UIUtils.dp2px(dialog.getContext(), cornerRadius);
+    public View getView(AlertDialog dialog) {
+        int radius = UIUtils.dp2px(dialog.getContext(), dialog.getCornerRadius());
+        int topRadius = dialog.getDialogHeader() == null ? radius : 0;
+        int bottomRadius = dialog.getDialogFooter() == null ? radius : 0;
 
         bodyView = new FrameLayout(dialog.getContext());
-
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setCornerRadii(new float[]{radius, radius, radius, radius, 0, 0, 0, 0});
+        drawable.setCornerRadii(new float[]{topRadius, topRadius, topRadius, topRadius,
+                bottomRadius, bottomRadius, bottomRadius, bottomRadius});
         drawable.setColor(bodyView.getResources().getColor(bgColor));
         bodyView.setBackground(drawable);
 
@@ -135,7 +139,7 @@ public class DialogBody implements IDialogView {
         tv.setPadding(UIUtils.dp2px(dialog.getContext(), paddingLeft),
                 UIUtils.dp2px(dialog.getContext(), paddingTop),
                 UIUtils.dp2px(dialog.getContext(), paddingRight),
-                UIUtils.dp2px(dialog.getContext(),paddingBottom));
+                UIUtils.dp2px(dialog.getContext(), paddingBottom));
 
         bodyView.addView(tv);
         addBottomDivider();

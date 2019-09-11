@@ -85,11 +85,11 @@ public class AlertDialog extends DialogFragment {
         });
         int index = 0;
         if (dialogHeader != null) {
-            rootView.addView(dialogHeader.getView(this, cornerRadius), index++);
+            rootView.addView(dialogHeader.getView(this), index++);
         }
-        rootView.addView(dialogBody.getView(this, null == dialogHeader ? cornerRadius : 0), index++);
+        rootView.addView(dialogBody.getView(this), index++);
         if (dialogFooter != null) {
-            rootView.addView(dialogFooter.getView(this, cornerRadius), index);
+            rootView.addView(dialogFooter.getView(this), index);
         }
         return rootView;
     }

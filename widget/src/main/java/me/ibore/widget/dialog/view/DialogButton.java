@@ -51,13 +51,13 @@ public class DialogButton {
     private int style = POSITIVE;
     private CharSequence text;
     @ColorRes
-    private int textColor = R.color.widget_dialog_neutral;
-    private int textSize = 15;
+    private int textColor;
+    private int textSize;
     private boolean textBold;
     @ColorRes
-    private int bgColor = android.R.color.transparent;
+    private int bgColor;
     @ColorRes
-    private int bgColorPressed = android.R.color.transparent;
+    private int bgColorPressed;
     private OnButtonClickListener onButtonClickListener;
 
     private GradientDrawable drawablePressed;
@@ -65,6 +65,10 @@ public class DialogButton {
     private StateListDrawable stateListDrawable;
 
     private DialogButton() {
+        textColor = R.color.widget_dialog_neutral;
+        textSize = 15;
+        bgColor = android.R.color.white;
+        bgColorPressed = android.R.color.white;
     }
 
     public DialogButton setText(CharSequence text) {
